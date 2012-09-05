@@ -441,7 +441,10 @@ tcpe_read_conn(struct tcpe_data* data, int cid, const tcpe_client* cl)
 		ret = mnl_socket_recvfrom(nl, buf, sizeof(buf));
 	}
 
-	Err2If(ret == -1, TCPE_ERR_GENL, "mnl_cb_run error");
+	if (ret == -1) {
+		printf("%s\n", strerror(errno));
+		Err2(TCPE_ERR_GENL, "mnl_cb_run error");
+	}
 
 	for (k = 0; k < TOTAL_INDEX_MAX; k++) {
 		data->val[k] = stat_val[k];
