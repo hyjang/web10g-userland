@@ -192,9 +192,6 @@ static void parse_4tuple(struct nlattr *nested, struct tcpe_client *cl)
 	struct tcpe_connection* cp = NULL;
 	struct tcpe_list* conn_head;
 
-        char rem_addr_str[40];
-        char local_addr_str[40];
-
 	char rem_addr[17];
 	char local_addr[17];
         uint16_t rem_port = 0;
@@ -332,9 +329,6 @@ tcpe_list_conns(tcpe_client* cl, tcpe_connection_func func)
 	struct tcpe_list* list_pos;
 	struct tcpe_list* tmp;
 	tcpe_connection* cp = NULL;
-
-	char rem_addr_str[40];
-        char local_addr_str[40];
 
 	conn_head = &(cl->connection_list_head);
 
