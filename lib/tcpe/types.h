@@ -79,9 +79,18 @@ struct tcpe_mask {
 	int      if_mask[MAX_TABLE];
 };
 
+enum tcpe_addrtype {
+	TCPE_ADDRTYPE_IPV4 = 1,
+	TCPE_ADDRTYPE_IPV6 = 2
+};
+
+/*
+ * tcpe_addrtype is sent in *_addr[16], below
+ */
+
 struct tcpe_connection_tuple {
-	char      rem_addr[17];
-	char      local_addr[17];
+	uint8_t   rem_addr[17];
+	uint8_t   local_addr[17];
 	uint16_t  rem_port;
 	uint16_t  local_port;
 	int       cid;

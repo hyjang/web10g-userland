@@ -156,13 +156,13 @@ static int parse_4tuple_cb(const struct nlattr *attr, void *data)
 
 	switch(type) {
 	case NEA_REM_ADDR:
-		if (mnl_attr_validate(attr, MNL_TYPE_STRING) < 0) {
+		if (mnl_attr_validate(attr, MNL_TYPE_BINARY) < 0) {
 			perror("mnl_attr_validate");
 			return MNL_CB_ERROR;
 		}
 		break;
 	case NEA_LOCAL_ADDR:
-		if (mnl_attr_validate(attr, MNL_TYPE_STRING) < 0) {
+		if (mnl_attr_validate(attr, MNL_TYPE_BINARY) < 0) {
 			perror("mnl_attr_validate");
 			return MNL_CB_ERROR;
 		}
@@ -192,8 +192,8 @@ static void parse_4tuple(struct nlattr *nested, struct tcpe_client *cl)
 	struct tcpe_connection* cp = NULL;
 	struct tcpe_list* conn_head;
 
-	char rem_addr[17];
-	char local_addr[17];
+	uint8_t rem_addr[17];
+	uint8_t local_addr[17];
         uint16_t rem_port = 0;
         uint16_t local_port = 0;
         int cid = 0;
@@ -201,10 +201,10 @@ static void parse_4tuple(struct nlattr *nested, struct tcpe_client *cl)
         mnl_attr_parse_nested(nested, parse_4tuple_cb, tb);
 
         if (tb[NEA_LOCAL_ADDR]) {
-		strncpy(&local_addr[0], mnl_attr_get_str(tb[NEA_LOCAL_ADDR]), 17);
+		memcpy(&local_addr[0], mnl_attr_get_payload(tb[NEA_LOCAL_ADDR]), 17);
         }
         if (tb[NEA_REM_ADDR]) {
-		strncpy(&rem_addr[0], mnl_attr_get_str(tb[NEA_REM_ADDR]), 17);
+		memcpy(&rem_addr[0], mnl_attr_get_payload(tb[NEA_REM_ADDR]), 17);
         }
         if (tb[NEA_LOCAL_PORT]) {
                 local_port = mnl_attr_get_u16(tb[NEA_LOCAL_PORT]);
@@ -225,8 +225,8 @@ static void parse_4tuple(struct nlattr *nested, struct tcpe_client *cl)
 			return;
 		}
 
-		strncpy(&(cp->rem_addr[0]), &rem_addr[0], 17);
-		strncpy(&(cp->local_addr[0]), &local_addr[0], 17);
+		memcpy(&(cp->rem_addr[0]), &rem_addr[0], 17);
+		memcpy(&(cp->local_addr[0]), &local_addr[0], 17);
 		cp->rem_port = rem_port;
 		cp->local_port = local_port;
 		cp->cid = cid;
