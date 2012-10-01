@@ -22,18 +22,18 @@
 void usage(void)
 {
         printf("\n\n");
-        printf("readconn cid [-m mask]\n");
+        printf("watchvars cid [-m mask]\n");
         printf("\n  Repeatedly list tcp_estats vars for connection specified\n");
         printf("  by cid (which can be obtained with \"listconns\"),\n");
 	printf("  with optional mask given as a 5-tuple of hex\n");
         printf("  values, e.g.\n");
         printf("\n");
-        printf("  readconn cid -m f,f,f,f,f\n");
+        printf("  watchvars cid -m f,f,f,f,f\n");
         printf("\n");
         printf("  returns the first 4 entries of each of the MIB tables.\n");
 	printf("  (Perf, Path, Stack, App, Tune; cf. RFC 4898)\n");
         printf("\n");
-        printf("  readconn cid -m 0,0,0,,0\n");
+        printf("  watchvars cid -m 0,0,0,,0\n");
         printf("\n");
         printf("  returns only the MIB App table, etc.\n");
         printf("\n  The mask limits the time the kernel holds a lock on\n");
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 {
 
 	tcpe_error* err = NULL;
-	struct tcpe_client* cl = NULL;
+	tcpe_client* cl = NULL;
 	tcpe_data* data = NULL;
 	int cid, i, j; 
 	int opt, option;
@@ -74,9 +74,9 @@ int main(int argc, char **argv)
         while ((opt = getopt(argc, argv, "hm:")) != -1) {
                 switch (opt) {
 		case 'h':
-                        usage();
-                        exit(EXIT_SUCCESS);
-                        break;
+			usage();
+			exit(EXIT_SUCCESS);
+			break;
                 case 'm':
                         strmask = strdup(optarg);
 
@@ -106,14 +106,18 @@ int main(int argc, char **argv)
         }
 
 	cid = atoi(argv[optind]);
-	
+
+
 	Chk(tcpe_client_init(&cl));
 	Chk(tcpe_client_set_mask(cl, &mask));
 	Chk(tcpe_data_new(&data));
 
+
+	while (1) {
+
 	Chk(tcpe_read_conn(data, cid, cl));
 
-	for (j = 0; j < ARRAYSIZE(data->val); j++){
+	for (j = 0; j < ARRAYSIZE(data->val); j++) {
 
 		if (j == 0)
 			printf("\n\n Perf Table\n\n");
@@ -150,9 +154,15 @@ int main(int argc, char **argv)
                 }
 	}
 
+	sleep(1);
+	printf("\n\n");
+	}
+
  Cleanup:
+
 	tcpe_data_free(&data);
 	tcpe_client_destroy(&cl);
+
 
 	if (err != NULL) {
 		PRINT_AND_FREE(err);
@@ -160,5 +170,4 @@ int main(int argc, char **argv)
 	}
 
 	return EXIT_SUCCESS;
-
 }
