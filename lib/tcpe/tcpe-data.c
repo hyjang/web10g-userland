@@ -43,3 +43,23 @@ tcpe_data_free(struct tcpe_data** data)
 	free(*data);
 	*data = NULL;
 }
+
+struct tcpe_error* tcpe_data_delta(struct tcpe_data* data, const struct tcpe_data* data2, const struct tcpe_data* data1)
+{
+	tcpe_error* err = NULL;
+	int i;
+
+	ErrIf(data == NULL || data2 == NULL || data1 == NULL, TCPE_ERR_INVAL);
+
+	for (i = 0; i < ARRAYSIZE(data->val); i++) {
+
+		if (data2->val[i].mask || data1->val[i].mask) {
+			data->val[i].mask = 1;
+			continue;
+		}
+		data->val[i].uv64 = data2->val[i].uv64 - data1->val[i].uv64;
+	}
+
+ Cleanup:
+ 	return err;
+}

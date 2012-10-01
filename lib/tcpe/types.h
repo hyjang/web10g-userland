@@ -58,6 +58,14 @@ typedef enum TCPE_EVENT {
         TCPE_NEW_CONN           = 0,
 } TCPE_EVENT;
 
+union tcpe_union {
+	uint64_t uv64;
+	uint32_t uv32;
+	int32_t  sv32;
+	uint16_t uv16;
+	uint8_t  uv8;
+};
+
 struct tcpe_val {
         union {
                 uint64_t uv64;
