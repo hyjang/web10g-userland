@@ -22,5 +22,6 @@
 
 struct tcpe_error* tcpe_data_new(struct tcpe_data**);
 struct tcpe_error* tcpe_data_free(struct tcpe_data**);
+struct tcpe_error* tcpe_data_delta(struct tcpe_data*, const struct tcpe_data*, const struct tcpe_data*);
 
 #endif /* TCPE_DATA_H */
