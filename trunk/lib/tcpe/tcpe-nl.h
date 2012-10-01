@@ -11,7 +11,7 @@ enum nl_estats_msg_types {
         TCPE_CMD_LIST_CONNS,
         TCPE_CMD_READ_CONN, 
         TCPE_CMD_READ_ALL,
-        TCPE_CMD_WRITE_CONN,
+        TCPE_CMD_WRITE_VAR,
         NLE_MSG_MAX
 };
 
@@ -29,6 +29,7 @@ enum nl_estats_attr {
         NLE_ATTR_TUNE_MASK,
         NLE_ATTR_MASK,
         NLE_ATTR_4TUPLE,
+	NLE_ATTR_WRITE,
         __NLE_ATTR_MAX
 };
 #define NLE_ATTR_MAX (__NLE_ATTR_MAX - 1)
@@ -54,5 +55,13 @@ enum neattr_mask {
         __NEA_MASK_MAX
 };
 #define NEA_MASK_MAX (__NEA_MASK_MAX - 1)
+
+enum neattr_write {
+	NEA_UNSPEC_WRITE,
+	NEA_WRITE_VAR,
+	NEA_WRITE_VAL,
+	__NEA_WRITE_MAX
+};
+#define NEA_WRITE_MAX (__NEA_WRITE_MAX - 1)
 
 #endif /* TCPE_NL_H */

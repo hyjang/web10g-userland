@@ -1,4 +1,4 @@
-bin_PROGRAMS = listconns readconn watchconn
+bin_PROGRAMS = listconns readconn watchconn writevar
 
 LIBTCPE_LDADDS = @STRIP_BEGIN@ \
 	$(top_builddir)/lib/tcpe/libtcpe.la \
@@ -17,3 +17,6 @@ listconns_LDADD = $(LIBTCPE_LDADDS)
 
 watchconn_SOURCES = watchconn.c scripts.h
 watchconn_LDADD = $(LIBTCPE_LDADDS)
+
+writevar_SOURCES = writevar.c scripts.h
+writevar_LDADD = $(LIBTCPE_LDADDS)

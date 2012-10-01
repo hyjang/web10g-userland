@@ -448,3 +448,62 @@ tcpe_read_conn(struct tcpe_data* data, int cid, const tcpe_client* cl)
 	return err;
 }
 
+struct tcpe_error*
+tcpe_write_var(const char* varname, uint32_t val, int cid, tcpe_client* cl)
+{
+	tcpe_error* err = NULL;
+	struct mnl_socket* nl;
+	int fam_id; 
+	int ret;
+
+	char buf[MNL_SOCKET_BUFFER_SIZE];
+	struct nlmsghdr *nlh;
+	struct genlmsghdr *genl;
+	struct nlattr *attrp;
+
+	unsigned int seq, portid;
+
+	nl = cl->mnl_sock;
+	fam_id = cl->fam_id;
+
+	portid = mnl_socket_get_portid(nl);
+
+	nlh = mnl_nlmsg_put_header(buf);
+	nlh->nlmsg_type = fam_id;
+	nlh->nlmsg_flags = NLM_F_REQUEST | NLM_F_ACK;
+	nlh->nlmsg_seq = seq = time(NULL);
+	genl = mnl_nlmsg_put_extra_header(nlh, sizeof(struct genlmsghdr));
+
+	genl->cmd = TCPE_CMD_WRITE_VAR;
+
+        attrp = mnl_attr_nest_start_check(nlh, getpagesize(), NLE_ATTR_4TUPLE);
+	Err2If(!attrp, TCPE_ERR_GENL, "attr_nest_start failure");
+
+        mnl_attr_put_u32(nlh, NEA_CID, cid);
+
+        mnl_attr_nest_end(nlh, attrp);
+
+        attrp = mnl_attr_nest_start_check(nlh, getpagesize(), NLE_ATTR_WRITE);
+	Err2If(!attrp, TCPE_ERR_GENL, "attr_nest_start failure");
+
+	mnl_attr_put_str(nlh, NEA_WRITE_VAR, varname);
+        mnl_attr_put_u32(nlh, NEA_WRITE_VAL, val);
+
+        mnl_attr_nest_end(nlh, attrp);
+
+	ret = mnl_socket_sendto(nl, nlh, nlh->nlmsg_len);
+	Err2If(ret == -1, TCPE_ERR_GENL, "mnl_socket_send");
+
+	ret = mnl_socket_recvfrom(nl, buf, sizeof(buf));
+	Err2If(ret == -1, TCPE_ERR_GENL, "mnl_socket_recvfrom");
+
+	ret = mnl_cb_run(buf, ret, seq, portid, NULL, NULL);
+
+	if (ret == -1) {
+		printf("%s\n", strerror(errno));
+		Err2(TCPE_ERR_GENL, "mnl_cb_run error");
+	}
+
+ Cleanup:
+ 	return err;
+}
