@@ -57,7 +57,30 @@ struct tcpe_error* tcpe_data_delta(struct tcpe_data* data, const struct tcpe_dat
 			data->val[i].mask = 1;
 			continue;
 		}
-		data->val[i].uv64 = data2->val[i].uv64 - data1->val[i].uv64;
+		switch(tcpe_var_array[i].type) {
+		case TCPE_UNSIGNED64:
+			data->val[i].uv64 =
+				data2->val[i].uv64 - data1->val[i].uv64;
+			break;
+		case TCPE_UNSIGNED32:
+			data->val[i].uv32 =
+				data2->val[i].uv32 - data1->val[i].uv32;
+			break;
+		case TCPE_SIGNED32:
+			data->val[i].sv32 =
+				data2->val[i].sv32 - data1->val[i].sv32;
+			break;
+		case TCPE_UNSIGNED16:
+			data->val[i].uv16 =
+				data2->val[i].uv16 - data1->val[i].uv16;
+			break;
+		case TCPE_UNSIGNED8:
+			data->val[i].uv8 =
+				data2->val[i].uv8 - data1->val[i].uv8;
+			break;
+		default:
+			break;
+		}
 	}
 
  Cleanup:

@@ -9,8 +9,8 @@
 
 enum nl_estats_msg_types {
         TCPE_CMD_LIST_CONNS,
-        TCPE_CMD_READ_CONN, 
         TCPE_CMD_READ_ALL,
+        TCPE_CMD_READ_VARS,
         TCPE_CMD_WRITE_VAR,
         NLE_MSG_MAX
 };
