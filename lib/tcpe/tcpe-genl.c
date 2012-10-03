@@ -375,7 +375,7 @@ tcpe_list_conns(tcpe_client* cl, tcpe_connection_func func)
 }
 
 struct tcpe_error*
-tcpe_read_conn(struct tcpe_data* data, int cid, const tcpe_client* cl)
+tcpe_read_vars(struct tcpe_data* data, int cid, const tcpe_client* cl)
 {
 	tcpe_error* err = NULL;
 	struct mnl_socket* nl;

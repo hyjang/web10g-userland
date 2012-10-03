@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 	
 	SWAP(data_new, data_prev);
 
-	Chk(tcpe_read_conn(data_new, cid, cl));
+	Chk(tcpe_read_vars(data_new, cid, cl));
 
 	Chk(tcpe_data_delta(data, data_new, data_prev));
 

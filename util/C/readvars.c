@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 	Chk(tcpe_client_set_mask(cl, &mask));
 	Chk(tcpe_data_new(&data));
 
-	Chk(tcpe_read_conn(data, cid, cl));
+	Chk(tcpe_read_vars(data, cid, cl));
 
 	for (j = 0; j < ARRAYSIZE(data->val); j++){
 
