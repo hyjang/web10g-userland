@@ -21,7 +21,7 @@
 #define TCPE_GENL_H
 
 struct tcpe_error* tcpe_list_conns(struct tcpe_client*, tcpe_connection_func);
-struct tcpe_error* tcpe_read_conn(struct tcpe_data*, int /*cid*/, const tcpe_client*);
+struct tcpe_error* tcpe_read_vars(struct tcpe_data*, int /*cid*/, const tcpe_client*);
 struct tcpe_error* tcpe_write_var(const char* /*name*/, uint32_t /*val*/, int /*cid*/, tcpe_client*);
 
 #endif /* TCPE_GENL_H */

@@ -115,7 +115,7 @@ int main(int argc, char **argv)
 
 	while (1) {
 
-	Chk(tcpe_read_conn(data, cid, cl));
+	Chk(tcpe_read_vars(data, cid, cl));
 
 	for (j = 0; j < ARRAYSIZE(data->val); j++) {
 
