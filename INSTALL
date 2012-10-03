@@ -11,7 +11,7 @@ There are 3 steps to installation of Web10G userland:
 
 	The kernel patches are against a mainline kernel, available
 	from kernel.org, of micro version 0; for example, the current
-	release is against version 3.4.0. Patching against later micro
+	release is against version 3.5.0. Patching against later micro
 	versions will often work, with reasonable offset, to produce a
 	viable kernel, but this is not tested.
 
@@ -29,14 +29,14 @@ There are 3 steps to installation of Web10G userland:
 		    [*] TCP: Extended TCP statistics (TCP ESTATS) MIB
 		    <M>   TCP: ESTATS netlink module
 
-	One will also want to set the default congestion control to RENO:
+	One may also want to set the default congestion control to RENO:
 		Networking support --->
 		  Networking options --->
 		    [*] TCP: advanced congestion control --->
 		        Default TCP congestion control (Reno)
 
-	Accommodations for CUBIC, BIC, and H-TCP have been developed, and
-	are currently in testing for immediate release.
+	as this is the model in which Web10G was first developed, however
+	accommodations for CUBIC, BIC, and H-TCP are now implemented.
 
 	The loadable kernel module produced is named "tcp_estats_nl".
 
@@ -95,20 +95,17 @@ CID LocalAddress LocalPort RemoteAddress RemotePort
 
 For a given CID of interest, one can run
 
-	readconn CID
+	readvars CID
 
 for an atomic read of all MIB variables, or
 
-	watchconn CID
+	watchvars CID     or     deltavars CID
 
-for a repeated read, every one second. For details on
-querying the kernel for a subset of variables, run
+for a repeated read of counters or difference of counters, each second.
+For details on querying the kernel for a subset of variables, run, e.g.,
 
-	watchconn -h
+	deltavars -h
 
-	    or
-	
-	readconn -h
 
 
 
