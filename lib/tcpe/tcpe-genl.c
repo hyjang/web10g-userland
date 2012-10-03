@@ -449,7 +449,7 @@ tcpe_read_vars(struct tcpe_data* data, int cid, const tcpe_client* cl)
 }
 
 struct tcpe_error*
-tcpe_write_var(const char* varname, uint32_t val, int cid, tcpe_client* cl)
+tcpe_write_var(const char* varname, uint32_t val, int cid, const tcpe_client* cl)
 {
 	tcpe_error* err = NULL;
 	struct mnl_socket* nl;
