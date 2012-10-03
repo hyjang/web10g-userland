@@ -403,7 +403,7 @@ tcpe_read_conn(struct tcpe_data* data, int cid, const tcpe_client* cl)
 	nlh->nlmsg_seq = seq = time(NULL);
 	genl = mnl_nlmsg_put_extra_header(nlh, sizeof(struct genlmsghdr));
 
-	genl->cmd = TCPE_CMD_READ_CONN;
+	genl->cmd = TCPE_CMD_READ_VARS;
 
         attrp = mnl_attr_nest_start_check(nlh, getpagesize(), NLE_ATTR_4TUPLE);
 	Err2If(!attrp, TCPE_ERR_GENL, "attr_nest_start failure");
