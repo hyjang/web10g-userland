@@ -29,14 +29,15 @@ There are 3 steps to installation of Web10G userland:
 		    [*] TCP: Extended TCP statistics (TCP ESTATS) MIB
 		    <M>   TCP: ESTATS netlink module
 
-	One may also want to set the default congestion control to RENO:
+	Previous versions encouraged setting the default congestion control
+	to RENO:
+
 		Networking support --->
 		  Networking options --->
 		    [*] TCP: advanced congestion control --->
 		        Default TCP congestion control (Reno)
 
-	as this is the model in which Web10G was first developed, however
-	accommodations for CUBIC, BIC, and H-TCP are now implemented.
+	However accommodations for CUBIC, BIC, and H-TCP are now implemented.
 
 	The loadable kernel module produced is named "tcp_estats_nl".
 
