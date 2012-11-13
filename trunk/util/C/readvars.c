@@ -113,7 +113,7 @@ int main(int argc, char **argv)
 
 	Chk(tcpe_read_vars(data, cid, cl));
 
-	for (j = 0; j < ARRAYSIZE(data->val); j++){
+	for (j = 0; j < data->length; j++){
 
 		if (j == 0)
 			printf("\n\n Perf Table\n\n");

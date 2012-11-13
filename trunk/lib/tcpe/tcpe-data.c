@@ -23,12 +23,30 @@ struct tcpe_error*
 tcpe_data_new(struct tcpe_data** data)
 {
 	tcpe_error* err = NULL;
+	int len = TOTAL_INDEX_MAX;
 
 	ErrIf(data == NULL, TCPE_ERR_INVAL);
 	*data = NULL;
 
-	Chk(Malloc((void**) data, sizeof(tcpe_data)));
-	memset((void*) *data, 0, sizeof(tcpe_data));
+	Chk(Malloc((void**) data, sizeof(tcpe_data) + len*sizeof(struct tcpe_val)));
+	memset((void*) *data, 0, sizeof(tcpe_data) + len*sizeof(struct tcpe_val));
+	(*data)->length = len;
+
+ Cleanup:
+ 	return err;
+}
+
+struct tcpe_error*
+tcpe_data_sized_new(struct tcpe_data** data, int len)
+{
+	tcpe_error* err = NULL;
+
+	ErrIf(data == NULL, TCPE_ERR_INVAL);
+	*data = NULL;
+
+	Chk(Malloc((void**) data, sizeof(tcpe_data) + len*sizeof(struct tcpe_val)));
+	memset((void*) *data, 0, sizeof(tcpe_data) + len*sizeof(struct tcpe_val));
+	(*data)->length = len;
 
  Cleanup:
  	return err;
@@ -51,7 +69,7 @@ struct tcpe_error* tcpe_data_delta(struct tcpe_data* data, const struct tcpe_dat
 
 	ErrIf(data == NULL || data2 == NULL || data1 == NULL, TCPE_ERR_INVAL);
 
-	for (i = 0; i < ARRAYSIZE(data->val); i++) {
+	for (i = 0; i < data->length; i++) {
 
 		if (data2->val[i].mask || data1->val[i].mask) {
 			data->val[i].mask = 1;

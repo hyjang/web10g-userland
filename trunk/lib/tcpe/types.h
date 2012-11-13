@@ -82,6 +82,11 @@ struct tcpe_var {
         enum TCPE_TYPE type;
 };
 
+struct tcpe_data {
+	int length;
+	struct tcpe_val val[0];
+};
+
 struct tcpe_mask {
 	uint64_t masks[MAX_TABLE];
 	int      if_mask[MAX_TABLE];
@@ -271,10 +276,6 @@ typedef enum TCPE_TUNE_INDEX {
 #define TUNE_INDEX_MAX __TUNE_INDEX_MAX
 
 #define TOTAL_INDEX_MAX PERF_INDEX_MAX+PATH_INDEX_MAX+STACK_INDEX_MAX+APP_INDEX_MAX+TUNE_INDEX_MAX
-
-struct tcpe_data {
-	struct tcpe_val val[TOTAL_INDEX_MAX];
-};
 
 #define ARRAYSIZE(x) (sizeof(x) / sizeof(x[0]))
 
