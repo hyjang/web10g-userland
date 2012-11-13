@@ -1,0 +1,14 @@
+
+
+web10g-userland-2.0.4:
+
+	Fixed reporting of IPv6 addresses in tcpe_list_conns.
+
+	Added tcpe_write_var function and example client (writevar).
+	N.B. currently writevar is only implemented for two of the four
+	writable variables defined in RFC 4898, LimCwnd and LimRwin.
+	This is an initial implementation, and deserves further testing,
+	but has been included in this release for consideration.
+
+	Added function tcpe_data_delta for taking difference of counters,
+	and client deltavars.

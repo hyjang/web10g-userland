@@ -10,7 +10,7 @@ SUBDIRS = lib util
 
 #EXTRA_DIST = tcpe-config.in tcpe.m4
 
-EXTRA_DIST = tcp-estats-nl-0.4-3.5.patch libmnl-1.0.3.tar.bz2
+EXTRA_DIST = estats-nl-0.4-3.5.patch libmnl-1.0.3.tar.bz2
 
 edit = @STRIP_BEGIN@ \
    sed -e 's,@TCPE_VERSION\@,$(TCPE_VERSION),g' \
