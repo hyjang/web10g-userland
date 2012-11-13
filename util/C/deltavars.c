@@ -125,7 +125,7 @@ int main(int argc, char **argv)
 
 	Chk(tcpe_data_delta(data, data_new, data_prev));
 
-	for (j = 0; j < ARRAYSIZE(data->val); j++) {
+	for (j = 0; j < data->length; j++) {
 
 		if (j == 0)
 			printf("\n\n Perf Table\n\n");
