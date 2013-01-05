@@ -40,22 +40,22 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-#include <tcpe/types.h>
-#include <tcpe/types-int.h>
+#include <estats/types.h>
+#include <estats/types-int.h>
 
-/* tcpe public headers */
-#include <tcpe/error.h>
-#include <tcpe/tcpe-client.h>
-#include <tcpe/tcpe-data.h>
-#include <tcpe/tcpe-genl.h>
-#include <tcpe/tcpe.h>
-#include <tcpe/tcpe-nl.h>
+/* estats public headers */
+#include <estats/error.h>
+#include <estats/estats-client.h>
+#include <estats/estats-data.h>
+#include <estats/estats-genl.h>
+#include <estats/estats.h>
+#include <estats/estats-nl.h>
 
-/* tcpe internal headers */
-#include <tcpe/debug-int.h>
-#include <tcpe/error-int.h>
-#include <tcpe/libcwrap-int.h>
-#include <tcpe/list-int.h>
-#include <tcpe/resolve-int.h>
+/* estats internal headers */
+#include <estats/debug-int.h>
+#include <estats/error-int.h>
+#include <estats/libcwrap-int.h>
+#include <estats/list-int.h>
+#include <estats/resolve-int.h>
 
 #endif /* TCPE_INT_H */

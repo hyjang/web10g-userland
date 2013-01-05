@@ -20,9 +20,9 @@
 #ifndef TCPE_DATA_H
 #define TCPE_DATA_H
 
-struct tcpe_error* tcpe_data_new(struct tcpe_data**);
-struct tcpe_error* tcpe_data_sized_new(struct tcpe_data**, int /*length*/);
-struct tcpe_error* tcpe_data_free(struct tcpe_data**);
-struct tcpe_error* tcpe_data_delta(struct tcpe_data*, const struct tcpe_data*, const struct tcpe_data*);
+struct estats_error* estats_data_new(struct estats_data**);
+struct estats_error* estats_data_sized_new(struct estats_data**, int /*length*/);
+struct estats_error* estats_data_free(struct estats_data**);
+struct estats_error* estats_data_delta(struct estats_data*, const struct estats_data*, const struct estats_data*);
 
 #endif /* TCPE_DATA_H */

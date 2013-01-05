@@ -20,8 +20,8 @@
 #ifndef TCPE_GENL_H
 #define TCPE_GENL_H
 
-struct tcpe_error* tcpe_list_conns(struct tcpe_client*, tcpe_connection_func);
-struct tcpe_error* tcpe_read_vars(struct tcpe_data*, int /*cid*/, const tcpe_client*);
-struct tcpe_error* tcpe_write_var(const char* /*name*/, uint32_t /*val*/, int /*cid*/, const tcpe_client*);
+struct estats_error* estats_list_conns(struct estats_client*, estats_connection_func);
+struct estats_error* estats_read_vars(struct estats_data*, int /*cid*/, const estats_client*);
+struct estats_error* estats_write_var(const char* /*name*/, uint32_t /*val*/, int /*cid*/, const estats_client*);
 
 #endif /* TCPE_GENL_H */

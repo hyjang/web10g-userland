@@ -17,43 +17,43 @@
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  *
  */
-#include <tcpe/tcpe-int.h>
+#include <estats/estats-int.h>
 
-struct tcpe_error*
-tcpe_data_new(struct tcpe_data** data)
+struct estats_error*
+estats_data_new(struct estats_data** data)
 {
-	tcpe_error* err = NULL;
+	estats_error* err = NULL;
 	int len = TOTAL_INDEX_MAX;
 
 	ErrIf(data == NULL, TCPE_ERR_INVAL);
 	*data = NULL;
 
-	Chk(Malloc((void**) data, sizeof(tcpe_data) + len*sizeof(struct tcpe_val)));
-	memset((void*) *data, 0, sizeof(tcpe_data) + len*sizeof(struct tcpe_val));
+	Chk(Malloc((void**) data, sizeof(estats_data) + len*sizeof(struct estats_val)));
+	memset((void*) *data, 0, sizeof(estats_data) + len*sizeof(struct estats_val));
 	(*data)->length = len;
 
  Cleanup:
  	return err;
 }
 
-struct tcpe_error*
-tcpe_data_sized_new(struct tcpe_data** data, int len)
+struct estats_error*
+estats_data_sized_new(struct estats_data** data, int len)
 {
-	tcpe_error* err = NULL;
+	estats_error* err = NULL;
 
 	ErrIf(data == NULL, TCPE_ERR_INVAL);
 	*data = NULL;
 
-	Chk(Malloc((void**) data, sizeof(tcpe_data) + len*sizeof(struct tcpe_val)));
-	memset((void*) *data, 0, sizeof(tcpe_data) + len*sizeof(struct tcpe_val));
+	Chk(Malloc((void**) data, sizeof(estats_data) + len*sizeof(struct estats_val)));
+	memset((void*) *data, 0, sizeof(estats_data) + len*sizeof(struct estats_val));
 	(*data)->length = len;
 
  Cleanup:
  	return err;
 }
 
-struct tcpe_error*
-tcpe_data_free(struct tcpe_data** data)
+struct estats_error*
+estats_data_free(struct estats_data** data)
 {
 	if (data == NULL || *data == NULL)
 		return;
@@ -62,9 +62,9 @@ tcpe_data_free(struct tcpe_data** data)
 	*data = NULL;
 }
 
-struct tcpe_error* tcpe_data_delta(struct tcpe_data* data, const struct tcpe_data* data2, const struct tcpe_data* data1)
+struct estats_error* estats_data_delta(struct estats_data* data, const struct estats_data* data2, const struct estats_data* data1)
 {
-	tcpe_error* err = NULL;
+	estats_error* err = NULL;
 	int i;
 
 	ErrIf(data == NULL || data2 == NULL || data1 == NULL, TCPE_ERR_INVAL);
@@ -75,7 +75,7 @@ struct tcpe_error* tcpe_data_delta(struct tcpe_data* data, const struct tcpe_dat
 			data->val[i].mask = 1;
 			continue;
 		}
-		switch(tcpe_var_array[i].type) {
+		switch(estats_var_array[i].type) {
 		case TCPE_UNSIGNED64:
 			data->val[i].uv64 =
 				data2->val[i].uv64 - data1->val[i].uv64;

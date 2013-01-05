@@ -17,13 +17,13 @@
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  *
  */
-#include <tcpe/tcpe-int.h>
+#include <estats/estats-int.h>
 
-#define TCPEVAR(_name_,_type_) (struct tcpe_var) { .name = #_name_, .type = TCPE_##_type_ }
+#define TCPEVAR(_name_,_type_) (struct estats_var) { .name = #_name_, .type = TCPE_##_type_ }
 
 int max_index[MAX_TABLE] = { PERF_INDEX_MAX, PATH_INDEX_MAX, STACK_INDEX_MAX, APP_INDEX_MAX, TUNE_INDEX_MAX };
 
-struct tcpe_var tcpe_var_array[TOTAL_INDEX_MAX] = {
+struct estats_var estats_var_array[TOTAL_INDEX_MAX] = {
         TCPEVAR(SegsOut,UNSIGNED32),
         TCPEVAR(DataSegsOut,UNSIGNED32),
         TCPEVAR(DataOctetsOut,UNSIGNED32),

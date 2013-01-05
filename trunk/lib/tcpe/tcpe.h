@@ -31,11 +31,11 @@
 #include <libmnl/libmnl.h>
 #include <linux/genetlink.h>
 
-#include <tcpe/types.h> /* Must be first */
-#include <tcpe/tcpe-client.h>
-#include <tcpe/tcpe-data.h>
-#include <tcpe/tcpe-genl.h>
-#include <tcpe/tcpe-nl.h>
-#include <tcpe/error.h>
+#include <estats/types.h> /* Must be first */
+#include <estats/estats-client.h>
+#include <estats/estats-data.h>
+#include <estats/estats-genl.h>
+#include <estats/estats-nl.h>
+#include <estats/error.h>
 
 #endif /* TCPE_H */

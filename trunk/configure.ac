@@ -1,15 +1,15 @@
 
 AC_PREREQ([2.68])
-AC_INIT([Web10G-userland], [2.0.4], [web10g-user@web10g.org])
+AC_INIT([Web10G-userland], [2.1.0], [web10g-user@web10g.org])
 
-dnl libestats libtool versioning
-LIBTCPE_LT_CURRENT=3
-LIBTCPE_LT_REVISION=0
-LIBTCPE_LT_AGE=2
+dnl libtcpestats libtool versioning
+LIBTCPESTATS_LT_CURRENT=1
+LIBTCPESTATS_LT_REVISION=0
+LIBTCPESTATS_LT_AGE=1
 
-AC_SUBST(LIBTCPE_LT_CURRENT)
-AC_SUBST(LIBTCPE_LT_REVISION)
-AC_SUBST(LIBTCPE_LT_AGE)
+AC_SUBST(LIBTCPESTATS_LT_CURRENT)
+AC_SUBST(LIBTCPESTATS_LT_REVISION)
+AC_SUBST(LIBTCPESTATS_LT_AGE)
 
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([])
@@ -28,6 +28,9 @@ AC_PROG_RANLIB
 AM_PROG_AR
 AC_PROG_LIBTOOL
 
+# AutoTroll with Qt.
+AT_WITH_QT
+
 AC_ARG_ENABLE(debug,
               AC_HELP_STRING([--enable-debug],
                              [turn on debugging compiler options]),
@@ -39,8 +42,8 @@ AC_ARG_ENABLE(warnings,
               enable_warnings=$enableval,
               enable_warnings=no)
 
-TCPE_INCLUDE_DIR=${includedir}
-AC_SUBST(TCPE_INCLUDE_DIR)
+TCPESTATS_INCLUDE_DIR=${includedir}
+AC_SUBST(TCPESTATS_INCLUDE_DIR)
 
 # Checks for libraries.
 
@@ -112,9 +115,10 @@ AC_SUBST(STRIP_END)
 
 AC_CONFIG_FILES([Makefile
                  lib/Makefile
-                 lib/tcpe/Makefile
+                 lib/estats/Makefile
 		 util/Makefile
 		 util/C/Makefile
+		 util/Qt/Makefile
 		 ])
 
 AC_OUTPUT
