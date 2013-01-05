@@ -5,6 +5,10 @@
  *  Intrusive list structure, similar to <linux/list.h>
  *  from the Linux kernel, or Boost.Instrusive from the
  *  Boost libraries.
+ *
+ *  The below code is modified from that of the GNU C Library,
+ *  (glibc-2.13/nptl/sysdeps/pthread/list.h), in accordance with
+ *  the LGPL 2.1.
  */
 
 static inline void _estats_list_init(struct estats_list* ptr)
