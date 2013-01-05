@@ -20,6 +20,6 @@
 #ifndef TCPE_INT_H
 #define TCPE_INT_H
 
-int resolve_genladdr(const char *name, struct tcpe_client* cl);
+int resolve_genladdr(const char *name, struct estats_client* cl);
 
 #endif /* TCPE_INT_H */

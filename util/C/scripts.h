@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <tcpe/tcpe.h>
+#include <estats/estats.h>
 
 #define Chk(x) \
     do { \
@@ -23,7 +23,7 @@
     do { \
         err = (x); \
         if (err != NULL) { \
-            tcpe_error_free(&err); \
+            estats_error_free(&err); \
             goto Cleanup; \
         } \
     } while (0)
@@ -38,8 +38,8 @@
 
 #define PRINT_AND_FREE(err) \
     do { \
-        tcpe_error_print(stderr, err); \
-        tcpe_error_free(&err); \
+        estats_error_print(stderr, err); \
+        estats_error_free(&err); \
     } while (0)
 
 #endif /* !defined(UTIL_SCRIPTS_SCRIPTS_H) */

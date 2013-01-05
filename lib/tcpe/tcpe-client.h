@@ -20,10 +20,10 @@
 #ifndef TCPE_CLIENT_H
 #define TCPE_CLIENT_H
 
-struct tcpe_error* tcpe_client_init(struct tcpe_client**);
-void               tcpe_client_destroy(struct tcpe_client**);
-struct tcpe_error* tcpe_client_get_sock(struct mnl_socket**, const tcpe_client*);
-struct tcpe_error* tcpe_client_get_fam_id(int*, const tcpe_client*);
-struct tcpe_error* tcpe_client_set_mask(struct tcpe_client*, struct tcpe_mask*);
+struct estats_error* estats_client_init(struct estats_client**);
+void               estats_client_destroy(struct estats_client**);
+struct estats_error* estats_client_get_sock(struct mnl_socket**, const estats_client*);
+struct estats_error* estats_client_get_fam_id(int*, const estats_client*);
+struct estats_error* estats_client_set_mask(struct estats_client*, struct estats_mask*);
 
 #endif /* TCPE_CLIENT_H */

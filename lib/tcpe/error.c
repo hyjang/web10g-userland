@@ -17,14 +17,14 @@
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  *
  */
-#include <tcpe/tcpe-int.h>
+#include <estats/estats-int.h>
 
 /*
  * Array of error code -> string mappings, in the style of sys_errlist.
- * Must be kept in sync with the defined errors in tcpe.h.
+ * Must be kept in sync with the defined errors in estats.h.
  */
 
-static const char* const _tcpe_sys_errlist[] = {
+static const char* const _estats_sys_errlist[] = {
         "Success",                      /* TCPE_ERR_SUCCESS */
         "Message un-acked",             /* TCPE_ERR_ACK */
         "No returned data",             /* TCPE_ERR_RET_DATA */
@@ -41,11 +41,11 @@ static const char* const _tcpe_sys_errlist[] = {
 };
 
 /*
- * Number of tcpe errors, in the style of sys_nerr.
+ * Number of estats errors, in the style of sys_nerr.
  */
-static int _tcpe_sys_nerr = ARRAYSIZE(_tcpe_sys_errlist);
+static int _estats_sys_nerr = ARRAYSIZE(_estats_sys_errlist);
 
-static struct tcpe_error _UnknownError = {
+static struct estats_error _UnknownError = {
     TCPE_ERR_UNKNOWN, /* num */
     "Error not found in error table", /* msg */
     NULL,               /* xtra */
@@ -54,7 +54,7 @@ static struct tcpe_error _UnknownError = {
     NULL,               /* function */
 };
 
-static struct tcpe_error _OOMError = {
+static struct estats_error _OOMError = {
     TCPE_ERR_NOMEM,   /* num */
     "Out of memory",    /* msg */
     NULL,               /* xtra */
@@ -64,19 +64,19 @@ static struct tcpe_error _OOMError = {
 };
 
 
-tcpe_error*
-tcpe_error_new(const TCPE_ERROR errnum,
+estats_error*
+estats_error_new(const TCPE_ERROR errnum,
                  const char* xtra,
                  const char* file,
                  const int line,
                  const char* function)
 {
-    tcpe_error* err;
+    estats_error* err;
 
-    if (errnum < 0 || errnum >= _tcpe_sys_nerr)
+    if (errnum < 0 || errnum >= _estats_sys_nerr)
         return &_UnknownError;
 
-    if ((err = malloc(sizeof(tcpe_error))) == NULL)
+    if ((err = malloc(sizeof(estats_error))) == NULL)
         return &_OOMError;
 
     if (xtra != NULL) {
@@ -92,7 +92,7 @@ tcpe_error_new(const TCPE_ERROR errnum,
     if (errnum == TCPE_ERR_LIBC)
         err->msg = strerror(errno);
     else
-        err->msg = _tcpe_sys_errlist[errnum];
+        err->msg = _estats_sys_errlist[errnum];
     err->file = file;
     err->line = line;
     err->function = function;
@@ -102,7 +102,7 @@ tcpe_error_new(const TCPE_ERROR errnum,
 
 
 void
-tcpe_error_free(tcpe_error** err)
+estats_error_free(estats_error** err)
 {
     if (err == NULL || *err == NULL)
         return;
@@ -116,8 +116,8 @@ tcpe_error_free(tcpe_error** err)
 
 
 void
-tcpe_error_print(FILE* fp,
-                   const tcpe_error* err)
+estats_error_print(FILE* fp,
+                   const estats_error* err)
 {
     if (err == NULL)
 	return;
@@ -137,42 +137,42 @@ tcpe_error_print(FILE* fp,
 
 
 TCPE_ERROR
-tcpe_error_get_number(const tcpe_error* err)
+estats_error_get_number(const estats_error* err)
 {
     return err->num;
 }
 
 
 const char*
-tcpe_error_get_message(const tcpe_error* err)
+estats_error_get_message(const estats_error* err)
 {
     return err->msg;
 }
 
 
 const char*
-tcpe_error_get_extra(const tcpe_error* err)
+estats_error_get_extra(const estats_error* err)
 {
     return err->xtra;
 }
 
 
 const char*
-tcpe_error_get_file(const tcpe_error* err)
+estats_error_get_file(const estats_error* err)
 {
     return err->file;
 }
 
 
 int
-tcpe_error_get_line(const tcpe_error* err)
+estats_error_get_line(const estats_error* err)
 {
     return err->line;
 }
 
 
 const char*
-tcpe_error_get_function(const tcpe_error* err)
+estats_error_get_function(const estats_error* err)
 {
     return err->function;
 }

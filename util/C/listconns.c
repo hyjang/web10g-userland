@@ -19,16 +19,16 @@
  */
 #include "scripts.h"
 
-void connection_callback(struct tcpe_connection_tuple* ct)
+void connection_callback(struct estats_connection_tuple* ct)
 {
 	char rem_addr_str[46];
 	char local_addr_str[46];
 
-	if ((ct->local_addr[16]) == TCPE_ADDRTYPE_IPV4) {
+	if ((ct->local_addr[16]) == ESTATS_ADDRTYPE_IPV4) {
 		inet_ntop(AF_INET, &(ct->rem_addr[0]), &rem_addr_str[0], 40);
 		inet_ntop(AF_INET, &(ct->local_addr[0]), &local_addr_str[0], 40);
 	}
-	else if ((ct->local_addr[16]) == TCPE_ADDRTYPE_IPV6) {
+	else if ((ct->local_addr[16]) == ESTATS_ADDRTYPE_IPV6) {
 		inet_ntop(AF_INET6, &(ct->rem_addr[0]), &rem_addr_str[0], 40);
 		inet_ntop(AF_INET6, &(ct->local_addr[0]), &local_addr_str[0], 40);
 	}
@@ -40,10 +40,10 @@ void connection_callback(struct tcpe_connection_tuple* ct)
 int main(int argc, char **argv)
 {
 
-	struct tcpe_error* err = NULL;
-	struct tcpe_client* cl = NULL;
+	struct estats_error* err = NULL;
+	struct estats_client* cl = NULL;
 
-	Chk(tcpe_client_init(&cl));
+	Chk(estats_client_init(&cl));
 
 
 	printf("%-8s %-20s %-8s %-20s %-8s\n", "CID", "LocalAddr", "LocalPort", "RemAddr", "RemPort");
@@ -51,10 +51,10 @@ int main(int argc, char **argv)
 	printf("\n");
 
 
-	Chk(tcpe_list_conns(cl, connection_callback));
+	Chk(estats_list_conns(cl, connection_callback));
 
  Cleanup:
-	tcpe_client_destroy(&cl);
+	estats_client_destroy(&cl);
 
 	if (err != NULL) {
 		PRINT_AND_FREE(err);

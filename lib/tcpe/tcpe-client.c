@@ -17,12 +17,12 @@
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  *
  */
-#include <tcpe/tcpe-int.h>
+#include <estats/estats-int.h>
 
-struct tcpe_error*
-tcpe_client_init(struct tcpe_client** cl)
+struct estats_error*
+estats_client_init(struct estats_client** cl)
 {
-	tcpe_error *err = NULL;
+	estats_error *err = NULL;
 	struct mnl_socket *sock;
 	int id;
 	int ret;
@@ -31,9 +31,9 @@ tcpe_client_init(struct tcpe_client** cl)
 	ErrIf(cl == NULL, TCPE_ERR_INVAL);
 	*cl = NULL;
 
-	Chk(Malloc((void**) cl, sizeof(tcpe_client)));
-	memset((void*) *cl, 0, sizeof(tcpe_client));
-	_tcpe_list_init(&((*cl)->connection_list_head));
+	Chk(Malloc((void**) cl, sizeof(estats_client)));
+	memset((void*) *cl, 0, sizeof(estats_client));
+	_estats_list_init(&((*cl)->connection_list_head));
 
 	sock = mnl_socket_open(NETLINK_GENERIC);
 	ErrIf(sock == NULL, TCPE_ERR_NOLINK);
@@ -61,10 +61,10 @@ tcpe_client_init(struct tcpe_client** cl)
 }
 
 void
-tcpe_client_destroy(struct tcpe_client** cl)
+estats_client_destroy(struct estats_client** cl)
 {
-	struct tcpe_list* conn_pos;
-	struct tcpe_list* tmp;
+	struct estats_list* conn_pos;
+	struct estats_list* tmp;
 
 	if (cl == NULL || *cl == NULL)
 		return;
@@ -72,8 +72,8 @@ tcpe_client_destroy(struct tcpe_client** cl)
 	mnl_socket_close((*cl)->mnl_sock);
 
 	TCPE_LIST_FOREACH_SAFE(conn_pos, tmp, &((*cl)->connection_list_head)) {
-        	tcpe_connection* currConn = TCPE_LIST_ENTRY(conn_pos, tcpe_connection, list);
-        	_tcpe_list_del(conn_pos);
+        	estats_connection* currConn = TCPE_LIST_ENTRY(conn_pos, estats_connection, list);
+        	_estats_list_del(conn_pos);
         	free(currConn);
 	}
 
@@ -81,10 +81,10 @@ tcpe_client_destroy(struct tcpe_client** cl)
 	*cl = NULL;
 }
 
-struct tcpe_error*
-tcpe_client_set_mask(struct tcpe_client* cl, struct tcpe_mask* mask)
+struct estats_error*
+estats_client_set_mask(struct estats_client* cl, struct estats_mask* mask)
 {
-	tcpe_error* err = NULL;
+	estats_error* err = NULL;
 
 	ErrIf(cl == NULL || mask == NULL, TCPE_ERR_INVAL);
 
@@ -94,10 +94,10 @@ tcpe_client_set_mask(struct tcpe_client* cl, struct tcpe_mask* mask)
  	return err;
 }
 
-struct tcpe_error*
-tcpe_client_get_sock(struct mnl_socket** nl, const tcpe_client* cl)
+struct estats_error*
+estats_client_get_sock(struct mnl_socket** nl, const estats_client* cl)
 {
-	tcpe_error* err = NULL;
+	estats_error* err = NULL;
 
 	ErrIf(nl == NULL || cl == NULL, TCPE_ERR_INVAL);
 
@@ -107,10 +107,10 @@ tcpe_client_get_sock(struct mnl_socket** nl, const tcpe_client* cl)
  	return err;
 }
 
-struct tcpe_error*
-tcpe_client_get_fam_id(int* id, const tcpe_client* cl)
+struct estats_error*
+estats_client_get_fam_id(int* id, const estats_client* cl)
 {
-	tcpe_error* err = NULL;
+	estats_error* err = NULL;
 
 	ErrIf(id == NULL || cl == NULL, TCPE_ERR_INVAL);
 

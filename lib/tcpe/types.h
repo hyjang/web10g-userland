@@ -58,7 +58,7 @@ typedef enum TCPE_EVENT {
         TCPE_NEW_CONN           = 0,
 } TCPE_EVENT;
 
-union tcpe_union {
+union estats_union {
 	uint64_t uv64;
 	uint32_t uv32;
 	int32_t  sv32;
@@ -66,7 +66,7 @@ union tcpe_union {
 	uint8_t  uv8;
 };
 
-struct tcpe_val {
+struct estats_val {
         union {
                 uint64_t uv64;
                 uint32_t uv32;
@@ -77,31 +77,31 @@ struct tcpe_val {
         int mask;
 };
 
-struct tcpe_var {
+struct estats_var {
         char *name;
         enum TCPE_TYPE type;
 };
 
-struct tcpe_data {
+struct estats_data {
 	int length;
-	struct tcpe_val val[0];
+	struct estats_val val[0];
 };
 
-struct tcpe_mask {
+struct estats_mask {
 	uint64_t masks[MAX_TABLE];
 	int      if_mask[MAX_TABLE];
 };
 
-enum tcpe_addrtype {
+enum estats_addrtype {
 	TCPE_ADDRTYPE_IPV4 = 1,
 	TCPE_ADDRTYPE_IPV6 = 2
 };
 
 /*
- * tcpe_addrtype is sent in *_addr[16], below
+ * estats_addrtype is sent in *_addr[16], below
  */
 
-struct tcpe_connection_tuple {
+struct estats_connection_tuple {
 	uint8_t   rem_addr[17];
 	uint8_t   local_addr[17];
 	uint16_t  rem_port;
@@ -109,16 +109,16 @@ struct tcpe_connection_tuple {
 	int       cid;
 };
 
-typedef void (*tcpe_connection_func)(struct tcpe_connection_tuple*);
+typedef void (*estats_connection_func)(struct estats_connection_tuple*);
 
 extern int max_index[];
 
-extern struct tcpe_var tcpe_var_array[];
+extern struct estats_var estats_var_array[];
 
-typedef struct tcpe_connection	tcpe_connection;
-typedef struct tcpe_data	tcpe_data;
-typedef struct tcpe_error	tcpe_error;
-typedef struct tcpe_client	tcpe_client;
+typedef struct estats_connection	estats_connection;
+typedef struct estats_data	estats_data;
+typedef struct estats_error	estats_error;
+typedef struct estats_client	estats_client;
 
 static inline int single_index(int inda, int indb)
 {

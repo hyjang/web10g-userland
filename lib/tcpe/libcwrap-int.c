@@ -17,13 +17,13 @@
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  *
  */
-#include <tcpe/tcpe-int.h>
+#include <estats/estats-int.h>
 
 
-tcpe_error*
+estats_error*
 Access(const char* pathname, int mode)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     int ret;
     
     ErrIf(pathname == NULL, TCPE_ERR_INVAL);
@@ -35,10 +35,10 @@ Access(const char* pathname, int mode)
 }
 
 
-tcpe_error*
+estats_error*
 Asprintf(int* ret, char** strp, const char* fmt, ...)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     va_list ap;
 
     va_start(ap, fmt);
@@ -50,10 +50,10 @@ Asprintf(int* ret, char** strp, const char* fmt, ...)
 }
 
 
-tcpe_error*
+estats_error*
 Calloc(void** ptr, size_t nmemb, size_t size)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
 
     ErrIf(ptr == NULL || size == 0 || nmemb == 0, TCPE_ERR_INVAL);
     if ((*ptr = calloc(nmemb, size)) == NULL)
@@ -86,10 +86,10 @@ Fclose(FILE** fp)
 }
 
 
-tcpe_error*
+estats_error*
 Fgets(char* s, int size, FILE* fp)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
 
     if (fgets(s, size, fp) == NULL) {
         if (feof(fp))
@@ -103,10 +103,10 @@ Cleanup:
 }
 
 
-tcpe_error*
+estats_error*
 Fopen(FILE** fp, const char* path, const char* mode)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
 
     ErrIf(fp == NULL || path == NULL || mode == NULL, TCPE_ERR_INVAL);
     if ((*fp = fopen(path, mode)) == NULL)
@@ -117,10 +117,10 @@ Fopen(FILE** fp, const char* path, const char* mode)
 }
 
 
-tcpe_error*
+estats_error*
 Fprintf(int* ret, FILE* fp, const char* fmt, ...)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     va_list ap;
 
     va_start(ap, fmt);
@@ -132,10 +132,10 @@ Cleanup:
 }
 
 
-tcpe_error*
+estats_error*
 Fputc(int c, FILE* fp)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
 
     if (fputc(c, fp) == EOF)
         Err(TCPE_ERR_LIBC);
@@ -145,10 +145,10 @@ Cleanup:
 }
 
 
-tcpe_error*
+estats_error*
 Fread(size_t* ret, void* ptr, size_t size, size_t nmemb, FILE* fp)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     size_t r;
 
     if ((r = fread(ptr, size, nmemb, fp)) < nmemb) {
@@ -176,10 +176,10 @@ Free(void** ptr)
 }
 
 
-tcpe_error*
+estats_error*
 Fscanf(int* ret, FILE* fp, const char* fmt, ...)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     va_list ap;
 
     va_start(ap, fmt);
@@ -191,10 +191,10 @@ Fscanf(int* ret, FILE* fp, const char* fmt, ...)
 }
 
 
-tcpe_error*
+estats_error*
 Fseek(FILE* fp, long offset, int whence)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     
     if (fseek(fp, offset, whence) == -1)
         Err(TCPE_ERR_LIBC);
@@ -204,10 +204,10 @@ Cleanup:
 }
 
 
-tcpe_error*
+estats_error*
 Fwrite(size_t* ret, const void* ptr, size_t size, size_t nmemb, FILE* fp)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     size_t r;
 
     if ((r = fwrite(ptr, size, nmemb, fp)) < nmemb)
@@ -220,10 +220,10 @@ Cleanup:
 }
 
 
-tcpe_error*
+estats_error*
 Getpeername(int s, struct sockaddr* name, socklen_t* namelen)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     int ret;
 
     if ((ret = getpeername(s, name, namelen)) == -1)
@@ -234,10 +234,10 @@ Cleanup:
 }
 
 
-tcpe_error*
+estats_error*
 Getsockname(int s, struct sockaddr* name, socklen_t* namelen)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     int ret;
 
     if ((ret = getsockname(s, name, namelen)) == -1)
@@ -248,10 +248,10 @@ Cleanup:
 }
 
 
-tcpe_error*
+estats_error*
 Inet_ntop(int af, const void* src, char* dst, size_t cnt)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     const char* ret;
 
     if ((ret = inet_ntop(af, src, dst, cnt)) == NULL)
@@ -262,10 +262,10 @@ Inet_ntop(int af, const void* src, char* dst, size_t cnt)
 }
 
 
-tcpe_error*
+estats_error*
 Inet_pton(int af, const char* src, void* dst)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     int ret;
 
     if ((ret = inet_pton(af, src, dst)) <= 0)
@@ -276,10 +276,10 @@ Inet_pton(int af, const char* src, void* dst)
 }
 
 
-tcpe_error*
+estats_error*
 Malloc(void** ptr, size_t size)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
 
     ErrIf(ptr == NULL || size == 0, TCPE_ERR_INVAL);
     if ((*ptr = malloc(size)) == NULL)
@@ -290,10 +290,10 @@ Malloc(void** ptr, size_t size)
 }
 
 
-tcpe_error*
+estats_error*
 Opendir(DIR** dir, const char* name)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
 
     if ((*dir = opendir(name)) == NULL)
         Err(TCPE_ERR_LIBC);
@@ -303,10 +303,10 @@ Cleanup:
 }
 
 
-tcpe_error*
+estats_error*
 Remove(const char* pathname)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     int ret;
 
     ErrIf(pathname == NULL, TCPE_ERR_INVAL);
@@ -318,10 +318,10 @@ Cleanup:
 }
 
 
-tcpe_error*
+estats_error*
 Sprintf(int* ret, char* str, const char* fmt, ...)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     va_list ap;
 
     va_start(ap,fmt);
@@ -333,10 +333,10 @@ Cleanup:
 }
 
 
-tcpe_error*
+estats_error*
 Snprintf(int* ret, char* str, size_t size, const char* fmt, ...)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     va_list ap;
 
     va_start(ap,fmt);
@@ -348,10 +348,10 @@ Cleanup:
 }
 
 
-tcpe_error*
+estats_error*
 Sscanf(int* ret, const char* str, const char* fmt, ...)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     va_list ap;
 
     va_start(ap, fmt);
@@ -363,10 +363,10 @@ Sscanf(int* ret, const char* str, const char* fmt, ...)
 }
 
 
-tcpe_error*
+estats_error*
 Strdup(char** ret, const char* s)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
 
     ErrIf(ret == NULL || s == NULL, TCPE_ERR_INVAL);
     if ((*ret = strdup(s)) == NULL)
@@ -377,10 +377,10 @@ Strdup(char** ret, const char* s)
 }
 
 
-tcpe_error*
+estats_error*
 Strndup(char** ret, const char* s, size_t n)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
 
     ErrIf(ret == NULL || s == NULL, TCPE_ERR_INVAL);
     if ((*ret = strndup(s, n)) == NULL)
@@ -391,10 +391,10 @@ Strndup(char** ret, const char* s, size_t n)
 }
 
 
-tcpe_error*
+estats_error*
 Strtol(long int* ret, const char* nptr, char** endptr, int base)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     char* e;
 
     ErrIf(ret == NULL || nptr == NULL, TCPE_ERR_INVAL);
@@ -408,10 +408,10 @@ Strtol(long int* ret, const char* nptr, char** endptr, int base)
 }
 
 
-tcpe_error*
+estats_error*
 Strtoul(unsigned long int* ret, const char* nptr, char** endptr, int base)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     char* e;
 
     ErrIf(ret == NULL || nptr == NULL, TCPE_ERR_INVAL);
@@ -425,10 +425,10 @@ Strtoul(unsigned long int* ret, const char* nptr, char** endptr, int base)
 }
 
 
-tcpe_error*
+estats_error*
 Strtoull(unsigned long long int* ret, const char* nptr, char** endptr, int base)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     char* e;
 
     ErrIf(ret == NULL || nptr == NULL, TCPE_ERR_INVAL);
@@ -442,10 +442,10 @@ Strtoull(unsigned long long int* ret, const char* nptr, char** endptr, int base)
 }
 
 
-tcpe_error*
+estats_error*
 Vasprintf(int* ret, char** strp, const char* fmt, va_list ap)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     int v;
 
     ErrIf(strp == NULL || fmt == NULL, TCPE_ERR_INVAL);
@@ -459,10 +459,10 @@ Vasprintf(int* ret, char** strp, const char* fmt, va_list ap)
 }
 
 
-tcpe_error*
+estats_error*
 Vfprintf(int* ret, FILE* fp, const char* fmt, va_list ap)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     int v;
 
     ErrIf(fp == NULL || fmt == NULL, TCPE_ERR_INVAL);
@@ -476,10 +476,10 @@ Vfprintf(int* ret, FILE* fp, const char* fmt, va_list ap)
 }
 
 
-tcpe_error*
+estats_error*
 Vfscanf(int* ret, FILE* fp, const char* fmt, va_list ap)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     int v;
 
     ErrIf(fp == NULL || fmt == NULL, TCPE_ERR_INVAL);
@@ -493,10 +493,10 @@ Vfscanf(int* ret, FILE* fp, const char* fmt, va_list ap)
 }
 
 
-tcpe_error*
+estats_error*
 Vsnprintf(int* ret, char* str, size_t size, const char* fmt, va_list ap)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     int v;
 
     ErrIf(str == NULL || size == 0 || fmt == NULL, TCPE_ERR_INVAL);
@@ -510,10 +510,10 @@ Vsnprintf(int* ret, char* str, size_t size, const char* fmt, va_list ap)
 }
 
 
-tcpe_error*
+estats_error*
 Vsprintf(int* ret, char* str, const char* fmt, va_list ap)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     int v;
 
     ErrIf(str == NULL || fmt == NULL, TCPE_ERR_INVAL);
@@ -527,10 +527,10 @@ Vsprintf(int* ret, char* str, const char* fmt, va_list ap)
 }
 
 
-tcpe_error*
+estats_error*
 Vsscanf(int* ret, const char* str, const char* fmt, va_list ap)
 {
-    tcpe_error* err = NULL;
+    estats_error* err = NULL;
     int v;
 
     ErrIf(str == NULL || fmt == NULL, TCPE_ERR_INVAL);

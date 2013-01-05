@@ -7,15 +7,15 @@
  *  Boost libraries.
  */
 
-static inline void _tcpe_list_init(struct tcpe_list* ptr)
+static inline void _estats_list_init(struct estats_list* ptr)
 {
     ptr->next = ptr;
     ptr->prev = ptr;
 }
 
-static inline void _tcpe_list_add2(struct tcpe_list* new,
-                                     struct tcpe_list* prev,
-                                     struct tcpe_list* next)
+static inline void _estats_list_add2(struct estats_list* new,
+                                     struct estats_list* prev,
+                                     struct estats_list* next)
 {
     next->prev = new;
     new->next = next;
@@ -23,32 +23,32 @@ static inline void _tcpe_list_add2(struct tcpe_list* new,
     prev->next = new;
 }
 
-static inline void _tcpe_list_add(struct tcpe_list* new,
-                                    struct tcpe_list* head)
+static inline void _estats_list_add(struct estats_list* new,
+                                    struct estats_list* head)
 {
-    _tcpe_list_add2(new, head, head->next);
+    _estats_list_add2(new, head, head->next);
 }
 
-static inline void _tcpe_list_add_tail(struct tcpe_list* new,
-                                         struct tcpe_list* head)
+static inline void _estats_list_add_tail(struct estats_list* new,
+                                         struct estats_list* head)
 {
-    _tcpe_list_add2(new, head->prev, head);
+    _estats_list_add2(new, head->prev, head);
 }
 
-static inline void _tcpe_list_del2(struct tcpe_list* prev,
-                                     struct tcpe_list* next)
+static inline void _estats_list_del2(struct estats_list* prev,
+                                     struct estats_list* next)
 {
     next->prev = prev;
     prev->next = next;
 }
 
-static inline void _tcpe_list_del(struct tcpe_list* entry)
+static inline void _estats_list_del(struct estats_list* entry)
 {
-    _tcpe_list_del2(entry->prev, entry->next);
+    _estats_list_del2(entry->prev, entry->next);
     entry->prev = entry->next = 0;
 }
 
-static inline int _tcpe_list_empty(struct tcpe_list* head)
+static inline int _estats_list_empty(struct estats_list* head)
 {
     return head->next == head;
 }

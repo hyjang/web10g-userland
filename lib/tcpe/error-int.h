@@ -25,12 +25,12 @@
         err = (x); \
         if (err != NULL) { \
             dbgprintf("   ... saw error \"%s\" (error code %d) at %s:%d in function %s (\"%s\")\n", \
-                      tcpe_error_get_message(err), \
-                      tcpe_error_get_number(err), \
+                      estats_error_get_message(err), \
+                      estats_error_get_number(err), \
                       __FILE__, \
                       __LINE__, \
                       __FUNCTION__, \
-                      tcpe_error_get_extra(err)); \
+                      estats_error_get_extra(err)); \
             goto Cleanup; \
         } \
     } while (0)
@@ -40,20 +40,20 @@
 #if defined(DEBUG)
 # define Err2(x, xtra) \
     do { \
-        err = tcpe_error_new(x, xtra, __FILE__, __LINE__, __FUNCTION__); \
+        err = estats_error_new(x, xtra, __FILE__, __LINE__, __FUNCTION__); \
         dbgprintf("Throwing error \"%s\" (error code %d) at %s:%d in function %s (\"%s\")\n", \
-                  tcpe_error_get_message(err), \
-                  tcpe_error_get_number(err), \
-                  tcpe_error_get_file(err), \
-                  tcpe_error_get_line(err), \
-                  tcpe_error_get_function(err), \
-                  tcpe_error_get_extra(err)); \
+                  estats_error_get_message(err), \
+                  estats_error_get_number(err), \
+                  estats_error_get_file(err), \
+                  estats_error_get_line(err), \
+                  estats_error_get_function(err), \
+                  estats_error_get_extra(err)); \
         goto Cleanup; \
     } while (0)
 #else
 # define Err2(x, xtra) \
     do { \
-        err = tcpe_error_new(x, xtra, NULL, -1, NULL); \
+        err = estats_error_new(x, xtra, NULL, -1, NULL); \
         goto Cleanup; \
     } while (0)
 #endif /* defined(DEBUG) */

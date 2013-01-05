@@ -30,9 +30,9 @@ void usage(void)
 int main(int argc, char **argv)
 {
 
-	tcpe_error* err = NULL;
-	struct tcpe_client* cl = NULL;
-	tcpe_data* data = NULL;
+	estats_error* err = NULL;
+	struct estats_client* cl = NULL;
+	estats_data* data = NULL;
 	int cid, i, j; 
 	int opt, option;
 	char varname[24];
@@ -62,12 +62,12 @@ int main(int argc, char **argv)
 	str = argv[3];
 	val = strtoumax(str, &endptr, 10);
 
-	Chk(tcpe_client_init(&cl));
+	Chk(estats_client_init(&cl));
 
-	Chk(tcpe_write_var(varname, (uint32_t)val, cid, cl));
+	Chk(estats_write_var(varname, (uint32_t)val, cid, cl));
 
  Cleanup:
-	tcpe_client_destroy(&cl);
+	estats_client_destroy(&cl);
 
 	if (err != NULL) {
 		PRINT_AND_FREE(err);

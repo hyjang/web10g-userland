@@ -44,9 +44,9 @@ void usage(void)
 int main(int argc, char **argv)
 {
 
-	tcpe_error* err = NULL;
-	tcpe_client* cl = NULL;
-	tcpe_data* data = NULL;
+	estats_error* err = NULL;
+	estats_client* cl = NULL;
+	estats_data* data = NULL;
 	int cid, i, j; 
 	int opt, option;
 
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
         const char delim = ',';
 	uint64_t tmpmask;
 
-	struct tcpe_mask mask;
+	struct estats_mask mask;
 
 	mask.masks[0] = DEFAULT_PERF_MASK;
         mask.masks[1] = DEFAULT_PATH_MASK;
@@ -108,14 +108,14 @@ int main(int argc, char **argv)
 	cid = atoi(argv[optind]);
 
 
-	Chk(tcpe_client_init(&cl));
-	Chk(tcpe_client_set_mask(cl, &mask));
-	Chk(tcpe_data_new(&data));
+	Chk(estats_client_init(&cl));
+	Chk(estats_client_set_mask(cl, &mask));
+	Chk(estats_data_new(&data));
 
 
 	while (1) {
 
-	Chk(tcpe_read_vars(data, cid, cl));
+	Chk(estats_read_vars(data, cid, cl));
 
 	for (j = 0; j < data->length; j++) {
 
@@ -133,21 +133,21 @@ int main(int argc, char **argv)
 
 		if (data->val[j].mask) continue;
 
-		switch(tcpe_var_array[j].type) {
-			case TCPE_UNSIGNED64:
-				printf("%s=%"PRIu64"\n", tcpe_var_array[j].name, data->val[j].uv64);
+		switch(estats_var_array[j].type) {
+			case ESTATS_UNSIGNED64:
+				printf("%s=%"PRIu64"\n", estats_var_array[j].name, data->val[j].uv64);
                 		break;
-                        case TCPE_UNSIGNED32:
-				printf("%s=%"PRIu32"\n", tcpe_var_array[j].name, data->val[j].uv32);
+                        case ESTATS_UNSIGNED32:
+				printf("%s=%"PRIu32"\n", estats_var_array[j].name, data->val[j].uv32);
 				break;
-                        case TCPE_SIGNED32:
-				printf("%s=%"PRId32"\n", tcpe_var_array[j].name, data->val[j].sv32);
+                        case ESTATS_SIGNED32:
+				printf("%s=%"PRId32"\n", estats_var_array[j].name, data->val[j].sv32);
                         	break;
-                        case TCPE_UNSIGNED16:
-				printf("%s=%"PRIu16"\n", tcpe_var_array[j].name, data->val[j].uv16);
+                        case ESTATS_UNSIGNED16:
+				printf("%s=%"PRIu16"\n", estats_var_array[j].name, data->val[j].uv16);
                         	break;
-                        case TCPE_UNSIGNED8:
-				printf("%s=%"PRIu8"\n", tcpe_var_array[j].name, data->val[j].uv8);
+                        case ESTATS_UNSIGNED8:
+				printf("%s=%"PRIu8"\n", estats_var_array[j].name, data->val[j].uv8);
                         	break;
                         default:
                                 break;
@@ -160,8 +160,8 @@ int main(int argc, char **argv)
 
  Cleanup:
 
-	tcpe_data_free(&data);
-	tcpe_client_destroy(&cl);
+	estats_data_free(&data);
+	estats_client_destroy(&cl);
 
 
 	if (err != NULL) {

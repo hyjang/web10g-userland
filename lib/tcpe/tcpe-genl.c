@@ -17,9 +17,9 @@
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  *
  */
-#include <tcpe/tcpe-int.h>
+#include <estats/estats-int.h>
 
-static struct tcpe_val stat_val[TOTAL_INDEX_MAX];
+static struct estats_val stat_val[TOTAL_INDEX_MAX];
 
 struct index_attr {
         struct nlattr **tb;
@@ -41,7 +41,7 @@ static int parse_table_cb(const struct nlattr *attr, void *data)
 
 	j = single_index(tblnum, type);
 
-	switch(tcpe_var_array[j].type) {
+	switch(estats_var_array[j].type) {
 
 	case TCPE_UNSIGNED8:
 		if (mnl_attr_validate(attr, MNL_TYPE_U8) < 0) {
@@ -119,7 +119,7 @@ static void parse_table(struct nlattr *nested, int index)
 		
                 if (ia.tb[i]) {
 
-			switch(tcpe_var_array[j].type) {
+			switch(estats_var_array[j].type) {
 
                         case TCPE_UNSIGNED64: 
 				stat_val[j].uv64 = mnl_attr_get_u64(ia.tb[i]);
@@ -185,12 +185,12 @@ static int parse_4tuple_cb(const struct nlattr *attr, void *data)
         return MNL_CB_OK;
 }
 
-static void parse_4tuple(struct nlattr *nested, struct tcpe_client *cl)
+static void parse_4tuple(struct nlattr *nested, struct estats_client *cl)
 {
         struct nlattr *tb[NEA_4TUPLE_MAX+1];
         struct nlattr *attr;
-	struct tcpe_connection* cp = NULL;
-	struct tcpe_list* conn_head;
+	struct estats_connection* cp = NULL;
+	struct estats_list* conn_head;
 
 	uint8_t rem_addr[17];
 	uint8_t local_addr[17];
@@ -219,7 +219,7 @@ static void parse_4tuple(struct nlattr *nested, struct tcpe_client *cl)
 	if (cid > 0) {
 		conn_head = &(cl->connection_list_head);
 
-		cp = malloc(sizeof(tcpe_connection));
+		cp = malloc(sizeof(estats_connection));
 		if (cp == NULL) {
 			dbgprintf("No mem; malloc failed");
 			return;
@@ -231,7 +231,7 @@ static void parse_4tuple(struct nlattr *nested, struct tcpe_client *cl)
 		cp->local_port = local_port;
 		cp->cid = cid;
 		
-		_tcpe_list_add_tail(&(cp->list), conn_head);
+		_estats_list_add_tail(&(cp->list), conn_head);
         	cp = NULL;
         }
 }
@@ -290,7 +290,7 @@ static int data_cb(const struct nlmsghdr *nlh, void *data)
 {
         struct nlattr *tb[NLE_ATTR_MAX+1] = {};
         struct genlmsghdr *genl = mnl_nlmsg_get_payload(nlh);
-	struct tcpe_client *cl = (struct tcpe_client*) data;
+	struct estats_client *cl = (struct estats_client*) data;
 
 	mnl_attr_parse(nlh, sizeof(*genl), data_attr_cb, tb);
 
@@ -310,10 +310,10 @@ static int data_cb(const struct nlmsghdr *nlh, void *data)
         return MNL_CB_OK;
 }
 
-struct tcpe_error*
-tcpe_list_conns(tcpe_client* cl, tcpe_connection_func func)
+struct estats_error*
+estats_list_conns(estats_client* cl, estats_connection_func func)
 {
-	tcpe_error* err = NULL;
+	estats_error* err = NULL;
 	struct mnl_socket* nl;
 	int fam_id; 
 	int ret;
@@ -324,17 +324,17 @@ tcpe_list_conns(tcpe_client* cl, tcpe_connection_func func)
 
 	unsigned int seq, portid;
 
-	struct tcpe_list* conn_head;
-	struct tcpe_list* conn_pos;
-	struct tcpe_list* list_pos;
-	struct tcpe_list* tmp;
-	tcpe_connection* cp = NULL;
+	struct estats_list* conn_head;
+	struct estats_list* conn_pos;
+	struct estats_list* list_pos;
+	struct estats_list* tmp;
+	estats_connection* cp = NULL;
 
 	conn_head = &(cl->connection_list_head);
 
     	TCPE_LIST_FOREACH_SAFE(conn_pos, tmp, conn_head) {
-        	tcpe_connection* curr_conn = TCPE_LIST_ENTRY(conn_pos, tcpe_connection, list);
-        	_tcpe_list_del(conn_pos);
+        	estats_connection* curr_conn = TCPE_LIST_ENTRY(conn_pos, estats_connection, list);
+        	_estats_list_del(conn_pos);
         	free(curr_conn);
 	}
 
@@ -365,8 +365,8 @@ tcpe_list_conns(tcpe_client* cl, tcpe_connection_func func)
 	Err2If(ret == -1, TCPE_ERR_GENL, "error");
 
 	TCPE_LIST_FOREACH(list_pos, &(cl->connection_list_head)) {
-		tcpe_connection* cp = TCPE_LIST_ENTRY(list_pos, tcpe_connection, list);
-		struct tcpe_connection_tuple* ct = (struct tcpe_connection_tuple*) cp;
+		estats_connection* cp = TCPE_LIST_ENTRY(list_pos, estats_connection, list);
+		struct estats_connection_tuple* ct = (struct estats_connection_tuple*) cp;
 		func(ct);
 	}
 
@@ -374,10 +374,10 @@ tcpe_list_conns(tcpe_client* cl, tcpe_connection_func func)
  	return err;
 }
 
-struct tcpe_error*
-tcpe_read_vars(struct tcpe_data* data, int cid, const tcpe_client* cl)
+struct estats_error*
+estats_read_vars(struct estats_data* data, int cid, const estats_client* cl)
 {
-	tcpe_error* err = NULL;
+	estats_error* err = NULL;
 	struct mnl_socket* nl;
 	int fam_id; 
 	int ret;
@@ -448,10 +448,10 @@ tcpe_read_vars(struct tcpe_data* data, int cid, const tcpe_client* cl)
 	return err;
 }
 
-struct tcpe_error*
-tcpe_write_var(const char* varname, uint32_t val, int cid, const tcpe_client* cl)
+struct estats_error*
+estats_write_var(const char* varname, uint32_t val, int cid, const estats_client* cl)
 {
-	tcpe_error* err = NULL;
+	estats_error* err = NULL;
 	struct mnl_socket* nl;
 	int fam_id; 
 	int ret;

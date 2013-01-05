@@ -20,19 +20,19 @@
 #ifndef TCPE_ERROR_H
 #define TCPE_ERROR_H
 
-tcpe_error*   tcpe_error_new(const TCPE_ERROR _errnum,
+estats_error*   estats_error_new(const TCPE_ERROR _errnum,
                              const char* _extra,
                              const char* _file,
                              const int _line,
                              const char* _function);
-void          tcpe_error_free(tcpe_error** _err);
-void          tcpe_error_print(FILE* _fp,
-                                 const tcpe_error* _err);
-TCPE_ERROR    tcpe_error_get_number(const tcpe_error* _err);
-const char*   tcpe_error_get_message(const tcpe_error* _err);
-const char*   tcpe_error_get_extra(const tcpe_error* _err);
-const char*   tcpe_error_get_file(const tcpe_error* _err);
-int           tcpe_error_get_line(const tcpe_error* _err);
-const char*   tcpe_error_get_function(const tcpe_error* _err);
+void          estats_error_free(estats_error** _err);
+void          estats_error_print(FILE* _fp,
+                                 const estats_error* _err);
+TCPE_ERROR    estats_error_get_number(const estats_error* _err);
+const char*   estats_error_get_message(const estats_error* _err);
+const char*   estats_error_get_extra(const estats_error* _err);
+const char*   estats_error_get_file(const estats_error* _err);
+int           estats_error_get_line(const estats_error* _err);
+const char*   estats_error_get_function(const estats_error* _err);
 
 #endif /* TCPE_ERROR_H */

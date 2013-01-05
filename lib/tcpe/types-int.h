@@ -20,28 +20,28 @@
 #ifndef TCPE_TYPES_INT_H
 #define TCPE_TYPES_INT_H
 
-struct tcpe_list {
-	struct tcpe_list* next;
-	struct tcpe_list* prev;
+struct estats_list {
+	struct estats_list* next;
+	struct estats_list* prev;
 };
 
-struct tcpe_client {
+struct estats_client {
         struct mnl_socket *mnl_sock;
         int fam_id;
-	struct tcpe_mask mask;
-	struct tcpe_list connection_list_head;
+	struct estats_mask mask;
+	struct estats_list connection_list_head;
 };
 
-struct tcpe_connection {
+struct estats_connection {
 	char      rem_addr[17];
 	char      local_addr[17];
 	uint16_t  rem_port;
 	uint16_t  local_port;
 	int       cid;
-	struct tcpe_list list;
+	struct estats_list list;
 };
 
-struct tcpe_error {
+struct estats_error {
         TCPE_ERROR num;
         const char* msg;
         char* xtra;
