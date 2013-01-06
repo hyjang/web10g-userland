@@ -42,18 +42,19 @@ int main(int argc, char **argv)
 
 	struct estats_error* err = NULL;
 	struct estats_nl_client* cl = NULL;
+	struct estats_connection_list* clist = NULL;
 
 	Chk(estats_nl_client_init(&cl));
-
+	Chk(estats_connection_list_new(&clist));
 
 	printf("%-8s %-20s %-8s %-20s %-8s\n", "CID", "LocalAddr", "LocalPort", "RemAddr", "RemPort");
 	printf("-------- -------------------- -------- -------------------- --------\n");
 	printf("\n");
 
-
-	Chk(estats_list_conns(cl, connection_callback));
+	Chk(estats_list_conns(clist, connection_callback, cl));
 
  Cleanup:
+	estats_connection_list_free(&clist);
 	estats_nl_client_destroy(&cl);
 
 	if (err != NULL) {

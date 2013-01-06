@@ -92,10 +92,10 @@ struct estats_mask {
 	int      if_mask[MAX_TABLE];
 };
 
-enum estats_addrtype {
+typedef enum ESTATS_ADDRTYPE {
 	ESTATS_ADDRTYPE_IPV4 = 1,
 	ESTATS_ADDRTYPE_IPV6 = 2
-};
+} ESTATS_ADDRTYPE;
 
 /*
  * estats_addrtype is sent in *_addr[16], below
@@ -109,6 +109,39 @@ struct estats_connection_tuple {
 	int       cid;
 };
 
+struct estats_list {
+        struct estats_list* next;
+        struct estats_list* prev;
+};
+
+struct estats_connection {
+	uint8_t   rem_addr[17];
+	uint8_t   local_addr[17];
+	uint16_t  rem_port;
+	uint16_t  local_port;
+	int       cid;
+	struct estats_list  list;
+};
+
+#define ESTATS_CMDLINE_LEN_MAX 32
+
+struct estats_connection_info {
+	struct estats_connection_tuple  tuple;
+	char             cmdline[ESTATS_CMDLINE_LEN_MAX];
+	pid_t            pid;
+	uid_t            uid;
+	ino_t            ino;
+	int              state;
+	int		 cid;
+	ESTATS_ADDRTYPE  addrtype;
+	struct estats_list  list;
+};
+
+struct estats_connection_list {
+	struct estats_list  connection_head;
+	struct estats_list  connection_info_head;
+};
+
 typedef void (*estats_connection_func)(struct estats_connection_tuple*);
 
 extern int max_index[];
@@ -116,6 +149,7 @@ extern int max_index[];
 extern struct estats_var estats_var_array[];
 
 typedef struct estats_connection	estats_connection;
+typedef struct estats_connection_list	estats_connection_list;
 typedef struct estats_data		estats_data;
 typedef struct estats_error		estats_error;
 typedef struct estats_nl_client		estats_nl_client;

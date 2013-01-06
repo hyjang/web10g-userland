@@ -33,7 +33,6 @@ estats_nl_client_init(struct estats_nl_client** cl)
 
 	Chk(Malloc((void**) cl, sizeof(estats_nl_client)));
 	memset((void*) *cl, 0, sizeof(estats_nl_client));
-	_estats_list_init(&((*cl)->connection_list_head));
 
 	sock = mnl_socket_open(NETLINK_GENERIC);
 	ErrIf(sock == NULL, ESTATS_ERR_NOLINK);
@@ -63,19 +62,10 @@ estats_nl_client_init(struct estats_nl_client** cl)
 void
 estats_nl_client_destroy(struct estats_nl_client** cl)
 {
-	struct estats_list* conn_pos;
-	struct estats_list* tmp;
-
 	if (cl == NULL || *cl == NULL)
 		return;
 
 	mnl_socket_close((*cl)->mnl_sock);
-
-	ESTATS_LIST_FOREACH_SAFE(conn_pos, tmp, &((*cl)->connection_list_head)) {
-        	estats_connection* currConn = ESTATS_LIST_ENTRY(conn_pos, estats_connection, list);
-        	_estats_list_del(conn_pos);
-        	free(currConn);
-	}
 
 	free(*cl);
 	*cl = NULL;

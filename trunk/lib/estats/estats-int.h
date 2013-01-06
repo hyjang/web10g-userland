@@ -45,11 +45,12 @@
 
 /* estats public headers */
 #include <estats/error.h>
-#include <estats/estats-nl-client.h>
+#include <estats/estats-connection.h>
 #include <estats/estats-data.h>
 #include <estats/estats-genl.h>
 #include <estats/estats.h>
 #include <estats/estats-nl.h>
+#include <estats/estats-nl-client.h>
 
 /* estats internal headers */
 #include <estats/debug-int.h>

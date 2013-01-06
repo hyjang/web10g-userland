@@ -2,10 +2,11 @@
 tcpestats_pub_h_sources = \
 	error.h \
 	estats.h \
-	estats-nl-client.h \
+	estats-connection.h \
 	estats-data.h \
 	estats-genl.h \
 	estats-nl.h \
+	estats-nl-client.h \
 	types.h
 
 # Header files not installed
@@ -24,9 +25,10 @@ tcpestats_c_sources = \
 	error.c \
 	libcwrap-int.c \
 	resolve-int.c \
-	estats-nl-client.c \
+	estats-connection.c \
 	estats-data.c \
 	estats-genl.c \
+	estats-nl-client.c \
 	estats-var.c
 
 # cpp flags to be used with all compilation
