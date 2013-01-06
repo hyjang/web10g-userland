@@ -185,7 +185,7 @@ static int parse_4tuple_cb(const struct nlattr *attr, void *data)
         return MNL_CB_OK;
 }
 
-static void parse_4tuple(struct nlattr *nested, struct estats_nl_client *cl)
+static void parse_4tuple(struct nlattr *nested, struct estats_connection_list *cli)
 {
         struct nlattr *tb[NEA_4TUPLE_MAX+1];
         struct nlattr *attr;
@@ -217,7 +217,7 @@ static void parse_4tuple(struct nlattr *nested, struct estats_nl_client *cl)
         }
 
 	if (cid > 0) {
-		conn_head = &(cl->connection_list_head);
+		conn_head = &(cli->connection_head);
 
 		cp = malloc(sizeof(estats_connection));
 		if (cp == NULL) {
@@ -290,12 +290,12 @@ static int data_cb(const struct nlmsghdr *nlh, void *data)
 {
         struct nlattr *tb[NLE_ATTR_MAX+1] = {};
         struct genlmsghdr *genl = mnl_nlmsg_get_payload(nlh);
-	struct estats_nl_client *cl = (struct estats_nl_client*) data;
+	struct estats_connection_list *cli = (struct estats_connection_list*) data;
 
 	mnl_attr_parse(nlh, sizeof(*genl), data_attr_cb, tb);
 
         if (tb[NLE_ATTR_4TUPLE])
-                parse_4tuple(tb[NLE_ATTR_4TUPLE], cl);
+                parse_4tuple(tb[NLE_ATTR_4TUPLE], cli);
         if (tb[NLE_ATTR_PERF])
                 parse_table(tb[NLE_ATTR_PERF], PERF_TABLE);
         if (tb[NLE_ATTR_PATH])
@@ -311,7 +311,7 @@ static int data_cb(const struct nlmsghdr *nlh, void *data)
 }
 
 struct estats_error*
-estats_list_conns(estats_nl_client* cl, estats_connection_func func)
+estats_list_conns(estats_connection_list* cli, estats_connection_func func, const estats_nl_client* cl)
 {
 	estats_error* err = NULL;
 	struct mnl_socket* nl;
@@ -330,7 +330,9 @@ estats_list_conns(estats_nl_client* cl, estats_connection_func func)
 	struct estats_list* tmp;
 	estats_connection* cp = NULL;
 
-	conn_head = &(cl->connection_list_head);
+	ErrIf(cli == NULL, ESTATS_ERR_INVAL);
+
+	conn_head = &(cli->connection_head);
 
     	ESTATS_LIST_FOREACH_SAFE(conn_pos, tmp, conn_head) {
         	estats_connection* curr_conn = ESTATS_LIST_ENTRY(conn_pos, estats_connection, list);
@@ -356,7 +358,7 @@ estats_list_conns(estats_nl_client* cl, estats_connection_func func)
 
 	ret = mnl_socket_recvfrom(nl, buf, sizeof(buf));
 	while (ret > 0) {
-		ret = mnl_cb_run(buf, ret, seq, portid, data_cb, cl);
+		ret = mnl_cb_run(buf, ret, seq, portid, data_cb, cli);
 		if (ret <= 0)
 			break;
 		ret = mnl_socket_recvfrom(nl, buf, sizeof(buf));
@@ -364,7 +366,8 @@ estats_list_conns(estats_nl_client* cl, estats_connection_func func)
 
 	Err2If(ret == -1, ESTATS_ERR_GENL, "error");
 
-	ESTATS_LIST_FOREACH(list_pos, &(cl->connection_list_head)) {
+	if (func)
+	ESTATS_LIST_FOREACH(list_pos, &(cli->connection_head)) {
 		estats_connection* cp = ESTATS_LIST_ENTRY(list_pos, estats_connection, list);
 		struct estats_connection_tuple* ct = (struct estats_connection_tuple*) cp;
 		func(ct);

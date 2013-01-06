@@ -20,25 +20,10 @@
 #ifndef ESTATS_TYPES_INT_H
 #define ESTATS_TYPES_INT_H
 
-struct estats_list {
-	struct estats_list* next;
-	struct estats_list* prev;
-};
-
 struct estats_nl_client {
         struct mnl_socket *mnl_sock;
         int fam_id;
 	struct estats_mask mask;
-	struct estats_list connection_list_head;
-};
-
-struct estats_connection {
-	char      rem_addr[17];
-	char      local_addr[17];
-	uint16_t  rem_port;
-	uint16_t  local_port;
-	int       cid;
-	struct estats_list list;
 };
 
 struct estats_error {

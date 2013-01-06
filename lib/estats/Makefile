@@ -101,8 +101,8 @@ am__installdirs = "$(DESTDIR)$(libdir)" \
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libtcpestats_la_LIBADD =
 am__objects_1 = debug-int.lo error.lo libcwrap-int.lo resolve-int.lo \
-	estats-nl-client.lo estats-data.lo estats-genl.lo \
-	estats-var.lo
+	estats-connection.lo estats-data.lo estats-genl.lo \
+	estats-nl-client.lo estats-var.lo
 am__objects_2 =
 am_libtcpestats_la_OBJECTS = $(am__objects_1) $(am__objects_2) \
 	$(am__objects_2)
@@ -284,10 +284,11 @@ top_srcdir = ../..
 tcpestats_pub_h_sources = \
 	error.h \
 	estats.h \
-	estats-nl-client.h \
+	estats-connection.h \
 	estats-data.h \
 	estats-genl.h \
 	estats-nl.h \
+	estats-nl-client.h \
 	types.h
 
 
@@ -308,9 +309,10 @@ tcpestats_c_sources = \
 	error.c \
 	libcwrap-int.c \
 	resolve-int.c \
-	estats-nl-client.c \
+	estats-connection.c \
 	estats-data.c \
 	estats-genl.c \
+	estats-nl-client.c \
 	estats-var.c
 
 
@@ -416,6 +418,7 @@ distclean-compile:
 
 include ./$(DEPDIR)/debug-int.Plo
 include ./$(DEPDIR)/error.Plo
+include ./$(DEPDIR)/estats-connection.Plo
 include ./$(DEPDIR)/estats-data.Plo
 include ./$(DEPDIR)/estats-genl.Plo
 include ./$(DEPDIR)/estats-nl-client.Plo
