@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 {
 
 	estats_error* err = NULL;
-	struct estats_client* cl = NULL;
+	struct estats_nl_client* cl = NULL;
 	estats_data* data = NULL;
 	int cid, i, j; 
 	int opt, option;
@@ -107,8 +107,8 @@ int main(int argc, char **argv)
 
 	cid = atoi(argv[optind]);
 	
-	Chk(estats_client_init(&cl));
-	Chk(estats_client_set_mask(cl, &mask));
+	Chk(estats_nl_client_init(&cl));
+	Chk(estats_nl_client_set_mask(cl, &mask));
 	Chk(estats_data_new(&data));
 
 	Chk(estats_read_vars(data, cid, cl));
@@ -152,7 +152,7 @@ int main(int argc, char **argv)
 
  Cleanup:
 	estats_data_free(&data);
-	estats_client_destroy(&cl);
+	estats_nl_client_destroy(&cl);
 
 	if (err != NULL) {
 		PRINT_AND_FREE(err);

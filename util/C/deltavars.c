@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 {
 
 	estats_error* err = NULL;
-	estats_client* cl = NULL;
+	estats_nl_client* cl = NULL;
 	estats_data* data = NULL;
 	estats_data* data_new = NULL;
 	estats_data* data_prev = NULL;
@@ -110,8 +110,8 @@ int main(int argc, char **argv)
 	cid = atoi(argv[optind]);
 
 
-	Chk(estats_client_init(&cl));
-	Chk(estats_client_set_mask(cl, &mask));
+	Chk(estats_nl_client_init(&cl));
+	Chk(estats_nl_client_set_mask(cl, &mask));
 	Chk(estats_data_new(&data));
 	Chk(estats_data_new(&data_new));
 	Chk(estats_data_new(&data_prev));
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 	estats_data_free(&data);
 	estats_data_free(&data_new);
 	estats_data_free(&data_prev);
-	estats_client_destroy(&cl);
+	estats_nl_client_destroy(&cl);
 
 
 	if (err != NULL) {

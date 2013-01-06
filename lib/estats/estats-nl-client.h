@@ -20,10 +20,10 @@
 #ifndef ESTATS_CLIENT_H
 #define ESTATS_CLIENT_H
 
-struct estats_error* estats_client_init(struct estats_client**);
-void               estats_client_destroy(struct estats_client**);
-struct estats_error* estats_client_get_sock(struct mnl_socket**, const estats_client*);
-struct estats_error* estats_client_get_fam_id(int*, const estats_client*);
-struct estats_error* estats_client_set_mask(struct estats_client*, struct estats_mask*);
+struct estats_error* estats_nl_client_init(struct estats_nl_client**);
+void                 estats_nl_client_destroy(struct estats_nl_client**);
+struct estats_error* estats_nl_client_get_sock(struct mnl_socket**, const estats_nl_client*);
+struct estats_error* estats_nl_client_get_fam_id(int*, const estats_nl_client*);
+struct estats_error* estats_nl_client_set_mask(struct estats_nl_client*, struct estats_mask*);
 
 #endif /* ESTATS_CLIENT_H */

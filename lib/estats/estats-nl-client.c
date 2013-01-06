@@ -20,7 +20,7 @@
 #include <estats/estats-int.h>
 
 struct estats_error*
-estats_client_init(struct estats_client** cl)
+estats_nl_client_init(struct estats_nl_client** cl)
 {
 	estats_error *err = NULL;
 	struct mnl_socket *sock;
@@ -31,8 +31,8 @@ estats_client_init(struct estats_client** cl)
 	ErrIf(cl == NULL, ESTATS_ERR_INVAL);
 	*cl = NULL;
 
-	Chk(Malloc((void**) cl, sizeof(estats_client)));
-	memset((void*) *cl, 0, sizeof(estats_client));
+	Chk(Malloc((void**) cl, sizeof(estats_nl_client)));
+	memset((void*) *cl, 0, sizeof(estats_nl_client));
 	_estats_list_init(&((*cl)->connection_list_head));
 
 	sock = mnl_socket_open(NETLINK_GENERIC);
@@ -61,7 +61,7 @@ estats_client_init(struct estats_client** cl)
 }
 
 void
-estats_client_destroy(struct estats_client** cl)
+estats_nl_client_destroy(struct estats_nl_client** cl)
 {
 	struct estats_list* conn_pos;
 	struct estats_list* tmp;
@@ -82,7 +82,7 @@ estats_client_destroy(struct estats_client** cl)
 }
 
 struct estats_error*
-estats_client_set_mask(struct estats_client* cl, struct estats_mask* mask)
+estats_nl_client_set_mask(struct estats_nl_client* cl, struct estats_mask* mask)
 {
 	estats_error* err = NULL;
 
@@ -95,7 +95,7 @@ estats_client_set_mask(struct estats_client* cl, struct estats_mask* mask)
 }
 
 struct estats_error*
-estats_client_get_sock(struct mnl_socket** nl, const estats_client* cl)
+estats_nl_client_get_sock(struct mnl_socket** nl, const estats_nl_client* cl)
 {
 	estats_error* err = NULL;
 
@@ -108,7 +108,7 @@ estats_client_get_sock(struct mnl_socket** nl, const estats_client* cl)
 }
 
 struct estats_error*
-estats_client_get_fam_id(int* id, const estats_client* cl)
+estats_nl_client_get_fam_id(int* id, const estats_nl_client* cl)
 {
 	estats_error* err = NULL;
 

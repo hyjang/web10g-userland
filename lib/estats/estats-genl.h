@@ -20,8 +20,8 @@
 #ifndef ESTATS_GENL_H
 #define ESTATS_GENL_H
 
-struct estats_error* estats_list_conns(struct estats_client*, estats_connection_func);
-struct estats_error* estats_read_vars(struct estats_data*, int /*cid*/, const estats_client*);
-struct estats_error* estats_write_var(const char* /*name*/, uint32_t /*val*/, int /*cid*/, const estats_client*);
+struct estats_error* estats_list_conns(struct estats_nl_client*, estats_connection_func);
+struct estats_error* estats_read_vars(struct estats_data*, int /*cid*/, const estats_nl_client*);
+struct estats_error* estats_write_var(const char* /*name*/, uint32_t /*val*/, int /*cid*/, const estats_nl_client*);
 
 #endif /* ESTATS_GENL_H */

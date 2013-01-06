@@ -116,9 +116,9 @@ extern int max_index[];
 extern struct estats_var estats_var_array[];
 
 typedef struct estats_connection	estats_connection;
-typedef struct estats_data	estats_data;
-typedef struct estats_error	estats_error;
-typedef struct estats_client	estats_client;
+typedef struct estats_data		estats_data;
+typedef struct estats_error		estats_error;
+typedef struct estats_nl_client		estats_nl_client;
 
 static inline int single_index(int inda, int indb)
 {

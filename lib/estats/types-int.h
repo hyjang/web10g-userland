@@ -25,7 +25,7 @@ struct estats_list {
 	struct estats_list* prev;
 };
 
-struct estats_client {
+struct estats_nl_client {
         struct mnl_socket *mnl_sock;
         int fam_id;
 	struct estats_mask mask;
