@@ -36,7 +36,7 @@ estats_connection_list_new(struct estats_connection_list** connection_list)
  	return err;
 }
 
-struct estats_error*
+void
 estats_connection_list_free(struct estats_connection_list** connection_list)
 {
 	struct estats_list* conn_pos;
@@ -61,3 +61,37 @@ estats_connection_list_free(struct estats_connection_list** connection_list)
 	*connection_list = NULL;
 }
 
+struct estats_error*
+estats_connection_info_new(struct estats_connection_info** connection_info)
+{
+	estats_error* err = NULL;
+
+	ErrIf(connection_info == NULL, ESTATS_ERR_INVAL);
+
+	*connection_info = NULL;
+	
+	Chk(Malloc((void**) connection_info, sizeof(estats_connection_info)));
+	memset((void*) connection_info, 0, sizeof(estats_connection_info));
+
+ Cleanup:
+ 	return err;
+}
+
+void
+estats_connection_info_free(struct estats_connection_info** connection_info)
+{
+	if (connection_info == NULL || *connection_info == NULL)
+		return;
+
+	free(*connection_info);
+	*connection_info = NULL;
+}
+	
+struct estats_error*
+estats_connection_list_add_info(struct estats_connection_list* connection_list)
+{
+	estats_error* err = NULL;
+
+ Cleanup:
+ 	return err;
+}

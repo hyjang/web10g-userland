@@ -149,6 +149,7 @@ extern int max_index[];
 extern struct estats_var estats_var_array[];
 
 typedef struct estats_connection	estats_connection;
+typedef struct estats_connection_info	estats_connection_info;
 typedef struct estats_connection_list	estats_connection_list;
 typedef struct estats_data		estats_data;
 typedef struct estats_error		estats_error;

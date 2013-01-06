@@ -21,6 +21,8 @@
 #define ESTATS_CONNECTION_H
 
 struct estats_error* estats_connection_list_new(struct estats_connection_list**);
-struct estats_error* estats_connection_list_free(struct estats_connection_list**);
+void estats_connection_list_free(struct estats_connection_list**);
+struct estats_error* estats_connection_info_new(struct estats_connection_info** );
+void estats_connection_info_free(struct estats_connection_info**);
 
 #endif /* ESTATS_CONNECTION_H */
