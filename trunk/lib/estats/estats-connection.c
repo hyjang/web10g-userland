@@ -95,3 +95,89 @@ estats_connection_list_add_info(struct estats_connection_list* connection_list)
  Cleanup:
  	return err;
 }
+
+static struct estats_error*
+_estats_get_ino_list(struct estats_connection_list* connection_list)
+{
+	estats_error* err = NULL;
+	struct estats_list* head = &(connection_list->connection_info_head);
+	FILE* file = NULL;
+	FILE* file6 = NULL;
+	char buf[256];
+	int scan;
+	struct in6_addr in6;
+
+	ErrIf(connection_list == NULL, ESTATS_ERR_INVAL);
+
+	file = fopen("/proc/net/tcp", "r");
+	file6 = fopen("/proc/net/tcp6", "r");
+
+	if (file) {
+		estats_connection_info* conninfo;
+
+		while (fgets(buf, sizeof(buf), file) != NULL) {
+
+			Chk(estats_connection_info_new(&conninfo));
+
+			if ((scan = sscanf(buf,
+				"%*u: %x:%hx %x:%hx %x %*x:%*x %*x:%*x %*x %u %*u %lu",
+				(uint32_t *) &(conninfo->tuple.local_addr),
+				(uint16_t *) &(conninfo->tuple.local_port),
+				(uint32_t *) &(conninfo->tuple.rem_addr),
+				(uint16_t *) &(conninfo->tuple.rem_port),
+				(int *) &(conninfo->state),
+				(uid_t *) &(conninfo->uid),
+				(ino_t *) &(conninfo->ino)
+				)) == 7) {
+
+				conninfo->addrtype = ESTATS_ADDRTYPE_IPV4;
+				_estats_list_add_tail(&conninfo->list, head);
+			} else {
+				estats_connection_info_free(&conninfo);
+			}
+		}
+		fclose(file);
+	}
+	
+    	if (file6) { 
+		estats_connection_info* conninfo;
+		char local_addr[INET6_ADDRSTRLEN];
+		char rem_addr[INET6_ADDRSTRLEN];
+
+		while (fgets(buf, sizeof(buf), file6) != NULL) {
+
+			Chk(_estats_conninfo_new_entry(&conninfo));
+
+			if ((scan = sscanf(buf,
+				"%*u: %64[0-9A-Fa-f]:%hx %64[0-9A-Fa-f]:%hx %x %*x:%*x %*x:%*x %*x %u %*u %u", 
+				(char *) &local_addr,
+				(uint16_t *) &(conninfo->tuple.local_port),
+				(char *) &rem_addr,
+				(uint16_t *) &(conninfo->tuple.rem_port),
+				(int *) &(conninfo->state),
+				(uid_t *) &(conninfo->uid),
+				(pid_t *) &(conninfo->ino)
+				)) == 7) {
+				
+				sscanf(local_addr, "%8x%8x%8x%8x", &in6.s6_addr32[0], &in6.s6_addr32[1], &in6.s6_addr32[2], &in6.s6_addr32[3]); 
+
+                		memcpy(&(conninfo->tuple.local_addr), &in6.s6_addr, 16);
+
+				sscanf(rem_addr, "%8x%8x%8x%8x", &in6.s6_addr32[0], &in6.s6_addr32[1], &in6.s6_addr32[2], &in6.s6_addr32[3]);
+
+                		memcpy(&(conninfo->tuple.rem_addr), &in6.s6_addr, 16);
+
+				conninfo->addrtype = ESTATS_ADDRTYPE_IPV6;
+				_estats_list_add_tail(&conninfo->list, head);
+			} else {
+				estats_connection_info_free(&conninfo);
+	    		}
+       		}
+		fclose(file6);
+	} 
+
+ Cleanup:
+ 	return err;
+}
+
+
