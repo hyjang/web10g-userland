@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 {
 
 	estats_error* err = NULL;
-	struct estats_client* cl = NULL;
+	struct estats_nl_client* cl = NULL;
 	estats_data* data = NULL;
 	int cid, i, j; 
 	int opt, option;
@@ -62,12 +62,12 @@ int main(int argc, char **argv)
 	str = argv[3];
 	val = strtoumax(str, &endptr, 10);
 
-	Chk(estats_client_init(&cl));
+	Chk(estats_nl_client_init(&cl));
 
 	Chk(estats_write_var(varname, (uint32_t)val, cid, cl));
 
  Cleanup:
-	estats_client_destroy(&cl);
+	estats_nl_client_destroy(&cl);
 
 	if (err != NULL) {
 		PRINT_AND_FREE(err);

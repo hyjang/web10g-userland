@@ -41,9 +41,9 @@ int main(int argc, char **argv)
 {
 
 	struct estats_error* err = NULL;
-	struct estats_client* cl = NULL;
+	struct estats_nl_client* cl = NULL;
 
-	Chk(estats_client_init(&cl));
+	Chk(estats_nl_client_init(&cl));
 
 
 	printf("%-8s %-20s %-8s %-20s %-8s\n", "CID", "LocalAddr", "LocalPort", "RemAddr", "RemPort");
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 	Chk(estats_list_conns(cl, connection_callback));
 
  Cleanup:
-	estats_client_destroy(&cl);
+	estats_nl_client_destroy(&cl);
 
 	if (err != NULL) {
 		PRINT_AND_FREE(err);

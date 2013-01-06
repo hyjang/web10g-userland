@@ -20,6 +20,6 @@
 #ifndef ESTATS_INT_H
 #define ESTATS_INT_H
 
-int resolve_genladdr(const char *name, struct estats_client* cl);
+int resolve_genladdr(const char *name, struct estats_nl_client* cl);
 
 #endif /* ESTATS_INT_H */

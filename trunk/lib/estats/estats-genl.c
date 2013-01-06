@@ -185,7 +185,7 @@ static int parse_4tuple_cb(const struct nlattr *attr, void *data)
         return MNL_CB_OK;
 }
 
-static void parse_4tuple(struct nlattr *nested, struct estats_client *cl)
+static void parse_4tuple(struct nlattr *nested, struct estats_nl_client *cl)
 {
         struct nlattr *tb[NEA_4TUPLE_MAX+1];
         struct nlattr *attr;
@@ -290,7 +290,7 @@ static int data_cb(const struct nlmsghdr *nlh, void *data)
 {
         struct nlattr *tb[NLE_ATTR_MAX+1] = {};
         struct genlmsghdr *genl = mnl_nlmsg_get_payload(nlh);
-	struct estats_client *cl = (struct estats_client*) data;
+	struct estats_nl_client *cl = (struct estats_nl_client*) data;
 
 	mnl_attr_parse(nlh, sizeof(*genl), data_attr_cb, tb);
 
@@ -311,7 +311,7 @@ static int data_cb(const struct nlmsghdr *nlh, void *data)
 }
 
 struct estats_error*
-estats_list_conns(estats_client* cl, estats_connection_func func)
+estats_list_conns(estats_nl_client* cl, estats_connection_func func)
 {
 	estats_error* err = NULL;
 	struct mnl_socket* nl;
@@ -375,7 +375,7 @@ estats_list_conns(estats_client* cl, estats_connection_func func)
 }
 
 struct estats_error*
-estats_read_vars(struct estats_data* data, int cid, const estats_client* cl)
+estats_read_vars(struct estats_data* data, int cid, const estats_nl_client* cl)
 {
 	estats_error* err = NULL;
 	struct mnl_socket* nl;
@@ -449,7 +449,7 @@ estats_read_vars(struct estats_data* data, int cid, const estats_client* cl)
 }
 
 struct estats_error*
-estats_write_var(const char* varname, uint32_t val, int cid, const estats_client* cl)
+estats_write_var(const char* varname, uint32_t val, int cid, const estats_nl_client* cl)
 {
 	estats_error* err = NULL;
 	struct mnl_socket* nl;

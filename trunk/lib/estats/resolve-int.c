@@ -57,7 +57,7 @@ static int data_cb(const struct nlmsghdr *nlh, void *data)
 	return MNL_CB_OK;
 }
 
-int resolve_genladdr(const char *name, struct estats_client* cl)
+int resolve_genladdr(const char *name, struct estats_nl_client* cl)
 {
 	struct mnl_socket *sock = cl->mnl_sock;
 	char buf[MNL_SOCKET_BUFFER_SIZE];
