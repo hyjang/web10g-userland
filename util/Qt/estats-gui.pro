@@ -11,17 +11,17 @@ include(./estats.pri)
 
 # Input
 HEADERS += EstatsView.hpp \
-           conn_tablemodel.hpp \
-           estats_itemdelegate.hpp \
-           estats_tablemodel.hpp \
-           mainwindow.hpp \
-           var_tablemodel.hpp \
-           varwindow.hpp
+	conn_tablemodel.hpp \
+	estats_itemdelegate.hpp \
+	estats_tablemodel.hpp \
+	mainwindow.hpp \
+	var_tablemodel.hpp \
+	varwindow.hpp
 SOURCES += EstatsView.cpp \
-           conn_tablemodel.cpp \
-           estats_itemdelegate.cpp \
-           estats_tablemodel.cpp \
-           main.cpp \
-           mainwindow.cpp \
-           var_tablemodel.cpp \
-           varwindow.cpp
+	conn_tablemodel.cpp \
+	estats_itemdelegate.cpp \
+	estats_tablemodel.cpp \
+	main.cpp \
+	mainwindow.cpp \
+	var_tablemodel.cpp \
+	varwindow.cpp

@@ -16,7 +16,7 @@ class VarWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit VarWindow(QWidget *parent=0, estats_agent *agent=NULL, int cid=-1);
+    explicit VarWindow(QWidget *parent=0, estats_nl_client *nl_client=NULL, int cid=-1);
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -29,7 +29,7 @@ private:
     void createLayout();
     void createConnections(); // QT slot connections; need to change name
 
-    estats_agent *agent;
+    estats_nl_client *nl_client;
     int cid;
     
     QTableView *tableView;
