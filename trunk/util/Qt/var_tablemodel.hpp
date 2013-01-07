@@ -10,7 +10,7 @@ class VarTableModel : public EstatsTableModel
     Q_OBJECT
 
 public:
-    explicit VarTableModel(QObject *parent=0, estats_agent *agent=NULL, int cid=-1);
+    explicit VarTableModel(QObject *parent=0, estats_nl_client *nl_client=NULL, int cid=-1);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
@@ -19,9 +19,9 @@ public:
 
 protected:
     int cid;
-    estats_connection_spec spec;
-    estats_snapshot* newsnap;
-    estats_snapshot* oldsnap;
+//    estats_connection_spec spec;
+//    estats_snapshot* newsnap;
+//    estats_snapshot* oldsnap;
 
     QMap<quint32, QList<QStandardItem*> > varInfo;
 

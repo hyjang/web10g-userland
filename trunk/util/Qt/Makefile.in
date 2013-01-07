@@ -107,10 +107,23 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_estatsview_OBJECTS = estatsview-main.$(OBJEXT)
+am_estatsview_OBJECTS = estatsview-EstatsView.$(OBJEXT) \
+	estatsview-conn_tablemodel.$(OBJEXT) \
+	estatsview-estats_itemdelegate.$(OBJEXT) \
+	estatsview-estats_tablemodel.$(OBJEXT) \
+	estatsview-main.$(OBJEXT) estatsview-mainwindow.$(OBJEXT) \
+	estatsview-var_tablemodel.$(OBJEXT) \
+	estatsview-varwindow.$(OBJEXT) \
+	estatsview-moc_conn_tablemodel.$(OBJEXT) \
+	estatsview-moc_estats_itemdelegate.$(OBJEXT) \
+	estatsview-moc_estats_tablemodel.$(OBJEXT) \
+	estatsview-moc_mainwindow.$(OBJEXT) \
+	estatsview-moc_var_tablemodel.$(OBJEXT) \
+	estatsview-moc_varwindow.$(OBJEXT)
 estatsview_OBJECTS = $(am_estatsview_OBJECTS)
 am__DEPENDENCIES_1 =
-estatsview_DEPENDENCIES = $(am__DEPENDENCIES_1)
+am__DEPENDENCIES_2 = $(top_builddir)/lib/estats/libestats.la
+estatsview_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_2)
 estatsview_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(estatsview_CXXFLAGS) \
 	$(CXXFLAGS) $(estatsview_LDFLAGS) $(LDFLAGS) -o $@
@@ -292,13 +305,19 @@ SUFFIXES = .moc.cpp .moc.cc .moc.cxx .moc.C .h .hh .hpp \
            .qrc .qrc.cpp .qrc.cc .qrc.cxx .qrc.C
 
 DISTCLEANFILES = $(BUILT_SOURCES)
+LIBESTATS_LDADDS = @STRIP_BEGIN@ \
+	$(top_builddir)/lib/estats/libestats.la \
+	@STRIP_END@
+
 #estatsview_SOURCES = main.cc qt_main.cpp
-estatsview_SOURCES = main.cpp
+estatsview_SOURCES = EstatsView.cpp conn_tablemodel.cpp estats_itemdelegate.cpp estats_tablemodel.cpp main.cpp mainwindow.cpp var_tablemodel.cpp varwindow.cpp moc_conn_tablemodel.cpp moc_estats_itemdelegate.cpp moc_estats_tablemodel.cpp moc_mainwindow.cpp moc_var_tablemodel.cpp moc_varwindow.cpp
 estatsview_CXXFLAGS = $(QT_CXXFLAGS) $(AM_CXXFLAGS)
 estatsview_CPPFLAGS = $(QT_CPPFLAGS) $(AM_CPPFLAGS)
 estatsview_LDFLAGS = $(QT_LDFLAGS) $(LDFLAGS)
-estatsview_LDADD = $(QT_LIBS) $(LDADD)
-all: all-am
+estatsview_LDADD = $(QT_LIBS) $(LIBESTATS_LDADDS) $(LDADD)
+BUILT_SOURCES = moc_conn_tablemodel.cpp moc_estats_itemdelegate.cpp moc_estats_tablemodel.cpp moc_mainwindow.cpp moc_var_tablemodel.cpp moc_varwindow.cpp
+all: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
 .SUFFIXES: .moc.cpp .moc.cc .moc.cxx .moc.C .h .hh .hpp .ui .ui.h .ui.hh .ui.hpp .qrc .qrc.cpp .qrc.cc .qrc.cxx .qrc.C .cpp .lo .o .obj
@@ -389,7 +408,20 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-EstatsView.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-conn_tablemodel.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-estats_itemdelegate.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-estats_tablemodel.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-mainwindow.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-moc_conn_tablemodel.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-moc_estats_itemdelegate.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-moc_estats_tablemodel.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-moc_mainwindow.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-moc_var_tablemodel.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-moc_varwindow.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-var_tablemodel.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-varwindow.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -412,6 +444,62 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
+estatsview-EstatsView.o: EstatsView.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-EstatsView.o -MD -MP -MF $(DEPDIR)/estatsview-EstatsView.Tpo -c -o estatsview-EstatsView.o `test -f 'EstatsView.cpp' || echo '$(srcdir)/'`EstatsView.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-EstatsView.Tpo $(DEPDIR)/estatsview-EstatsView.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EstatsView.cpp' object='estatsview-EstatsView.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-EstatsView.o `test -f 'EstatsView.cpp' || echo '$(srcdir)/'`EstatsView.cpp
+
+estatsview-EstatsView.obj: EstatsView.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-EstatsView.obj -MD -MP -MF $(DEPDIR)/estatsview-EstatsView.Tpo -c -o estatsview-EstatsView.obj `if test -f 'EstatsView.cpp'; then $(CYGPATH_W) 'EstatsView.cpp'; else $(CYGPATH_W) '$(srcdir)/EstatsView.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-EstatsView.Tpo $(DEPDIR)/estatsview-EstatsView.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EstatsView.cpp' object='estatsview-EstatsView.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-EstatsView.obj `if test -f 'EstatsView.cpp'; then $(CYGPATH_W) 'EstatsView.cpp'; else $(CYGPATH_W) '$(srcdir)/EstatsView.cpp'; fi`
+
+estatsview-conn_tablemodel.o: conn_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-conn_tablemodel.o -MD -MP -MF $(DEPDIR)/estatsview-conn_tablemodel.Tpo -c -o estatsview-conn_tablemodel.o `test -f 'conn_tablemodel.cpp' || echo '$(srcdir)/'`conn_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-conn_tablemodel.Tpo $(DEPDIR)/estatsview-conn_tablemodel.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='conn_tablemodel.cpp' object='estatsview-conn_tablemodel.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-conn_tablemodel.o `test -f 'conn_tablemodel.cpp' || echo '$(srcdir)/'`conn_tablemodel.cpp
+
+estatsview-conn_tablemodel.obj: conn_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-conn_tablemodel.obj -MD -MP -MF $(DEPDIR)/estatsview-conn_tablemodel.Tpo -c -o estatsview-conn_tablemodel.obj `if test -f 'conn_tablemodel.cpp'; then $(CYGPATH_W) 'conn_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/conn_tablemodel.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-conn_tablemodel.Tpo $(DEPDIR)/estatsview-conn_tablemodel.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='conn_tablemodel.cpp' object='estatsview-conn_tablemodel.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-conn_tablemodel.obj `if test -f 'conn_tablemodel.cpp'; then $(CYGPATH_W) 'conn_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/conn_tablemodel.cpp'; fi`
+
+estatsview-estats_itemdelegate.o: estats_itemdelegate.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-estats_itemdelegate.o -MD -MP -MF $(DEPDIR)/estatsview-estats_itemdelegate.Tpo -c -o estatsview-estats_itemdelegate.o `test -f 'estats_itemdelegate.cpp' || echo '$(srcdir)/'`estats_itemdelegate.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-estats_itemdelegate.Tpo $(DEPDIR)/estatsview-estats_itemdelegate.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='estats_itemdelegate.cpp' object='estatsview-estats_itemdelegate.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-estats_itemdelegate.o `test -f 'estats_itemdelegate.cpp' || echo '$(srcdir)/'`estats_itemdelegate.cpp
+
+estatsview-estats_itemdelegate.obj: estats_itemdelegate.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-estats_itemdelegate.obj -MD -MP -MF $(DEPDIR)/estatsview-estats_itemdelegate.Tpo -c -o estatsview-estats_itemdelegate.obj `if test -f 'estats_itemdelegate.cpp'; then $(CYGPATH_W) 'estats_itemdelegate.cpp'; else $(CYGPATH_W) '$(srcdir)/estats_itemdelegate.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-estats_itemdelegate.Tpo $(DEPDIR)/estatsview-estats_itemdelegate.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='estats_itemdelegate.cpp' object='estatsview-estats_itemdelegate.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-estats_itemdelegate.obj `if test -f 'estats_itemdelegate.cpp'; then $(CYGPATH_W) 'estats_itemdelegate.cpp'; else $(CYGPATH_W) '$(srcdir)/estats_itemdelegate.cpp'; fi`
+
+estatsview-estats_tablemodel.o: estats_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-estats_tablemodel.o -MD -MP -MF $(DEPDIR)/estatsview-estats_tablemodel.Tpo -c -o estatsview-estats_tablemodel.o `test -f 'estats_tablemodel.cpp' || echo '$(srcdir)/'`estats_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-estats_tablemodel.Tpo $(DEPDIR)/estatsview-estats_tablemodel.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='estats_tablemodel.cpp' object='estatsview-estats_tablemodel.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-estats_tablemodel.o `test -f 'estats_tablemodel.cpp' || echo '$(srcdir)/'`estats_tablemodel.cpp
+
+estatsview-estats_tablemodel.obj: estats_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-estats_tablemodel.obj -MD -MP -MF $(DEPDIR)/estatsview-estats_tablemodel.Tpo -c -o estatsview-estats_tablemodel.obj `if test -f 'estats_tablemodel.cpp'; then $(CYGPATH_W) 'estats_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/estats_tablemodel.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-estats_tablemodel.Tpo $(DEPDIR)/estatsview-estats_tablemodel.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='estats_tablemodel.cpp' object='estatsview-estats_tablemodel.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-estats_tablemodel.obj `if test -f 'estats_tablemodel.cpp'; then $(CYGPATH_W) 'estats_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/estats_tablemodel.cpp'; fi`
+
 estatsview-main.o: main.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-main.o -MD -MP -MF $(DEPDIR)/estatsview-main.Tpo -c -o estatsview-main.o `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-main.Tpo $(DEPDIR)/estatsview-main.Po
@@ -425,6 +513,132 @@ estatsview-main.obj: main.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='main.cpp' object='estatsview-main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
+
+estatsview-mainwindow.o: mainwindow.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-mainwindow.o -MD -MP -MF $(DEPDIR)/estatsview-mainwindow.Tpo -c -o estatsview-mainwindow.o `test -f 'mainwindow.cpp' || echo '$(srcdir)/'`mainwindow.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-mainwindow.Tpo $(DEPDIR)/estatsview-mainwindow.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='mainwindow.cpp' object='estatsview-mainwindow.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-mainwindow.o `test -f 'mainwindow.cpp' || echo '$(srcdir)/'`mainwindow.cpp
+
+estatsview-mainwindow.obj: mainwindow.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-mainwindow.obj -MD -MP -MF $(DEPDIR)/estatsview-mainwindow.Tpo -c -o estatsview-mainwindow.obj `if test -f 'mainwindow.cpp'; then $(CYGPATH_W) 'mainwindow.cpp'; else $(CYGPATH_W) '$(srcdir)/mainwindow.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-mainwindow.Tpo $(DEPDIR)/estatsview-mainwindow.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='mainwindow.cpp' object='estatsview-mainwindow.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-mainwindow.obj `if test -f 'mainwindow.cpp'; then $(CYGPATH_W) 'mainwindow.cpp'; else $(CYGPATH_W) '$(srcdir)/mainwindow.cpp'; fi`
+
+estatsview-var_tablemodel.o: var_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-var_tablemodel.o -MD -MP -MF $(DEPDIR)/estatsview-var_tablemodel.Tpo -c -o estatsview-var_tablemodel.o `test -f 'var_tablemodel.cpp' || echo '$(srcdir)/'`var_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-var_tablemodel.Tpo $(DEPDIR)/estatsview-var_tablemodel.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='var_tablemodel.cpp' object='estatsview-var_tablemodel.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-var_tablemodel.o `test -f 'var_tablemodel.cpp' || echo '$(srcdir)/'`var_tablemodel.cpp
+
+estatsview-var_tablemodel.obj: var_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-var_tablemodel.obj -MD -MP -MF $(DEPDIR)/estatsview-var_tablemodel.Tpo -c -o estatsview-var_tablemodel.obj `if test -f 'var_tablemodel.cpp'; then $(CYGPATH_W) 'var_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/var_tablemodel.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-var_tablemodel.Tpo $(DEPDIR)/estatsview-var_tablemodel.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='var_tablemodel.cpp' object='estatsview-var_tablemodel.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-var_tablemodel.obj `if test -f 'var_tablemodel.cpp'; then $(CYGPATH_W) 'var_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/var_tablemodel.cpp'; fi`
+
+estatsview-varwindow.o: varwindow.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-varwindow.o -MD -MP -MF $(DEPDIR)/estatsview-varwindow.Tpo -c -o estatsview-varwindow.o `test -f 'varwindow.cpp' || echo '$(srcdir)/'`varwindow.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-varwindow.Tpo $(DEPDIR)/estatsview-varwindow.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='varwindow.cpp' object='estatsview-varwindow.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-varwindow.o `test -f 'varwindow.cpp' || echo '$(srcdir)/'`varwindow.cpp
+
+estatsview-varwindow.obj: varwindow.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-varwindow.obj -MD -MP -MF $(DEPDIR)/estatsview-varwindow.Tpo -c -o estatsview-varwindow.obj `if test -f 'varwindow.cpp'; then $(CYGPATH_W) 'varwindow.cpp'; else $(CYGPATH_W) '$(srcdir)/varwindow.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-varwindow.Tpo $(DEPDIR)/estatsview-varwindow.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='varwindow.cpp' object='estatsview-varwindow.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-varwindow.obj `if test -f 'varwindow.cpp'; then $(CYGPATH_W) 'varwindow.cpp'; else $(CYGPATH_W) '$(srcdir)/varwindow.cpp'; fi`
+
+estatsview-moc_conn_tablemodel.o: moc_conn_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_conn_tablemodel.o -MD -MP -MF $(DEPDIR)/estatsview-moc_conn_tablemodel.Tpo -c -o estatsview-moc_conn_tablemodel.o `test -f 'moc_conn_tablemodel.cpp' || echo '$(srcdir)/'`moc_conn_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-moc_conn_tablemodel.Tpo $(DEPDIR)/estatsview-moc_conn_tablemodel.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='moc_conn_tablemodel.cpp' object='estatsview-moc_conn_tablemodel.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_conn_tablemodel.o `test -f 'moc_conn_tablemodel.cpp' || echo '$(srcdir)/'`moc_conn_tablemodel.cpp
+
+estatsview-moc_conn_tablemodel.obj: moc_conn_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_conn_tablemodel.obj -MD -MP -MF $(DEPDIR)/estatsview-moc_conn_tablemodel.Tpo -c -o estatsview-moc_conn_tablemodel.obj `if test -f 'moc_conn_tablemodel.cpp'; then $(CYGPATH_W) 'moc_conn_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_conn_tablemodel.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-moc_conn_tablemodel.Tpo $(DEPDIR)/estatsview-moc_conn_tablemodel.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='moc_conn_tablemodel.cpp' object='estatsview-moc_conn_tablemodel.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_conn_tablemodel.obj `if test -f 'moc_conn_tablemodel.cpp'; then $(CYGPATH_W) 'moc_conn_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_conn_tablemodel.cpp'; fi`
+
+estatsview-moc_estats_itemdelegate.o: moc_estats_itemdelegate.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_estats_itemdelegate.o -MD -MP -MF $(DEPDIR)/estatsview-moc_estats_itemdelegate.Tpo -c -o estatsview-moc_estats_itemdelegate.o `test -f 'moc_estats_itemdelegate.cpp' || echo '$(srcdir)/'`moc_estats_itemdelegate.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-moc_estats_itemdelegate.Tpo $(DEPDIR)/estatsview-moc_estats_itemdelegate.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='moc_estats_itemdelegate.cpp' object='estatsview-moc_estats_itemdelegate.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_estats_itemdelegate.o `test -f 'moc_estats_itemdelegate.cpp' || echo '$(srcdir)/'`moc_estats_itemdelegate.cpp
+
+estatsview-moc_estats_itemdelegate.obj: moc_estats_itemdelegate.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_estats_itemdelegate.obj -MD -MP -MF $(DEPDIR)/estatsview-moc_estats_itemdelegate.Tpo -c -o estatsview-moc_estats_itemdelegate.obj `if test -f 'moc_estats_itemdelegate.cpp'; then $(CYGPATH_W) 'moc_estats_itemdelegate.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_estats_itemdelegate.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-moc_estats_itemdelegate.Tpo $(DEPDIR)/estatsview-moc_estats_itemdelegate.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='moc_estats_itemdelegate.cpp' object='estatsview-moc_estats_itemdelegate.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_estats_itemdelegate.obj `if test -f 'moc_estats_itemdelegate.cpp'; then $(CYGPATH_W) 'moc_estats_itemdelegate.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_estats_itemdelegate.cpp'; fi`
+
+estatsview-moc_estats_tablemodel.o: moc_estats_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_estats_tablemodel.o -MD -MP -MF $(DEPDIR)/estatsview-moc_estats_tablemodel.Tpo -c -o estatsview-moc_estats_tablemodel.o `test -f 'moc_estats_tablemodel.cpp' || echo '$(srcdir)/'`moc_estats_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-moc_estats_tablemodel.Tpo $(DEPDIR)/estatsview-moc_estats_tablemodel.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='moc_estats_tablemodel.cpp' object='estatsview-moc_estats_tablemodel.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_estats_tablemodel.o `test -f 'moc_estats_tablemodel.cpp' || echo '$(srcdir)/'`moc_estats_tablemodel.cpp
+
+estatsview-moc_estats_tablemodel.obj: moc_estats_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_estats_tablemodel.obj -MD -MP -MF $(DEPDIR)/estatsview-moc_estats_tablemodel.Tpo -c -o estatsview-moc_estats_tablemodel.obj `if test -f 'moc_estats_tablemodel.cpp'; then $(CYGPATH_W) 'moc_estats_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_estats_tablemodel.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-moc_estats_tablemodel.Tpo $(DEPDIR)/estatsview-moc_estats_tablemodel.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='moc_estats_tablemodel.cpp' object='estatsview-moc_estats_tablemodel.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_estats_tablemodel.obj `if test -f 'moc_estats_tablemodel.cpp'; then $(CYGPATH_W) 'moc_estats_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_estats_tablemodel.cpp'; fi`
+
+estatsview-moc_mainwindow.o: moc_mainwindow.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_mainwindow.o -MD -MP -MF $(DEPDIR)/estatsview-moc_mainwindow.Tpo -c -o estatsview-moc_mainwindow.o `test -f 'moc_mainwindow.cpp' || echo '$(srcdir)/'`moc_mainwindow.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-moc_mainwindow.Tpo $(DEPDIR)/estatsview-moc_mainwindow.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='moc_mainwindow.cpp' object='estatsview-moc_mainwindow.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_mainwindow.o `test -f 'moc_mainwindow.cpp' || echo '$(srcdir)/'`moc_mainwindow.cpp
+
+estatsview-moc_mainwindow.obj: moc_mainwindow.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_mainwindow.obj -MD -MP -MF $(DEPDIR)/estatsview-moc_mainwindow.Tpo -c -o estatsview-moc_mainwindow.obj `if test -f 'moc_mainwindow.cpp'; then $(CYGPATH_W) 'moc_mainwindow.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_mainwindow.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-moc_mainwindow.Tpo $(DEPDIR)/estatsview-moc_mainwindow.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='moc_mainwindow.cpp' object='estatsview-moc_mainwindow.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_mainwindow.obj `if test -f 'moc_mainwindow.cpp'; then $(CYGPATH_W) 'moc_mainwindow.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_mainwindow.cpp'; fi`
+
+estatsview-moc_var_tablemodel.o: moc_var_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_var_tablemodel.o -MD -MP -MF $(DEPDIR)/estatsview-moc_var_tablemodel.Tpo -c -o estatsview-moc_var_tablemodel.o `test -f 'moc_var_tablemodel.cpp' || echo '$(srcdir)/'`moc_var_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-moc_var_tablemodel.Tpo $(DEPDIR)/estatsview-moc_var_tablemodel.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='moc_var_tablemodel.cpp' object='estatsview-moc_var_tablemodel.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_var_tablemodel.o `test -f 'moc_var_tablemodel.cpp' || echo '$(srcdir)/'`moc_var_tablemodel.cpp
+
+estatsview-moc_var_tablemodel.obj: moc_var_tablemodel.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_var_tablemodel.obj -MD -MP -MF $(DEPDIR)/estatsview-moc_var_tablemodel.Tpo -c -o estatsview-moc_var_tablemodel.obj `if test -f 'moc_var_tablemodel.cpp'; then $(CYGPATH_W) 'moc_var_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_var_tablemodel.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-moc_var_tablemodel.Tpo $(DEPDIR)/estatsview-moc_var_tablemodel.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='moc_var_tablemodel.cpp' object='estatsview-moc_var_tablemodel.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_var_tablemodel.obj `if test -f 'moc_var_tablemodel.cpp'; then $(CYGPATH_W) 'moc_var_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_var_tablemodel.cpp'; fi`
+
+estatsview-moc_varwindow.o: moc_varwindow.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_varwindow.o -MD -MP -MF $(DEPDIR)/estatsview-moc_varwindow.Tpo -c -o estatsview-moc_varwindow.o `test -f 'moc_varwindow.cpp' || echo '$(srcdir)/'`moc_varwindow.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-moc_varwindow.Tpo $(DEPDIR)/estatsview-moc_varwindow.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='moc_varwindow.cpp' object='estatsview-moc_varwindow.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_varwindow.o `test -f 'moc_varwindow.cpp' || echo '$(srcdir)/'`moc_varwindow.cpp
+
+estatsview-moc_varwindow.obj: moc_varwindow.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_varwindow.obj -MD -MP -MF $(DEPDIR)/estatsview-moc_varwindow.Tpo -c -o estatsview-moc_varwindow.obj `if test -f 'moc_varwindow.cpp'; then $(CYGPATH_W) 'moc_varwindow.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_varwindow.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-moc_varwindow.Tpo $(DEPDIR)/estatsview-moc_varwindow.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='moc_varwindow.cpp' object='estatsview-moc_varwindow.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_varwindow.obj `if test -f 'moc_varwindow.cpp'; then $(CYGPATH_W) 'moc_varwindow.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_varwindow.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -515,13 +729,15 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: check-am
+check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) check-am
 all-am: Makefile $(PROGRAMS)
 installdirs:
 	for dir in "$(DESTDIR)$(bindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
+install: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -552,6 +768,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
@@ -622,7 +839,7 @@ ps-am:
 
 uninstall-am: uninstall-binPROGRAMS
 
-.MAKE: install-am install-strip
+.MAKE: all check install install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
 	clean-generic clean-libtool ctags distclean distclean-compile \
@@ -703,8 +920,6 @@ uninstall-am: uninstall-binPROGRAMS
 
 .qrc.qrc.C:
 	$(RCC) -name `echo "$<" | sed 's|^.*/\(.*\)\.qrc$$|\1|'` $< -o $@
-
-#BUILT_SOURCES = estatsview.moc.cpp
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

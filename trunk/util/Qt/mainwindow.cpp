@@ -91,7 +91,7 @@ void MainWindow::openStatsWindow()
     QVariant cidVar = cidItem->data(Qt::DisplayRole);
     int res = cidVar.toInt();
 
-    varwin = new VarWindow(this, agent, res);
+    varwin = new VarWindow(this, nl_client, res);
     varwin->setMinimumSize(400,600);
     varwin->show();
 }

@@ -17,13 +17,13 @@ extern "C" {
 #include "estats/estats.h"                                                                
 }
 
-VarWindow::VarWindow(QWidget *parent, estats_agent *agent, int cid)
+VarWindow::VarWindow(QWidget *parent, estats_nl_client *nl_client, int cid)
     : QMainWindow(parent)
 { 
-    this->agent = agent;
+    this->nl_client = nl_client;
     this->cid = cid;
 
-    model = new VarTableModel(this, agent, cid);
+    model = new VarTableModel(this, nl_client, cid);
 
     createWidgets();
     createLayout();

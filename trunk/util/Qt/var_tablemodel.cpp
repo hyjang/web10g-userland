@@ -3,15 +3,17 @@
 #include <QDebug>
 #include <QString>
 
-VarTableModel::VarTableModel(QObject *parent, estats_agent *agent, int cid)
-    : EstatsTableModel(parent, agent)
+VarTableModel::VarTableModel(QObject *parent, estats_nl_client *nl_client, int cid)
+    : EstatsTableModel(parent, nl_client)
 {
     estats_connection *conn;
     this->cid = cid;
+/*
     estats::Check(estats_agent_find_connection_from_cid(&conn, agent, cid));
     estats::Check(estats_connection_get_connection_spec(&spec, conn));
     estats::Check(estats_snapshot_alloc(&newsnap, conn));
     estats::Check(estats_snapshot_alloc(&oldsnap, conn));
+*/
     initialize();
 }
 
@@ -33,7 +35,7 @@ void VarTableModel::initialize()
     estats_var* var_pos;
 
     quint32 index = 0;
-
+/*
     estats::Check(estats_agent_get_var_head(&var_head, agent));
 
     ESTATS_VAR_FOREACH(var_pos, var_head) {
@@ -53,6 +55,7 @@ void VarTableModel::initialize()
     QMapIterator<quint32, QList<QStandardItem*> > i(varInfo); 
     while (i.hasNext())
         appendRow(i.next().value());
+*/
 }
 
 void VarTableModel::clear()
@@ -64,6 +67,7 @@ void VarTableModel::clear()
 void VarTableModel::update()
 {
     static int first_update = 1;
+/*
     estats_var* var_head;
     estats_var* var_pos;
     estats_snapshot *tmp;
@@ -108,7 +112,7 @@ void VarTableModel::update()
     tmp = oldsnap;
     oldsnap = newsnap;
     newsnap = tmp;
-
+*/
     if (first_update) first_update = 0;
 }
 
