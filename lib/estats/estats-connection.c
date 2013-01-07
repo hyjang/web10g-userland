@@ -110,6 +110,30 @@ Cleanup:
     return err;
 }
 
+struct estats_error*
+estats_connection_tuple_as_strings(struct estats_connection_tuple_ascii* tuple_ascii, struct estats_connection_tuple* tuple)
+{
+	estats_error* err = NULL;
+
+	Chk(Sprintf(NULL, tuple_ascii->rem_port, "%u", tuple->rem_port));
+	Chk(Sprintf(NULL, tuple_ascii->local_port, "%u", tuple->local_port));
+	Chk(Sprintf(NULL, tuple_ascii->cid, "%d", tuple->cid));
+
+	if (tuple->rem_addr[16] == ESTATS_ADDRTYPE_IPV4)
+        	Chk(Inet_ntop(AF_INET, (void*) (tuple->rem_addr), tuple_ascii->rem_addr, INET_ADDRSTRLEN));
+	else if (tuple->rem_addr[16] == ESTATS_ADDRTYPE_IPV6)
+        	Chk(Inet_ntop(AF_INET6, (void*) (tuple->rem_addr), tuple_ascii->rem_addr, INET6_ADDRSTRLEN));
+	else Err(ESTATS_ERR_UNKNOWN);
+
+	if (tuple->local_addr[16] == ESTATS_ADDRTYPE_IPV4)
+        	Chk(Inet_ntop(AF_INET, (void*) (tuple->local_addr), tuple_ascii->local_addr, INET_ADDRSTRLEN));
+	else if (tuple->rem_addr[16] == ESTATS_ADDRTYPE_IPV6)
+        	Chk(Inet_ntop(AF_INET6, (void*) (tuple->local_addr), tuple_ascii->local_addr, INET6_ADDRSTRLEN));
+	else Err(ESTATS_ERR_UNKNOWN);
+
+ Cleanup:
+    return err;
+}
 	
 static struct estats_error* _estats_get_tcp_list(struct estats_list*, const struct estats_connection_list*);
 static struct estats_error* _estats_get_ino_list(struct estats_list*);
@@ -189,7 +213,7 @@ estats_connection_list_add_info(struct estats_connection_list* connection_list)
 			conninfo->cid = tcp_ent->cid;
 			conninfo->addrtype = tcp_ent->addrtype; 
 
-                        conninfo->tuple = tcp_ent->tuple; // struct copy
+                        conninfo->tuple = tcp_ent->tuple;
                         
                         strncpy(conninfo->cmdline, "\0", 1);
                         
@@ -204,7 +228,7 @@ estats_connection_list_add_info(struct estats_connection_list* connection_list)
 	    conninfo->cid = tcp_ent->cid; 
 	    conninfo->addrtype = tcp_ent->addrtype; 
 
-            conninfo->tuple = tcp_ent->tuple; // struct copy
+            conninfo->tuple = tcp_ent->tuple;
 
             strncpy(conninfo->cmdline, "\0", 1);
 
@@ -417,4 +441,6 @@ _estats_get_pid_list(struct estats_list* head)
  Cleanup:
     return err;
 }
+
+
 

@@ -13,8 +13,7 @@ int main(int argc, char *argv[])
 
     app.setWindowIcon(icon);
 
-//    MainWindow window;
-    QMainWindow window;
+    MainWindow window;
     window.setMinimumSize(700,300);
     window.show();
     return app.exec();
