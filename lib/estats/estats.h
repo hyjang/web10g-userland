@@ -39,4 +39,6 @@
 #include <estats/estats-nl-client.h>
 #include <estats/error.h>
 
+#include <estats/list-int.h>
+
 #endif /* ESTATS_H */

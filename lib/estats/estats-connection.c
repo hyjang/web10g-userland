@@ -52,7 +52,7 @@ estats_connection_list_free(struct estats_connection_list** connection_list)
 	}
 
 	ESTATS_LIST_FOREACH_SAFE(conn_pos, tmp, &((*connection_list)->connection_info_head)) {
-        	estats_connection* curr_conn = ESTATS_LIST_ENTRY(conn_pos, estats_connection, list);
+        	estats_connection_info* curr_conn = ESTATS_LIST_ENTRY(conn_pos, estats_connection_info, list);
         	_estats_list_del(conn_pos);
         	free(curr_conn);
 	}
@@ -71,7 +71,7 @@ estats_connection_info_new(struct estats_connection_info** connection_info)
 	*connection_info = NULL;
 	
 	Chk(Malloc((void**) connection_info, sizeof(estats_connection_info)));
-	memset((void*) connection_info, 0, sizeof(estats_connection_info));
+	memset((void*) *connection_info, 0, sizeof(estats_connection_info));
 
  Cleanup:
  	return err;
@@ -86,28 +86,199 @@ estats_connection_info_free(struct estats_connection_info** connection_info)
 	free(*connection_info);
 	*connection_info = NULL;
 }
+
+struct estats_error*
+estats_connection_tuple_compare(int* res,
+                               const struct estats_connection_tuple *s1,
+                               const struct estats_connection_tuple *s2)
+{
+    estats_error* err = NULL;
+
+    ErrIf(s1 == NULL || s2 == NULL, ESTATS_ERR_INVAL);
+
+    *res = 1;
+
+    if ( (s1->rem_port == s2->rem_port) &&
+         strcmp((char *)(s1->rem_addr), (char *)(s2->rem_addr)) == 0 &&
+         (s1->local_port == s2->local_port) &&
+         strcmp((char *)(s1->local_addr), (char *)(s2->local_addr)) == 0 ) {
+
+        *res = 0;
+    }
+
+Cleanup:
+    return err;
+}
+
 	
+static struct estats_error* _estats_get_tcp_list(struct estats_list*, const struct estats_connection_list*);
+static struct estats_error* _estats_get_ino_list(struct estats_list*);
+static struct estats_error* _estats_get_pid_list(struct estats_list*);
+
 struct estats_error*
 estats_connection_list_add_info(struct estats_connection_list* connection_list)
 {
 	estats_error* err = NULL;
+	struct estats_list* head;
+	struct estats_list tcp_head;
+	struct estats_list ino_head;
+	struct estats_list pid_head;
+	struct estats_list* tcp_pos;
+	struct estats_list* ino_pos;
+	struct estats_list* pid_pos;
+	struct estats_list* tmp;
+	estats_connection_info* conninfo;
+	int dif;
+	int tcp_entry, fd_entry;
+
+	ErrIf(connection_list == NULL, ESTATS_ERR_INVAL);
+
+	head = &connection_list->connection_info_head;
+
+	Chk(_estats_get_tcp_list(&tcp_head, connection_list));
+	Chk(_estats_get_ino_list(&ino_head));
+	Chk(_estats_get_pid_list(&pid_head));
+
+    ESTATS_LIST_FOREACH(tcp_pos, &tcp_head) {
+
+	estats_connection_info* tcp_ent = ESTATS_LIST_ENTRY(tcp_pos, estats_connection_info, list);
+	tcp_entry = 0;
+ 
+        ESTATS_LIST_FOREACH(ino_pos, &ino_head) {
+
+            estats_connection_info* ino_ent = ESTATS_LIST_ENTRY(ino_pos, estats_connection_info, list);
+	    
+	    Chk(estats_connection_tuple_compare(&dif, &ino_ent->tuple, &tcp_ent->tuple));
+
+	    if (!dif) {
+	       	tcp_entry = 1;
+	       	fd_entry = 0;
+
+		ESTATS_LIST_FOREACH(pid_pos, &pid_head) {
+
+                    estats_connection_info* pid_ent = ESTATS_LIST_ENTRY(pid_pos, estats_connection_info, list);
+
+		    if(pid_ent->ino == ino_ent->ino) { //then create entry 
+			fd_entry = 1;
+
+                        Chk(estats_connection_info_new(&conninfo));
+
+			conninfo->pid = pid_ent->pid; 
+
+                        strncpy(conninfo->cmdline, pid_ent->cmdline, sizeof(pid_ent->cmdline));
+                        conninfo->uid = ino_ent->uid;
+		       	conninfo->state = ino_ent->state;
+
+			conninfo->cid = tcp_ent->cid;
+
+			conninfo->addrtype = tcp_ent->addrtype; 
+
+                        conninfo->tuple = tcp_ent->tuple;
+
+                        _estats_list_add_tail(&(conninfo->list), head);
+		    }
+	       	}
+	       	if(!fd_entry) { // add entry w/out cmdline 
+
+                        Chk(estats_connection_info_new(&conninfo));
+
+			conninfo->pid = 0;
+			conninfo->uid = ino_ent->uid;
+		       	conninfo->state = ino_ent->state;
+
+			conninfo->cid = tcp_ent->cid;
+			conninfo->addrtype = tcp_ent->addrtype; 
+
+                        conninfo->tuple = tcp_ent->tuple; // struct copy
+                        
+                        strncpy(conninfo->cmdline, "\0", 1);
+                        
+                        _estats_list_add_tail(&(conninfo->list), head);
+	       	}
+	    }
+	}
+	if(!tcp_entry) { // then connection has vanished; add residual cid info
+
+            Chk(estats_connection_info_new(&conninfo));
+
+	    conninfo->cid = tcp_ent->cid; 
+	    conninfo->addrtype = tcp_ent->addrtype; 
+
+            conninfo->tuple = tcp_ent->tuple; // struct copy
+
+            strncpy(conninfo->cmdline, "\0", 1);
+
+            _estats_list_add_tail(&(conninfo->list), head);
+       	}
+    }
+
+Cleanup:
+    
+    ESTATS_LIST_FOREACH_SAFE(tcp_pos, tmp, &tcp_head) {
+        estats_connection_info* tcp_ent = ESTATS_LIST_ENTRY(tcp_pos, estats_connection_info, list);
+        _estats_list_del(tcp_pos);
+        free(tcp_ent);
+    }
+    ESTATS_LIST_FOREACH_SAFE(ino_pos, tmp, &ino_head) {
+        estats_connection_info* ino_ent = ESTATS_LIST_ENTRY(ino_pos, estats_connection_info, list);
+        _estats_list_del(ino_pos);
+        free(ino_ent);
+    }
+    ESTATS_LIST_FOREACH_SAFE(pid_pos, tmp, &pid_head) {
+        estats_connection_info* pid_ent = ESTATS_LIST_ENTRY(pid_pos, estats_connection_info, list);
+        _estats_list_del(pid_pos);
+        free(pid_ent);
+    }
+
+    return err;
+}
+
+static struct estats_error*
+_estats_get_tcp_list(struct estats_list* head, const estats_connection_list* connection_list)
+{
+	estats_error* err = NULL;
+	struct estats_list* connection_head;
+	struct estats_list* pos;
+	int i;
+
+	ErrIf(head == NULL || connection_list == NULL, ESTATS_ERR_INVAL);
+	_estats_list_init(head);
+	
+	connection_head = &connection_list->connection_head;
+
+	ESTATS_LIST_FOREACH(pos, connection_head) {
+		estats_connection* ent = ESTATS_LIST_ENTRY(pos, estats_connection, list);
+		estats_connection_info* conninfo;
+		Chk(estats_connection_info_new(&conninfo));
+
+		conninfo->cid = ent->cid;
+		for (i = 0; i < 17; i++)
+			conninfo->tuple.rem_addr[i] = ent->rem_addr[i];
+		for (i = 0; i < 17; i++)
+			conninfo->tuple.local_addr[i] = ent->local_addr[i];
+		conninfo->tuple.rem_port = ent->rem_port;
+		conninfo->tuple.local_port = ent->local_port;
+		conninfo->addrtype = ent->local_addr[16];
+
+		_estats_list_add_tail(&conninfo->list, head);
+	}
 
  Cleanup:
  	return err;
 }
 
 static struct estats_error*
-_estats_get_ino_list(struct estats_connection_list* connection_list)
+_estats_get_ino_list(struct estats_list* head)
 {
 	estats_error* err = NULL;
-	struct estats_list* head = &(connection_list->connection_info_head);
 	FILE* file = NULL;
 	FILE* file6 = NULL;
 	char buf[256];
 	int scan;
 	struct in6_addr in6;
 
-	ErrIf(connection_list == NULL, ESTATS_ERR_INVAL);
+	ErrIf(head == NULL, ESTATS_ERR_INVAL);
+	_estats_list_init(head);
 
 	file = fopen("/proc/net/tcp", "r");
 	file6 = fopen("/proc/net/tcp6", "r");
@@ -146,7 +317,7 @@ _estats_get_ino_list(struct estats_connection_list* connection_list)
 
 		while (fgets(buf, sizeof(buf), file6) != NULL) {
 
-			Chk(_estats_conninfo_new_entry(&conninfo));
+			Chk(estats_connection_info_new(&conninfo));
 
 			if ((scan = sscanf(buf,
 				"%*u: %64[0-9A-Fa-f]:%hx %64[0-9A-Fa-f]:%hx %x %*x:%*x %*x:%*x %*x %u %*u %u", 
@@ -180,4 +351,70 @@ _estats_get_ino_list(struct estats_connection_list* connection_list)
  	return err;
 }
 
+static struct estats_error*
+_estats_get_pid_list(struct estats_list* head)
+{
+	estats_error* err = NULL;
+	estats_connection_info* conninfo;
+	DIR *dir, *fddir;
+	struct dirent *direntp, *fddirentp;
+	pid_t pid;
+	char path[PATH_MAX];
+	char buf[256];
+	struct stat st;
+	int stno;
+	FILE* file;
+
+	ErrIf(head == NULL, ESTATS_ERR_INVAL);
+	_estats_list_init(head);
+
+	Chk(Opendir(&dir, "/proc"));
+
+	while ((direntp = readdir(dir)) != NULL) {
+		if ((pid = atoi(direntp->d_name)) != 0) {
+
+			sprintf(path, "%s/%d/%s/", "/proc", pid, "fd"); 
+
+			if ((fddir = opendir(path)) != NULL) { //else lacks permissions 
+	     
+			while ((fddirentp = readdir(fddir)) != NULL) { 
+
+		    	strcpy(buf, path);
+		    	strcat(buf, fddirentp->d_name); 
+		    	stno = stat(buf, &st); 
+
+		    	if (S_ISSOCK(st.st_mode)) { // add new list entry
+
+			sprintf(buf, "/proc/%d/status", pid);
+
+			if ((file = fopen(buf, "r")) == NULL)
+				continue;
+
+			if (fgets(buf, sizeof(buf), file) == NULL)
+			    	goto FileCleanup; 
+       	
+	                Chk(estats_connection_info_new(&conninfo));
+
+			if (sscanf(buf, "Name: %16s\n", conninfo->cmdline) != 1) {
+			    estats_connection_info_free(&conninfo);
+			    goto FileCleanup;
+		       	}
+
+			conninfo->ino = st.st_ino;
+		       	conninfo->pid = pid;
+                        _estats_list_add_tail(&conninfo->list, head);
+
+ FileCleanup:
+			fclose(file); 
+		    	}
+	       		}
+	       		closedir(fddir);
+	    		}
+       		}
+    	}
+    	closedir(dir);
+
+ Cleanup:
+    return err;
+}
 
