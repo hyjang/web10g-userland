@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     timer->start(1000);
 
-    estats::Check(estats_agent_attach(&agent, ESTATS_AGENT_TYPE_LOCAL, NULL));
+//    estats::Check(estats_agent_attach(&agent, ESTATS_AGENT_TYPE_LOCAL, NULL));
 
     model = new ConnTableModel(this, agent);
 

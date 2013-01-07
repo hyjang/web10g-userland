@@ -109,6 +109,14 @@ struct estats_connection_tuple {
 	int       cid;
 };
 
+struct estats_connection_tuple_ascii {
+	char rem_addr[INET6_ADDRSTRLEN];
+	char local_addr[INET6_ADDRSTRLEN];
+	char rem_port[6];
+	char local_port[6];
+	char cid[11];
+};
+
 struct estats_list {
         struct estats_list* next;
         struct estats_list* prev;

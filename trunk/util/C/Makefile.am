@@ -1,4 +1,4 @@
-bin_PROGRAMS = deltavars listconns readvars watchvars writevar
+bin_PROGRAMS = deltavars listconninfo listconns readvars watchvars writevar
 
 LIBTCPESTATS_LDADDS = @STRIP_BEGIN@ \
 	$(top_builddir)/lib/estats/libtcpestats.la \
@@ -14,6 +14,9 @@ deltavars_LDADD = $(LIBTCPESTATS_LDADDS)
 
 readvars_SOURCES = readvars.c scripts.h
 readvars_LDADD = $(LIBTCPESTATS_LDADDS)
+
+listconninfo_SOURCES = listconninfo.c scripts.h
+listconninfo_LDADD = $(LIBTCPESTATS_LDADDS)
 
 listconns_SOURCES = listconns.c scripts.h
 listconns_LDADD = $(LIBTCPESTATS_LDADDS)
