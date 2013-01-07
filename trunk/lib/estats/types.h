@@ -30,7 +30,7 @@ enum MIB_TABLE {
 };
 #define MAX_TABLE __MAX_TABLE
 
-enum ESTATS_TYPE {
+enum ESTATS_VAL_TYPE {
         ESTATS_UNSIGNED64,
         ESTATS_UNSIGNED32,
         ESTATS_SIGNED32,
@@ -79,7 +79,7 @@ struct estats_val {
 
 struct estats_var {
         char *name;
-        enum ESTATS_TYPE type;
+        enum ESTATS_VAL_TYPE valtype;
 };
 
 struct estats_data {

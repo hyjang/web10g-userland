@@ -56,6 +56,24 @@ void VarTableModel::initialize()
     while (i.hasNext())
         appendRow(i.next().value());
 */
+
+    for (int i = 0; i < TOTAL_INDEX_MAX; i++) {
+	const char* name;
+
+	name = estats_var_array[i].name;
+
+        QList<QStandardItem*> items;
+
+        items << new QStandardItem(name);
+        items << new QStandardItem();
+        items << new QStandardItem();
+
+        varInfo[index++] = items;
+    }
+
+    QMapIterator<quint32, QList<QStandardItem*> > i(varInfo); 
+    while (i.hasNext())
+        appendRow(i.next().value());
 }
 
 void VarTableModel::clear()
