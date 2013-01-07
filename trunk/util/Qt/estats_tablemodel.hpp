@@ -9,10 +9,10 @@ class EstatsTableModel : public QStandardItemModel
     Q_OBJECT
 
 public:
-    explicit EstatsTableModel(QObject *parent=0, estats_agent *agent=NULL);
+    explicit EstatsTableModel(QObject *parent=0, estats_nl_client *nl_client=NULL);
 
 protected:
-    estats_agent *agent;
+    estats_nl_client *nl_client;
 
 private:
 

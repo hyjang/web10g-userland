@@ -29,7 +29,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 //    estats::Check(estats_agent_attach(&agent, ESTATS_AGENT_TYPE_LOCAL, NULL));
 
-    model = new ConnTableModel(this, agent);
+    estats::Check(estats_nl_client_init(&nl_client));
+
+    model = new ConnTableModel(this, nl_client);
 
     createWidgets();
     createLayout();

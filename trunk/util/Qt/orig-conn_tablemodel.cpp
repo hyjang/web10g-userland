@@ -2,8 +2,8 @@
 #include <QSet>
 #include <QDebug>
 
-ConnTableModel::ConnTableModel(QObject *parent, estats_nl_client *nl_client)
-    : EstatsTableModel(parent, nl_client)
+ConnTableModel::ConnTableModel(QObject *parent, estats_agent *agent)
+    : EstatsTableModel(parent, agent)
 {
     initialize();
 }
@@ -35,34 +35,26 @@ void ConnTableModel::clear()
 
 void ConnTableModel::update()
 {
-    struct estats_connection_list* connlist = NULL;
-//    estats_connection_info* conninfo = NULL;
-    struct estats_list* ci_head = NULL;
-    struct estats_list* ci_pos;
+    estats_sockinfo* sinfo = NULL;
+    estats_sockinfo_item* ci_head = NULL;
+    estats_sockinfo_item* ci_pos;
 
     quint32 qucid;
 
     QMap<quint32, QList<QStandardItem*> > connectionInfo;
 
     QSet<quint32> curr_cids = QSet<quint32>();
-/*
-    estats::Check(estats_connection_list_new(&sinfo, nl_client));
-    estats::Check(estats_connection_info_get_list_head(&ci_head, sinfo));
-*/
-    estats::Check(estats_connection_list_new(&connlist));
-    estats::Check(estats_list_conns(connlist, NULL, nl_client));
-    estats::Check(estats_connection_list_add_info(connlist));
 
-    ci_head = &connlist->connection_info_head;
+    estats::Check(estats_sockinfo_new(&sinfo, agent));
+    estats::Check(estats_sockinfo_get_list_head(&ci_head, sinfo));
 
-    ESTATS_LIST_FOREACH(ci_pos, ci_head) {
+    ESTATS_SOCKINFO_FOREACH(ci_pos, ci_head) {
         int cid, pid, uid;
         char* cmdline;
-        struct estats_connection_tuple tuple;
-        struct estats_connection_tuple_ascii tuple_ascii;
-	struct estats_connection_info* conninfo = ESTATS_LIST_ENTRY(ci_pos, estats_connection_info, list);
+        struct estats_connection_spec spec;
+        struct spec_ascii spec_asc;
 
-        estats::Check(estats_connection_info_get_cid(&cid, conninfo));
+        estats::Check(estats_sockinfo_get_cid(&cid, ci_pos));
 
         qucid = (quint32)cid;
 
@@ -70,12 +62,12 @@ void ConnTableModel::update()
 
         if (prev_cids.contains(qucid)) continue;
 
-        estats::Check(estats_connection_info_get_pid(&pid, conninfo));
-        estats::Check(estats_connection_info_get_uid(&uid, conninfo));
+        estats::Check(estats_sockinfo_get_pid(&pid, ci_pos));
+        estats::Check(estats_sockinfo_get_uid(&uid, ci_pos));
 
-        estats::Check(estats_connection_info_get_cmdline(&cmdline, conninfo));
-        estats::Check(estats_connection_info_get_tuple(&tuple, conninfo));
-        estats::Check(estats_connection_tuple_as_strings(&tuple_ascii, &tuple));
+        estats::Check(estats_sockinfo_get_cmdline(&cmdline, ci_pos));
+        estats::Check(estats_sockinfo_get_connection_spec(&spec, ci_pos));
+        estats::Check(estats_connection_spec_as_strings(&spec_asc, &spec));
 
         QList<QStandardItem*> items;
 
@@ -87,17 +79,17 @@ void ConnTableModel::update()
 
         items << new QStandardItem(QString::number(pid));
         items << new QStandardItem(QString::number(uid));
-        items << new QStandardItem(tuple_ascii.local_addr);
-        items << new QStandardItem(tuple_ascii.local_port);
-        items << new QStandardItem(tuple_ascii.rem_addr);
-        items << new QStandardItem(tuple_ascii.rem_port);
+        items << new QStandardItem(spec_asc.src_addr);
+        items << new QStandardItem(spec_asc.src_port);
+        items << new QStandardItem(spec_asc.dst_addr);
+        items << new QStandardItem(spec_asc.dst_port);
 
         connectionInfo[qucid] = items;
 
         free((void*) cmdline);
     }
 
-    estats_connection_list_free(&connlist);
+    estats_sockinfo_free(&sinfo);
 
     QSet<quint32> stale_cids = prev_cids - curr_cids;
 

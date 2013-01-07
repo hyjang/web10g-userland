@@ -134,7 +134,68 @@ estats_connection_tuple_as_strings(struct estats_connection_tuple_ascii* tuple_a
  Cleanup:
     return err;
 }
+
+estats_error*
+estats_connection_info_get_cid(int* cid, const estats_connection_info* connection_info)
+{
+    estats_error* err = NULL;
+
+    ErrIf(cid == NULL || connection_info == NULL, ESTATS_ERR_INVAL);
+    *cid = connection_info->cid;
+
+Cleanup:
+    return err;
+}
 	
+estats_error*
+estats_connection_info_get_pid(int* pid, const estats_connection_info* connection_info)
+{
+    estats_error* err = NULL;
+
+    ErrIf(pid == NULL || connection_info == NULL, ESTATS_ERR_INVAL);
+    *pid = connection_info->pid;
+
+Cleanup:
+    return err;
+}
+	
+estats_error*
+estats_connection_info_get_uid(int* uid, const estats_connection_info* connection_info)
+{
+    estats_error* err = NULL;
+
+    ErrIf(uid == NULL || connection_info == NULL, ESTATS_ERR_INVAL);
+    *uid = connection_info->uid;
+
+Cleanup:
+    return err;
+}
+
+estats_error*
+estats_connection_info_get_cmdline(char** str, const estats_connection_info* connection_info)
+{
+    estats_error* err = NULL;
+
+    ErrIf(connection_info == NULL, ESTATS_ERR_INVAL);
+    Chk(Strdup(str, connection_info->cmdline));
+
+Cleanup:
+    return err;
+}
+
+estats_error*
+estats_connection_info_get_tuple(struct estats_connection_tuple* tuple, const estats_connection_info* connection_info)
+{
+    estats_error* err = NULL;
+
+    ErrIf(tuple == NULL || connection_info == NULL, ESTATS_ERR_INVAL);
+
+    *tuple = connection_info->tuple;
+
+Cleanup:
+    return err;
+}
+
 static struct estats_error* _estats_get_tcp_list(struct estats_list*, const struct estats_connection_list*);
 static struct estats_error* _estats_get_ino_list(struct estats_list*);
 static struct estats_error* _estats_get_pid_list(struct estats_list*);
@@ -261,7 +322,7 @@ static struct estats_error*
 _estats_get_tcp_list(struct estats_list* head, const estats_connection_list* connection_list)
 {
 	estats_error* err = NULL;
-	struct estats_list* connection_head;
+	const struct estats_list* connection_head;
 	struct estats_list* pos;
 	int i;
 

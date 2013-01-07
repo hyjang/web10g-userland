@@ -1,5 +1,5 @@
 # Header files for public installation
-tcpestats_pub_h_sources = \
+estats_pub_h_sources = \
 	error.h \
 	estats.h \
 	estats-connection.h \
@@ -7,20 +7,20 @@ tcpestats_pub_h_sources = \
 	estats-genl.h \
 	estats-nl.h \
 	estats-nl-client.h \
+	list-int.h \
 	types.h
 
 # Header files not installed
-tcpestats_pri_h_sources = \
+estats_pri_h_sources = \
 	debug-int.h \
 	error-int.h \
 	libcwrap-int.h \
-	list-int.h \
 	resolve-int.h \
 	estats-int.h \
 	types-int.h
 
 # C sources to build the library from
-tcpestats_c_sources = \
+estats_c_sources = \
 	debug-int.c \
 	error.c \
 	libcwrap-int.c \
@@ -47,12 +47,12 @@ AM_LDFLAGS = @STRIP_BEGIN@ \
 	@STRIP_END@
 
 # Libraries to compile and install
-lib_LTLIBRARIES = libtcpestats.la
+lib_LTLIBRARIES = libestats.la
 
-libtcpestats_la_SOURCES = $(tcpestats_c_sources) $(tcpestats_pub_h_sources) $(tcpestats_pri_h_sources)
-#libtcpestats_la_LDFLAGS = -version-info=0:1:0
+libestats_la_SOURCES = $(estats_c_sources) $(estats_pub_h_sources) $(estats_pri_h_sources)
+#libestats_la_LDFLAGS = -version-info=0:1:0
 
-# Install headers into include/tcpestats
-# NOTE: If you update this, be sure to update tcpestats-config
-libtcpestatsincludedir = $(TCPESTATS_INCLUDE_DIR)/tcpestats
-libtcpestatsinclude_HEADERS = $(tcpestats_pub_h_sources)
+# Install headers into include/estats
+# NOTE: If you update this, be sure to update estats-config
+libestatsincludedir = $(TCPESTATS_INCLUDE_DIR)/estats
+libestatsinclude_HEADERS = $(estats_pub_h_sources)

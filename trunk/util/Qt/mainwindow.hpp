@@ -29,7 +29,9 @@ private:
     void createLayout();
     void createConnections(); // QT slot connections; need to change name
 
-    estats_agent *agent;
+//    estats_agent *agent;
+
+    estats_nl_client *nl_client;
     
     QTableView *tableView;
     ConnTableModel *model;
