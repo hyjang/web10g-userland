@@ -97,6 +97,7 @@ am__aclocal_m4_deps = $(top_srcdir)/build-aux/autotroll.m4 \
 	$(top_srcdir)/build-aux/ltsugar.m4 \
 	$(top_srcdir)/build-aux/ltversion.m4 \
 	$(top_srcdir)/build-aux/lt~obsolete.m4 \
+	$(top_srcdir)/build-aux/m4_ax_cxx_compile_stdcxx_11.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
@@ -106,7 +107,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_estatsview_OBJECTS = estatsview-qt_main.$(OBJEXT)
+am_estatsview_OBJECTS = estatsview-main.$(OBJEXT)
 estatsview_OBJECTS = $(am_estatsview_OBJECTS)
 am__DEPENDENCIES_1 =
 estatsview_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -292,7 +293,7 @@ SUFFIXES = .moc.cpp .moc.cc .moc.cxx .moc.C .h .hh .hpp \
 
 DISTCLEANFILES = $(BUILT_SOURCES)
 #estatsview_SOURCES = main.cc qt_main.cpp
-estatsview_SOURCES = qt_main.cpp
+estatsview_SOURCES = main.cpp
 estatsview_CXXFLAGS = $(QT_CXXFLAGS) $(AM_CXXFLAGS)
 estatsview_CPPFLAGS = $(QT_CPPFLAGS) $(AM_CPPFLAGS)
 estatsview_LDFLAGS = $(QT_LDFLAGS) $(LDFLAGS)
@@ -388,7 +389,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-qt_main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/estatsview-main.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -411,19 +412,19 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
-estatsview-qt_main.o: qt_main.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-qt_main.o -MD -MP -MF $(DEPDIR)/estatsview-qt_main.Tpo -c -o estatsview-qt_main.o `test -f 'qt_main.cpp' || echo '$(srcdir)/'`qt_main.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-qt_main.Tpo $(DEPDIR)/estatsview-qt_main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='qt_main.cpp' object='estatsview-qt_main.o' libtool=no @AMDEPBACKSLASH@
+estatsview-main.o: main.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-main.o -MD -MP -MF $(DEPDIR)/estatsview-main.Tpo -c -o estatsview-main.o `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-main.Tpo $(DEPDIR)/estatsview-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='main.cpp' object='estatsview-main.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-qt_main.o `test -f 'qt_main.cpp' || echo '$(srcdir)/'`qt_main.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-main.o `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
 
-estatsview-qt_main.obj: qt_main.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-qt_main.obj -MD -MP -MF $(DEPDIR)/estatsview-qt_main.Tpo -c -o estatsview-qt_main.obj `if test -f 'qt_main.cpp'; then $(CYGPATH_W) 'qt_main.cpp'; else $(CYGPATH_W) '$(srcdir)/qt_main.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-qt_main.Tpo $(DEPDIR)/estatsview-qt_main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='qt_main.cpp' object='estatsview-qt_main.obj' libtool=no @AMDEPBACKSLASH@
+estatsview-main.obj: main.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-main.obj -MD -MP -MF $(DEPDIR)/estatsview-main.Tpo -c -o estatsview-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/estatsview-main.Tpo $(DEPDIR)/estatsview-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='main.cpp' object='estatsview-main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-qt_main.obj `if test -f 'qt_main.cpp'; then $(CYGPATH_W) 'qt_main.cpp'; else $(CYGPATH_W) '$(srcdir)/qt_main.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

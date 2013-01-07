@@ -6,7 +6,7 @@
 
 extern "C" {                                                                              
 #include "estats/estats.h"                                                                
-#include "estats/sockinfo.h"
+//#include "tcpestats/sockinfo.h"
 }
 
 class EApplication : public QApplication

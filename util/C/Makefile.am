@@ -1,7 +1,7 @@
 bin_PROGRAMS = deltavars listconninfo listconns readvars watchvars writevar
 
 LIBTCPESTATS_LDADDS = @STRIP_BEGIN@ \
-	$(top_builddir)/lib/estats/libtcpestats.la \
+	$(top_builddir)/lib/estats/libestats.la \
 	@STRIP_END@
 
 AM_CPPFLAGS = @STRIP_BEGIN@ \

@@ -1,3 +1,13 @@
 
 Temporary README, as initial import proceeds...
 
+Based on Qt 4.7; configure script for checking dependencies to follow, however,
+the basic libraries required are standard for most Linux distros, and required
+for any platform running the KDE desktop.
+
+To build:
+
+qmake
+make
+
+

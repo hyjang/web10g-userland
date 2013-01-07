@@ -10,7 +10,7 @@ class ConnTableModel : public EstatsTableModel
     Q_OBJECT
 
 public:
-    explicit ConnTableModel(QObject *parent=0, estats_agent *agent=NULL);
+    explicit ConnTableModel(QObject *parent=0, estats_nl_client *nl_client=NULL);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 

@@ -11,32 +11,36 @@
  *  the LGPL 2.1.
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 static inline void _estats_list_init(struct estats_list* ptr)
 {
     ptr->next = ptr;
     ptr->prev = ptr;
 }
 
-static inline void _estats_list_add2(struct estats_list* new,
+static inline void _estats_list_add2(struct estats_list* item,
                                      struct estats_list* prev,
                                      struct estats_list* next)
 {
-    next->prev = new;
-    new->next = next;
-    new->prev = prev;
-    prev->next = new;
+    next->prev = item;
+    item->next = next;
+    item->prev = prev;
+    prev->next = item;
 }
 
-static inline void _estats_list_add(struct estats_list* new,
+static inline void _estats_list_add(struct estats_list* item,
                                     struct estats_list* head)
 {
-    _estats_list_add2(new, head, head->next);
+    _estats_list_add2(item, head, head->next);
 }
 
-static inline void _estats_list_add_tail(struct estats_list* new,
+static inline void _estats_list_add_tail(struct estats_list* item,
                                          struct estats_list* head)
 {
-    _estats_list_add2(new, head->prev, head);
+    _estats_list_add2(item, head->prev, head);
 }
 
 static inline void _estats_list_del2(struct estats_list* prev,
@@ -65,5 +69,9 @@ static inline int _estats_list_empty(struct estats_list* head)
     for (pos = (head)->prev; pos != (head); pos = pos->prev)
 #define ESTATS_LIST_FOREACH_SAFE(pos, tmp, head) \
     for (pos = (head)->next, tmp = pos->next; pos != (head); pos = tmp, tmp = pos->next)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* ESTATS_LIST_INT_H */
