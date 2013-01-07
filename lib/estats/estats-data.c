@@ -75,7 +75,7 @@ struct estats_error* estats_data_delta(struct estats_data* data, const struct es
 			data->val[i].mask = 1;
 			continue;
 		}
-		switch(estats_var_array[i].type) {
+		switch(estats_var_array[i].valtype) {
 		case ESTATS_UNSIGNED64:
 			data->val[i].uv64 =
 				data2->val[i].uv64 - data1->val[i].uv64;

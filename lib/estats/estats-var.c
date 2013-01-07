@@ -19,7 +19,7 @@
  */
 #include <estats/estats-int.h>
 
-#define ESTATSVAR(_name_,_type_) (struct estats_var) { .name = #_name_, .type = ESTATS_##_type_ }
+#define ESTATSVAR(_name_,_valtype_) (struct estats_var) { .name = #_name_, .valtype = ESTATS_##_valtype_ }
 
 int max_index[MAX_TABLE] = { PERF_INDEX_MAX, PATH_INDEX_MAX, STACK_INDEX_MAX, APP_INDEX_MAX, TUNE_INDEX_MAX };
 

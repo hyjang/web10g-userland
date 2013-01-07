@@ -41,7 +41,7 @@ static int parse_table_cb(const struct nlattr *attr, void *data)
 
 	j = single_index(tblnum, type);
 
-	switch(estats_var_array[j].type) {
+	switch(estats_var_array[j].valtype) {
 
 	case ESTATS_UNSIGNED8:
 		if (mnl_attr_validate(attr, MNL_TYPE_U8) < 0) {
@@ -119,7 +119,7 @@ static void parse_table(struct nlattr *nested, int index)
 		
                 if (ia.tb[i]) {
 
-			switch(estats_var_array[j].type) {
+			switch(estats_var_array[j].valtype) {
 
                         case ESTATS_UNSIGNED64: 
 				stat_val[j].uv64 = mnl_attr_get_u64(ia.tb[i]);

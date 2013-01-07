@@ -129,7 +129,7 @@ int main(int argc, char **argv)
 
 		if (data->val[j].mask) continue;
 
-		switch(estats_var_array[j].type) {
+		switch(estats_var_array[j].valtype) {
 			case ESTATS_UNSIGNED64:
 				printf("%s=%"PRIu64"\n", estats_var_array[j].name, data->val[j].uv64);
                 		break;
