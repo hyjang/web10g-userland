@@ -7,6 +7,7 @@ estats_pub_h_sources = \
 	estats-genl.h \
 	estats-nl.h \
 	estats-nl-client.h \
+	estats-val.h \
 	list-int.h \
 	types.h
 
@@ -29,6 +30,7 @@ estats_c_sources = \
 	estats-data.c \
 	estats-genl.c \
 	estats-nl-client.c \
+	estats-val.c \
 	estats-var.c
 
 # cpp flags to be used with all compilation

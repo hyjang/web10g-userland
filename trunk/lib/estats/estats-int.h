@@ -51,6 +51,7 @@
 #include <estats/estats.h>
 #include <estats/estats-nl.h>
 #include <estats/estats-nl-client.h>
+#include <estats/estats-val.h>
 
 /* estats internal headers */
 #include <estats/debug-int.h>

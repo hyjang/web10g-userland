@@ -112,14 +112,16 @@ am_estatsview_OBJECTS = estatsview-EstatsView.$(OBJEXT) \
 	estatsview-estats_itemdelegate.$(OBJEXT) \
 	estatsview-estats_tablemodel.$(OBJEXT) \
 	estatsview-main.$(OBJEXT) estatsview-mainwindow.$(OBJEXT) \
+	estatsview-statswindow.$(OBJEXT) \
 	estatsview-var_tablemodel.$(OBJEXT) \
 	estatsview-varwindow.$(OBJEXT) \
-	estatsview-moc_conn_tablemodel.$(OBJEXT) \
-	estatsview-moc_estats_itemdelegate.$(OBJEXT) \
-	estatsview-moc_estats_tablemodel.$(OBJEXT) \
-	estatsview-moc_mainwindow.$(OBJEXT) \
-	estatsview-moc_var_tablemodel.$(OBJEXT) \
-	estatsview-moc_varwindow.$(OBJEXT)
+	estatsview-conn_tablemodel.moc.$(OBJEXT) \
+	estatsview-estats_itemdelegate.moc.$(OBJEXT) \
+	estatsview-estats_tablemodel.moc.$(OBJEXT) \
+	estatsview-mainwindow.moc.$(OBJEXT) \
+	estatsview-statswindow.moc.$(OBJEXT) \
+	estatsview-var_tablemodel.moc.$(OBJEXT) \
+	estatsview-varwindow.moc.$(OBJEXT)
 estatsview_OBJECTS = $(am_estatsview_OBJECTS)
 am__DEPENDENCIES_1 =
 am__DEPENDENCIES_2 = $(top_builddir)/lib/estats/libestats.la
@@ -139,6 +141,15 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(estatsview_SOURCES)
 DIST_SOURCES = $(estatsview_SOURCES)
@@ -309,13 +320,12 @@ LIBESTATS_LDADDS = $(strip $(STRIP_DUMMY) \
 	$(top_builddir)/lib/estats/libestats.la \
 	)
 
-#estatsview_SOURCES = main.cc qt_main.cpp
-estatsview_SOURCES = EstatsView.cpp conn_tablemodel.cpp estats_itemdelegate.cpp estats_tablemodel.cpp main.cpp mainwindow.cpp var_tablemodel.cpp varwindow.cpp moc_conn_tablemodel.cpp moc_estats_itemdelegate.cpp moc_estats_tablemodel.cpp moc_mainwindow.cpp moc_var_tablemodel.cpp moc_varwindow.cpp
+estatsview_SOURCES = EstatsView.cpp EstatsView.hpp conn_tablemodel.cpp conn_tablemodel.hpp estats_itemdelegate.cpp estats_itemdelegate.hpp estats_tablemodel.cpp estats_tablemodel.hpp main.cpp mainwindow.cpp mainwindow.hpp statswindow.cpp statswindow.hpp var_tablemodel.cpp var_tablemodel.hpp varwindow.cpp varwindow.hpp conn_tablemodel.moc.cpp estats_itemdelegate.moc.cpp estats_tablemodel.moc.cpp mainwindow.moc.cpp statswindow.moc.cpp var_tablemodel.moc.cpp varwindow.moc.cpp
 estatsview_CXXFLAGS = $(QT_CXXFLAGS) $(AM_CXXFLAGS)
 estatsview_CPPFLAGS = $(QT_CPPFLAGS) $(AM_CPPFLAGS)
 estatsview_LDFLAGS = $(QT_LDFLAGS) $(LDFLAGS)
 estatsview_LDADD = $(QT_LIBS) $(LIBESTATS_LDADDS) $(LDADD)
-BUILT_SOURCES = moc_conn_tablemodel.cpp moc_estats_itemdelegate.cpp moc_estats_tablemodel.cpp moc_mainwindow.cpp moc_var_tablemodel.cpp moc_varwindow.cpp
+BUILT_SOURCES = conn_tablemodel.moc.cpp estats_itemdelegate.moc.cpp estats_tablemodel.moc.cpp mainwindow.moc.cpp statswindow.moc.cpp var_tablemodel.moc.cpp varwindow.moc.cpp
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -410,18 +420,20 @@ distclean-compile:
 
 include ./$(DEPDIR)/estatsview-EstatsView.Po
 include ./$(DEPDIR)/estatsview-conn_tablemodel.Po
+include ./$(DEPDIR)/estatsview-conn_tablemodel.moc.Po
 include ./$(DEPDIR)/estatsview-estats_itemdelegate.Po
+include ./$(DEPDIR)/estatsview-estats_itemdelegate.moc.Po
 include ./$(DEPDIR)/estatsview-estats_tablemodel.Po
+include ./$(DEPDIR)/estatsview-estats_tablemodel.moc.Po
 include ./$(DEPDIR)/estatsview-main.Po
 include ./$(DEPDIR)/estatsview-mainwindow.Po
-include ./$(DEPDIR)/estatsview-moc_conn_tablemodel.Po
-include ./$(DEPDIR)/estatsview-moc_estats_itemdelegate.Po
-include ./$(DEPDIR)/estatsview-moc_estats_tablemodel.Po
-include ./$(DEPDIR)/estatsview-moc_mainwindow.Po
-include ./$(DEPDIR)/estatsview-moc_var_tablemodel.Po
-include ./$(DEPDIR)/estatsview-moc_varwindow.Po
+include ./$(DEPDIR)/estatsview-mainwindow.moc.Po
+include ./$(DEPDIR)/estatsview-statswindow.Po
+include ./$(DEPDIR)/estatsview-statswindow.moc.Po
 include ./$(DEPDIR)/estatsview-var_tablemodel.Po
+include ./$(DEPDIR)/estatsview-var_tablemodel.moc.Po
 include ./$(DEPDIR)/estatsview-varwindow.Po
+include ./$(DEPDIR)/estatsview-varwindow.moc.Po
 
 .cpp.o:
 	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -528,6 +540,20 @@ estatsview-mainwindow.obj: mainwindow.cpp
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-mainwindow.obj `if test -f 'mainwindow.cpp'; then $(CYGPATH_W) 'mainwindow.cpp'; else $(CYGPATH_W) '$(srcdir)/mainwindow.cpp'; fi`
 
+estatsview-statswindow.o: statswindow.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-statswindow.o -MD -MP -MF $(DEPDIR)/estatsview-statswindow.Tpo -c -o estatsview-statswindow.o `test -f 'statswindow.cpp' || echo '$(srcdir)/'`statswindow.cpp
+	$(am__mv) $(DEPDIR)/estatsview-statswindow.Tpo $(DEPDIR)/estatsview-statswindow.Po
+#	source='statswindow.cpp' object='estatsview-statswindow.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-statswindow.o `test -f 'statswindow.cpp' || echo '$(srcdir)/'`statswindow.cpp
+
+estatsview-statswindow.obj: statswindow.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-statswindow.obj -MD -MP -MF $(DEPDIR)/estatsview-statswindow.Tpo -c -o estatsview-statswindow.obj `if test -f 'statswindow.cpp'; then $(CYGPATH_W) 'statswindow.cpp'; else $(CYGPATH_W) '$(srcdir)/statswindow.cpp'; fi`
+	$(am__mv) $(DEPDIR)/estatsview-statswindow.Tpo $(DEPDIR)/estatsview-statswindow.Po
+#	source='statswindow.cpp' object='estatsview-statswindow.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-statswindow.obj `if test -f 'statswindow.cpp'; then $(CYGPATH_W) 'statswindow.cpp'; else $(CYGPATH_W) '$(srcdir)/statswindow.cpp'; fi`
+
 estatsview-var_tablemodel.o: var_tablemodel.cpp
 	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-var_tablemodel.o -MD -MP -MF $(DEPDIR)/estatsview-var_tablemodel.Tpo -c -o estatsview-var_tablemodel.o `test -f 'var_tablemodel.cpp' || echo '$(srcdir)/'`var_tablemodel.cpp
 	$(am__mv) $(DEPDIR)/estatsview-var_tablemodel.Tpo $(DEPDIR)/estatsview-var_tablemodel.Po
@@ -556,89 +582,103 @@ estatsview-varwindow.obj: varwindow.cpp
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-varwindow.obj `if test -f 'varwindow.cpp'; then $(CYGPATH_W) 'varwindow.cpp'; else $(CYGPATH_W) '$(srcdir)/varwindow.cpp'; fi`
 
-estatsview-moc_conn_tablemodel.o: moc_conn_tablemodel.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_conn_tablemodel.o -MD -MP -MF $(DEPDIR)/estatsview-moc_conn_tablemodel.Tpo -c -o estatsview-moc_conn_tablemodel.o `test -f 'moc_conn_tablemodel.cpp' || echo '$(srcdir)/'`moc_conn_tablemodel.cpp
-	$(am__mv) $(DEPDIR)/estatsview-moc_conn_tablemodel.Tpo $(DEPDIR)/estatsview-moc_conn_tablemodel.Po
-#	source='moc_conn_tablemodel.cpp' object='estatsview-moc_conn_tablemodel.o' libtool=no \
+estatsview-conn_tablemodel.moc.o: conn_tablemodel.moc.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-conn_tablemodel.moc.o -MD -MP -MF $(DEPDIR)/estatsview-conn_tablemodel.moc.Tpo -c -o estatsview-conn_tablemodel.moc.o `test -f 'conn_tablemodel.moc.cpp' || echo '$(srcdir)/'`conn_tablemodel.moc.cpp
+	$(am__mv) $(DEPDIR)/estatsview-conn_tablemodel.moc.Tpo $(DEPDIR)/estatsview-conn_tablemodel.moc.Po
+#	source='conn_tablemodel.moc.cpp' object='estatsview-conn_tablemodel.moc.o' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_conn_tablemodel.o `test -f 'moc_conn_tablemodel.cpp' || echo '$(srcdir)/'`moc_conn_tablemodel.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-conn_tablemodel.moc.o `test -f 'conn_tablemodel.moc.cpp' || echo '$(srcdir)/'`conn_tablemodel.moc.cpp
 
-estatsview-moc_conn_tablemodel.obj: moc_conn_tablemodel.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_conn_tablemodel.obj -MD -MP -MF $(DEPDIR)/estatsview-moc_conn_tablemodel.Tpo -c -o estatsview-moc_conn_tablemodel.obj `if test -f 'moc_conn_tablemodel.cpp'; then $(CYGPATH_W) 'moc_conn_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_conn_tablemodel.cpp'; fi`
-	$(am__mv) $(DEPDIR)/estatsview-moc_conn_tablemodel.Tpo $(DEPDIR)/estatsview-moc_conn_tablemodel.Po
-#	source='moc_conn_tablemodel.cpp' object='estatsview-moc_conn_tablemodel.obj' libtool=no \
+estatsview-conn_tablemodel.moc.obj: conn_tablemodel.moc.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-conn_tablemodel.moc.obj -MD -MP -MF $(DEPDIR)/estatsview-conn_tablemodel.moc.Tpo -c -o estatsview-conn_tablemodel.moc.obj `if test -f 'conn_tablemodel.moc.cpp'; then $(CYGPATH_W) 'conn_tablemodel.moc.cpp'; else $(CYGPATH_W) '$(srcdir)/conn_tablemodel.moc.cpp'; fi`
+	$(am__mv) $(DEPDIR)/estatsview-conn_tablemodel.moc.Tpo $(DEPDIR)/estatsview-conn_tablemodel.moc.Po
+#	source='conn_tablemodel.moc.cpp' object='estatsview-conn_tablemodel.moc.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_conn_tablemodel.obj `if test -f 'moc_conn_tablemodel.cpp'; then $(CYGPATH_W) 'moc_conn_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_conn_tablemodel.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-conn_tablemodel.moc.obj `if test -f 'conn_tablemodel.moc.cpp'; then $(CYGPATH_W) 'conn_tablemodel.moc.cpp'; else $(CYGPATH_W) '$(srcdir)/conn_tablemodel.moc.cpp'; fi`
 
-estatsview-moc_estats_itemdelegate.o: moc_estats_itemdelegate.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_estats_itemdelegate.o -MD -MP -MF $(DEPDIR)/estatsview-moc_estats_itemdelegate.Tpo -c -o estatsview-moc_estats_itemdelegate.o `test -f 'moc_estats_itemdelegate.cpp' || echo '$(srcdir)/'`moc_estats_itemdelegate.cpp
-	$(am__mv) $(DEPDIR)/estatsview-moc_estats_itemdelegate.Tpo $(DEPDIR)/estatsview-moc_estats_itemdelegate.Po
-#	source='moc_estats_itemdelegate.cpp' object='estatsview-moc_estats_itemdelegate.o' libtool=no \
+estatsview-estats_itemdelegate.moc.o: estats_itemdelegate.moc.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-estats_itemdelegate.moc.o -MD -MP -MF $(DEPDIR)/estatsview-estats_itemdelegate.moc.Tpo -c -o estatsview-estats_itemdelegate.moc.o `test -f 'estats_itemdelegate.moc.cpp' || echo '$(srcdir)/'`estats_itemdelegate.moc.cpp
+	$(am__mv) $(DEPDIR)/estatsview-estats_itemdelegate.moc.Tpo $(DEPDIR)/estatsview-estats_itemdelegate.moc.Po
+#	source='estats_itemdelegate.moc.cpp' object='estatsview-estats_itemdelegate.moc.o' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_estats_itemdelegate.o `test -f 'moc_estats_itemdelegate.cpp' || echo '$(srcdir)/'`moc_estats_itemdelegate.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-estats_itemdelegate.moc.o `test -f 'estats_itemdelegate.moc.cpp' || echo '$(srcdir)/'`estats_itemdelegate.moc.cpp
 
-estatsview-moc_estats_itemdelegate.obj: moc_estats_itemdelegate.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_estats_itemdelegate.obj -MD -MP -MF $(DEPDIR)/estatsview-moc_estats_itemdelegate.Tpo -c -o estatsview-moc_estats_itemdelegate.obj `if test -f 'moc_estats_itemdelegate.cpp'; then $(CYGPATH_W) 'moc_estats_itemdelegate.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_estats_itemdelegate.cpp'; fi`
-	$(am__mv) $(DEPDIR)/estatsview-moc_estats_itemdelegate.Tpo $(DEPDIR)/estatsview-moc_estats_itemdelegate.Po
-#	source='moc_estats_itemdelegate.cpp' object='estatsview-moc_estats_itemdelegate.obj' libtool=no \
+estatsview-estats_itemdelegate.moc.obj: estats_itemdelegate.moc.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-estats_itemdelegate.moc.obj -MD -MP -MF $(DEPDIR)/estatsview-estats_itemdelegate.moc.Tpo -c -o estatsview-estats_itemdelegate.moc.obj `if test -f 'estats_itemdelegate.moc.cpp'; then $(CYGPATH_W) 'estats_itemdelegate.moc.cpp'; else $(CYGPATH_W) '$(srcdir)/estats_itemdelegate.moc.cpp'; fi`
+	$(am__mv) $(DEPDIR)/estatsview-estats_itemdelegate.moc.Tpo $(DEPDIR)/estatsview-estats_itemdelegate.moc.Po
+#	source='estats_itemdelegate.moc.cpp' object='estatsview-estats_itemdelegate.moc.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_estats_itemdelegate.obj `if test -f 'moc_estats_itemdelegate.cpp'; then $(CYGPATH_W) 'moc_estats_itemdelegate.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_estats_itemdelegate.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-estats_itemdelegate.moc.obj `if test -f 'estats_itemdelegate.moc.cpp'; then $(CYGPATH_W) 'estats_itemdelegate.moc.cpp'; else $(CYGPATH_W) '$(srcdir)/estats_itemdelegate.moc.cpp'; fi`
 
-estatsview-moc_estats_tablemodel.o: moc_estats_tablemodel.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_estats_tablemodel.o -MD -MP -MF $(DEPDIR)/estatsview-moc_estats_tablemodel.Tpo -c -o estatsview-moc_estats_tablemodel.o `test -f 'moc_estats_tablemodel.cpp' || echo '$(srcdir)/'`moc_estats_tablemodel.cpp
-	$(am__mv) $(DEPDIR)/estatsview-moc_estats_tablemodel.Tpo $(DEPDIR)/estatsview-moc_estats_tablemodel.Po
-#	source='moc_estats_tablemodel.cpp' object='estatsview-moc_estats_tablemodel.o' libtool=no \
+estatsview-estats_tablemodel.moc.o: estats_tablemodel.moc.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-estats_tablemodel.moc.o -MD -MP -MF $(DEPDIR)/estatsview-estats_tablemodel.moc.Tpo -c -o estatsview-estats_tablemodel.moc.o `test -f 'estats_tablemodel.moc.cpp' || echo '$(srcdir)/'`estats_tablemodel.moc.cpp
+	$(am__mv) $(DEPDIR)/estatsview-estats_tablemodel.moc.Tpo $(DEPDIR)/estatsview-estats_tablemodel.moc.Po
+#	source='estats_tablemodel.moc.cpp' object='estatsview-estats_tablemodel.moc.o' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_estats_tablemodel.o `test -f 'moc_estats_tablemodel.cpp' || echo '$(srcdir)/'`moc_estats_tablemodel.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-estats_tablemodel.moc.o `test -f 'estats_tablemodel.moc.cpp' || echo '$(srcdir)/'`estats_tablemodel.moc.cpp
 
-estatsview-moc_estats_tablemodel.obj: moc_estats_tablemodel.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_estats_tablemodel.obj -MD -MP -MF $(DEPDIR)/estatsview-moc_estats_tablemodel.Tpo -c -o estatsview-moc_estats_tablemodel.obj `if test -f 'moc_estats_tablemodel.cpp'; then $(CYGPATH_W) 'moc_estats_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_estats_tablemodel.cpp'; fi`
-	$(am__mv) $(DEPDIR)/estatsview-moc_estats_tablemodel.Tpo $(DEPDIR)/estatsview-moc_estats_tablemodel.Po
-#	source='moc_estats_tablemodel.cpp' object='estatsview-moc_estats_tablemodel.obj' libtool=no \
+estatsview-estats_tablemodel.moc.obj: estats_tablemodel.moc.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-estats_tablemodel.moc.obj -MD -MP -MF $(DEPDIR)/estatsview-estats_tablemodel.moc.Tpo -c -o estatsview-estats_tablemodel.moc.obj `if test -f 'estats_tablemodel.moc.cpp'; then $(CYGPATH_W) 'estats_tablemodel.moc.cpp'; else $(CYGPATH_W) '$(srcdir)/estats_tablemodel.moc.cpp'; fi`
+	$(am__mv) $(DEPDIR)/estatsview-estats_tablemodel.moc.Tpo $(DEPDIR)/estatsview-estats_tablemodel.moc.Po
+#	source='estats_tablemodel.moc.cpp' object='estatsview-estats_tablemodel.moc.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_estats_tablemodel.obj `if test -f 'moc_estats_tablemodel.cpp'; then $(CYGPATH_W) 'moc_estats_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_estats_tablemodel.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-estats_tablemodel.moc.obj `if test -f 'estats_tablemodel.moc.cpp'; then $(CYGPATH_W) 'estats_tablemodel.moc.cpp'; else $(CYGPATH_W) '$(srcdir)/estats_tablemodel.moc.cpp'; fi`
 
-estatsview-moc_mainwindow.o: moc_mainwindow.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_mainwindow.o -MD -MP -MF $(DEPDIR)/estatsview-moc_mainwindow.Tpo -c -o estatsview-moc_mainwindow.o `test -f 'moc_mainwindow.cpp' || echo '$(srcdir)/'`moc_mainwindow.cpp
-	$(am__mv) $(DEPDIR)/estatsview-moc_mainwindow.Tpo $(DEPDIR)/estatsview-moc_mainwindow.Po
-#	source='moc_mainwindow.cpp' object='estatsview-moc_mainwindow.o' libtool=no \
+estatsview-mainwindow.moc.o: mainwindow.moc.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-mainwindow.moc.o -MD -MP -MF $(DEPDIR)/estatsview-mainwindow.moc.Tpo -c -o estatsview-mainwindow.moc.o `test -f 'mainwindow.moc.cpp' || echo '$(srcdir)/'`mainwindow.moc.cpp
+	$(am__mv) $(DEPDIR)/estatsview-mainwindow.moc.Tpo $(DEPDIR)/estatsview-mainwindow.moc.Po
+#	source='mainwindow.moc.cpp' object='estatsview-mainwindow.moc.o' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_mainwindow.o `test -f 'moc_mainwindow.cpp' || echo '$(srcdir)/'`moc_mainwindow.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-mainwindow.moc.o `test -f 'mainwindow.moc.cpp' || echo '$(srcdir)/'`mainwindow.moc.cpp
 
-estatsview-moc_mainwindow.obj: moc_mainwindow.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_mainwindow.obj -MD -MP -MF $(DEPDIR)/estatsview-moc_mainwindow.Tpo -c -o estatsview-moc_mainwindow.obj `if test -f 'moc_mainwindow.cpp'; then $(CYGPATH_W) 'moc_mainwindow.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_mainwindow.cpp'; fi`
-	$(am__mv) $(DEPDIR)/estatsview-moc_mainwindow.Tpo $(DEPDIR)/estatsview-moc_mainwindow.Po
-#	source='moc_mainwindow.cpp' object='estatsview-moc_mainwindow.obj' libtool=no \
+estatsview-mainwindow.moc.obj: mainwindow.moc.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-mainwindow.moc.obj -MD -MP -MF $(DEPDIR)/estatsview-mainwindow.moc.Tpo -c -o estatsview-mainwindow.moc.obj `if test -f 'mainwindow.moc.cpp'; then $(CYGPATH_W) 'mainwindow.moc.cpp'; else $(CYGPATH_W) '$(srcdir)/mainwindow.moc.cpp'; fi`
+	$(am__mv) $(DEPDIR)/estatsview-mainwindow.moc.Tpo $(DEPDIR)/estatsview-mainwindow.moc.Po
+#	source='mainwindow.moc.cpp' object='estatsview-mainwindow.moc.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_mainwindow.obj `if test -f 'moc_mainwindow.cpp'; then $(CYGPATH_W) 'moc_mainwindow.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_mainwindow.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-mainwindow.moc.obj `if test -f 'mainwindow.moc.cpp'; then $(CYGPATH_W) 'mainwindow.moc.cpp'; else $(CYGPATH_W) '$(srcdir)/mainwindow.moc.cpp'; fi`
 
-estatsview-moc_var_tablemodel.o: moc_var_tablemodel.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_var_tablemodel.o -MD -MP -MF $(DEPDIR)/estatsview-moc_var_tablemodel.Tpo -c -o estatsview-moc_var_tablemodel.o `test -f 'moc_var_tablemodel.cpp' || echo '$(srcdir)/'`moc_var_tablemodel.cpp
-	$(am__mv) $(DEPDIR)/estatsview-moc_var_tablemodel.Tpo $(DEPDIR)/estatsview-moc_var_tablemodel.Po
-#	source='moc_var_tablemodel.cpp' object='estatsview-moc_var_tablemodel.o' libtool=no \
+estatsview-statswindow.moc.o: statswindow.moc.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-statswindow.moc.o -MD -MP -MF $(DEPDIR)/estatsview-statswindow.moc.Tpo -c -o estatsview-statswindow.moc.o `test -f 'statswindow.moc.cpp' || echo '$(srcdir)/'`statswindow.moc.cpp
+	$(am__mv) $(DEPDIR)/estatsview-statswindow.moc.Tpo $(DEPDIR)/estatsview-statswindow.moc.Po
+#	source='statswindow.moc.cpp' object='estatsview-statswindow.moc.o' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_var_tablemodel.o `test -f 'moc_var_tablemodel.cpp' || echo '$(srcdir)/'`moc_var_tablemodel.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-statswindow.moc.o `test -f 'statswindow.moc.cpp' || echo '$(srcdir)/'`statswindow.moc.cpp
 
-estatsview-moc_var_tablemodel.obj: moc_var_tablemodel.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_var_tablemodel.obj -MD -MP -MF $(DEPDIR)/estatsview-moc_var_tablemodel.Tpo -c -o estatsview-moc_var_tablemodel.obj `if test -f 'moc_var_tablemodel.cpp'; then $(CYGPATH_W) 'moc_var_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_var_tablemodel.cpp'; fi`
-	$(am__mv) $(DEPDIR)/estatsview-moc_var_tablemodel.Tpo $(DEPDIR)/estatsview-moc_var_tablemodel.Po
-#	source='moc_var_tablemodel.cpp' object='estatsview-moc_var_tablemodel.obj' libtool=no \
+estatsview-statswindow.moc.obj: statswindow.moc.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-statswindow.moc.obj -MD -MP -MF $(DEPDIR)/estatsview-statswindow.moc.Tpo -c -o estatsview-statswindow.moc.obj `if test -f 'statswindow.moc.cpp'; then $(CYGPATH_W) 'statswindow.moc.cpp'; else $(CYGPATH_W) '$(srcdir)/statswindow.moc.cpp'; fi`
+	$(am__mv) $(DEPDIR)/estatsview-statswindow.moc.Tpo $(DEPDIR)/estatsview-statswindow.moc.Po
+#	source='statswindow.moc.cpp' object='estatsview-statswindow.moc.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_var_tablemodel.obj `if test -f 'moc_var_tablemodel.cpp'; then $(CYGPATH_W) 'moc_var_tablemodel.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_var_tablemodel.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-statswindow.moc.obj `if test -f 'statswindow.moc.cpp'; then $(CYGPATH_W) 'statswindow.moc.cpp'; else $(CYGPATH_W) '$(srcdir)/statswindow.moc.cpp'; fi`
 
-estatsview-moc_varwindow.o: moc_varwindow.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_varwindow.o -MD -MP -MF $(DEPDIR)/estatsview-moc_varwindow.Tpo -c -o estatsview-moc_varwindow.o `test -f 'moc_varwindow.cpp' || echo '$(srcdir)/'`moc_varwindow.cpp
-	$(am__mv) $(DEPDIR)/estatsview-moc_varwindow.Tpo $(DEPDIR)/estatsview-moc_varwindow.Po
-#	source='moc_varwindow.cpp' object='estatsview-moc_varwindow.o' libtool=no \
+estatsview-var_tablemodel.moc.o: var_tablemodel.moc.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-var_tablemodel.moc.o -MD -MP -MF $(DEPDIR)/estatsview-var_tablemodel.moc.Tpo -c -o estatsview-var_tablemodel.moc.o `test -f 'var_tablemodel.moc.cpp' || echo '$(srcdir)/'`var_tablemodel.moc.cpp
+	$(am__mv) $(DEPDIR)/estatsview-var_tablemodel.moc.Tpo $(DEPDIR)/estatsview-var_tablemodel.moc.Po
+#	source='var_tablemodel.moc.cpp' object='estatsview-var_tablemodel.moc.o' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_varwindow.o `test -f 'moc_varwindow.cpp' || echo '$(srcdir)/'`moc_varwindow.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-var_tablemodel.moc.o `test -f 'var_tablemodel.moc.cpp' || echo '$(srcdir)/'`var_tablemodel.moc.cpp
 
-estatsview-moc_varwindow.obj: moc_varwindow.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-moc_varwindow.obj -MD -MP -MF $(DEPDIR)/estatsview-moc_varwindow.Tpo -c -o estatsview-moc_varwindow.obj `if test -f 'moc_varwindow.cpp'; then $(CYGPATH_W) 'moc_varwindow.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_varwindow.cpp'; fi`
-	$(am__mv) $(DEPDIR)/estatsview-moc_varwindow.Tpo $(DEPDIR)/estatsview-moc_varwindow.Po
-#	source='moc_varwindow.cpp' object='estatsview-moc_varwindow.obj' libtool=no \
+estatsview-var_tablemodel.moc.obj: var_tablemodel.moc.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-var_tablemodel.moc.obj -MD -MP -MF $(DEPDIR)/estatsview-var_tablemodel.moc.Tpo -c -o estatsview-var_tablemodel.moc.obj `if test -f 'var_tablemodel.moc.cpp'; then $(CYGPATH_W) 'var_tablemodel.moc.cpp'; else $(CYGPATH_W) '$(srcdir)/var_tablemodel.moc.cpp'; fi`
+	$(am__mv) $(DEPDIR)/estatsview-var_tablemodel.moc.Tpo $(DEPDIR)/estatsview-var_tablemodel.moc.Po
+#	source='var_tablemodel.moc.cpp' object='estatsview-var_tablemodel.moc.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-moc_varwindow.obj `if test -f 'moc_varwindow.cpp'; then $(CYGPATH_W) 'moc_varwindow.cpp'; else $(CYGPATH_W) '$(srcdir)/moc_varwindow.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-var_tablemodel.moc.obj `if test -f 'var_tablemodel.moc.cpp'; then $(CYGPATH_W) 'var_tablemodel.moc.cpp'; else $(CYGPATH_W) '$(srcdir)/var_tablemodel.moc.cpp'; fi`
+
+estatsview-varwindow.moc.o: varwindow.moc.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-varwindow.moc.o -MD -MP -MF $(DEPDIR)/estatsview-varwindow.moc.Tpo -c -o estatsview-varwindow.moc.o `test -f 'varwindow.moc.cpp' || echo '$(srcdir)/'`varwindow.moc.cpp
+	$(am__mv) $(DEPDIR)/estatsview-varwindow.moc.Tpo $(DEPDIR)/estatsview-varwindow.moc.Po
+#	source='varwindow.moc.cpp' object='estatsview-varwindow.moc.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-varwindow.moc.o `test -f 'varwindow.moc.cpp' || echo '$(srcdir)/'`varwindow.moc.cpp
+
+estatsview-varwindow.moc.obj: varwindow.moc.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -MT estatsview-varwindow.moc.obj -MD -MP -MF $(DEPDIR)/estatsview-varwindow.moc.Tpo -c -o estatsview-varwindow.moc.obj `if test -f 'varwindow.moc.cpp'; then $(CYGPATH_W) 'varwindow.moc.cpp'; else $(CYGPATH_W) '$(srcdir)/varwindow.moc.cpp'; fi`
+	$(am__mv) $(DEPDIR)/estatsview-varwindow.moc.Tpo $(DEPDIR)/estatsview-varwindow.moc.Po
+#	source='varwindow.moc.cpp' object='estatsview-varwindow.moc.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(estatsview_CPPFLAGS) $(CPPFLAGS) $(estatsview_CXXFLAGS) $(CXXFLAGS) -c -o estatsview-varwindow.moc.obj `if test -f 'varwindow.moc.cpp'; then $(CYGPATH_W) 'varwindow.moc.cpp'; else $(CYGPATH_W) '$(srcdir)/varwindow.moc.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

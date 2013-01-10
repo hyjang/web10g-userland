@@ -30,15 +30,15 @@ enum MIB_TABLE {
 };
 #define MAX_TABLE __MAX_TABLE
 
-enum ESTATS_VAL_TYPE {
+typedef enum ESTATS_VAL_TYPE {
         ESTATS_UNSIGNED64,
         ESTATS_UNSIGNED32,
         ESTATS_SIGNED32,
         ESTATS_UNSIGNED16,
         ESTATS_UNSIGNED8,
-};
+} ESTATS_VAL_TYPE;
 
-enum ESTATS_TYPE {
+typedef enum ESTATS_TYPE {
 	ESTATS_TYPE_INTEGER,
 	ESTATS_TYPE_INTEGER32,
 	ESTATS_TYPE_INET_ADDRESS_IPV4,
@@ -51,7 +51,7 @@ enum ESTATS_TYPE {
 	ESTATS_TYPE_INET_ADDRESS,
 	ESTATS_TYPE_INET_ADDRESS_IPV6,
 	ESTATS_TYPE_OCTET,
-};
+} ESTATS_TYPE;
 
 typedef enum ESTATS_ERROR {
         ESTATS_ERR_SUCCESS        = 0,
@@ -178,6 +178,7 @@ typedef struct estats_connection_list	estats_connection_list;
 typedef struct estats_data		estats_data;
 typedef struct estats_error		estats_error;
 typedef struct estats_nl_client		estats_nl_client;
+typedef struct estats_val		estats_val;
 
 static inline int single_index(int inda, int indb)
 {

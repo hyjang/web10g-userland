@@ -37,6 +37,7 @@
 #include <estats/estats-genl.h>
 #include <estats/estats-nl.h>
 #include <estats/estats-nl-client.h>
+#include <estats/estats-val.h>
 #include <estats/error.h>
 
 #include <estats/list-int.h>

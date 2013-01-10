@@ -8,6 +8,7 @@ class QTableView;
 class ConnTableModel;
 //class ProxyModel;
 class VarWindow;
+class StatsWindow;
 
 class MainWindow : public QMainWindow
 {
@@ -37,6 +38,7 @@ private:
     ConnTableModel *model;
 //    ProxyModel *proxyModel;
     VarWindow *varwin;
+    StatsWindow *statswin;
 };
 
 #endif // MAINWINDOW_HPP
