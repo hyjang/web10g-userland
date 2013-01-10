@@ -58,6 +58,7 @@ void MainWindow::createWidgets()
             Qt::AlignVCenter|Qt::AlignRight);
     tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     tableView->setShowGrid(false);
+    tableView->setSortingEnabled(TRUE);
     
 }
 
