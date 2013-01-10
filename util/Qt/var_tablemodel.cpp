@@ -39,7 +39,12 @@ void VarTableModel::initialize()
 
         QList<QStandardItem*> items;
 
-        items << new QStandardItem(name);
+	QStandardItem *nameItem = new QStandardItem(name);
+	nameItem->setData(i, Qt::UserRole);
+
+	items << nameItem;
+
+//        items << new QStandardItem(name);
         items << new QStandardItem();
         items << new QStandardItem();
 
@@ -74,6 +79,7 @@ void VarTableModel::update()
 	estats::Check(estats_val_as_string(&valstr, &newdata->val[i], valtype));
 
         QStandardItem* item = new QStandardItem(valstr); 
+//        QStandardItem* item = new QStandardItem(newdata->val[i]); 
         setItem(index, 1, item);
 
         free((void*)valstr);
@@ -84,6 +90,7 @@ void VarTableModel::update()
 	    estats::Check(estats_val_as_string(&valstr, &deldata->val[i], valtype));
 
             QStandardItem* item = new QStandardItem(valstr);
+//            QStandardItem* item = new QStandardItem(QString::number(deldata->val[i]));
 
             setItem(index, 2, item);
 
