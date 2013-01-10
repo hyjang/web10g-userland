@@ -1,4 +1,5 @@
 #include "mainwindow.hpp"
+#include "statswindow.hpp"
 #include "varwindow.hpp"
 #include "estats_itemdelegate.hpp"
 #include "conn_tablemodel.hpp"
@@ -57,6 +58,7 @@ void MainWindow::createWidgets()
             Qt::AlignVCenter|Qt::AlignRight);
     tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     tableView->setShowGrid(false);
+    
 }
 
 void MainWindow::createLayout()
@@ -90,10 +92,14 @@ void MainWindow::openStatsWindow()
     QStandardItem *cidItem = model->item(currRow, 0);
     QVariant cidVar = cidItem->data(Qt::DisplayRole);
     int res = cidVar.toInt();
-
+/*
     varwin = new VarWindow(this, nl_client, res);
     varwin->setMinimumSize(400,600);
     varwin->show();
+*/
+    statswin = new StatsWindow(this, nl_client, res);
+//    statswin->setMinimumSize(800,600);
+    statswin->show();
 }
 
 void MainWindow::testSelectionChanged()

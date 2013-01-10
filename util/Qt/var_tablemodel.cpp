@@ -6,14 +6,13 @@
 VarTableModel::VarTableModel(QObject *parent, estats_nl_client *nl_client, int cid)
     : EstatsTableModel(parent, nl_client)
 {
-    estats_connection *conn;
     this->cid = cid;
-/*
-    estats::Check(estats_agent_find_connection_from_cid(&conn, agent, cid));
-    estats::Check(estats_connection_get_connection_spec(&spec, conn));
-    estats::Check(estats_snapshot_alloc(&newsnap, conn));
-    estats::Check(estats_snapshot_alloc(&oldsnap, conn));
-*/
+    this->nl_client = nl_client;
+
+    estats::Check(estats_data_new(&newdata));
+    estats::Check(estats_data_new(&olddata));
+    estats::Check(estats_data_new(&deldata));
+
     initialize();
 }
 
@@ -31,31 +30,7 @@ void VarTableModel::initialize()
     setHorizontalHeaderLabels(QStringList() << tr("Name")
         << tr("Value") << tr("Delta"));
 
-    estats_var* var_head;
-    estats_var* var_pos;
-
     quint32 index = 0;
-/*
-    estats::Check(estats_agent_get_var_head(&var_head, agent));
-
-    ESTATS_VAR_FOREACH(var_pos, var_head) {
-        const char* name;
-        
-        estats::Check(estats_var_get_name(&name, var_pos));
-
-        QList<QStandardItem*> items;
-
-        items << new QStandardItem(name);
-        items << new QStandardItem();
-        items << new QStandardItem();
-
-        varInfo[index++] = items;
-    }
-
-    QMapIterator<quint32, QList<QStandardItem*> > i(varInfo); 
-    while (i.hasNext())
-        appendRow(i.next().value());
-*/
 
     for (int i = 0; i < TOTAL_INDEX_MAX; i++) {
 	const char* name;
@@ -85,52 +60,41 @@ void VarTableModel::clear()
 void VarTableModel::update()
 {
     static int first_update = 1;
-/*
-    estats_var* var_head;
-    estats_var* var_pos;
-    estats_snapshot *tmp;
 
     quint32 index = 0;
+    estats_data* tmp;
+ 
+    estats::Check(estats_read_vars(newdata, cid, nl_client));
 
-    estats::Check(estats_take_snapshot(newsnap));
+    for (int i = 0; i < newdata->length; i++) {
+	ESTATS_VAL_TYPE valtype = estats_var_array[i].valtype;
+	ESTATS_TYPE type = estats_var_array[i].type;
+	char* valstr;
 
-    estats::Check(estats_agent_get_var_head(&var_head, agent));
+	estats::Check(estats_val_as_string(&valstr, &newdata->val[i], valtype));
 
-    ESTATS_VAR_FOREACH(var_pos, var_head) {
-        ESTATS_TYPE type;
-        estats_value *val = NULL;
-        char* valstr;
-        
-        estats::Check(estats_snapshot_read_value(&val, newsnap, var_pos));
-        estats::Check(estats_value_as_string(&valstr, val));
-
-        QStandardItem* item = new QStandardItem(valstr);
-
+        QStandardItem* item = new QStandardItem(valstr); 
         setItem(index, 1, item);
 
-        estats_value_free(&val);
         free((void*)valstr);
 
-        estats::Check(estats_var_get_type(&type, var_pos));
-
         if (!first_update && (type == ESTATS_TYPE_COUNTER32 || type == ESTATS_TYPE_COUNTER64)) {
-            estats::Check(estats_snapshot_delta(&val, newsnap, oldsnap, var_pos));
-            estats::Check(estats_value_as_string(&valstr, val));
+            estats::Check(estats_data_delta(deldata, newdata, olddata));
+
+	    estats::Check(estats_val_as_string(&valstr, &deldata->val[i], valtype));
 
             QStandardItem* item = new QStandardItem(valstr);
 
             setItem(index, 2, item);
 
-            estats_value_free(&val);
             free((void*)valstr);
         }
-        index++;
+	index++;
     }
+    tmp = olddata;
+    olddata = newdata;
+    newdata = tmp;
 
-    tmp = oldsnap;
-    oldsnap = newsnap;
-    newsnap = tmp;
-*/
     if (first_update) first_update = 0;
 }
 

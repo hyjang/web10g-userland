@@ -36,7 +36,6 @@ void ConnTableModel::clear()
 void ConnTableModel::update()
 {
     struct estats_connection_list* connlist = NULL;
-//    estats_connection_info* conninfo = NULL;
     struct estats_list* ci_head = NULL;
     struct estats_list* ci_pos;
 
@@ -45,10 +44,7 @@ void ConnTableModel::update()
     QMap<quint32, QList<QStandardItem*> > connectionInfo;
 
     QSet<quint32> curr_cids = QSet<quint32>();
-/*
-    estats::Check(estats_connection_list_new(&sinfo, nl_client));
-    estats::Check(estats_connection_info_get_list_head(&ci_head, sinfo));
-*/
+
     estats::Check(estats_connection_list_new(&connlist));
     estats::Check(estats_list_conns(connlist, NULL, nl_client));
     estats::Check(estats_connection_list_add_info(connlist));
@@ -116,7 +112,6 @@ void ConnTableModel::update()
     // add new
     QSetIterator<quint32> i(new_cids);
     while (i.hasNext())
-//        appendRow(connectionInfo[i.next()]);
         insertRow(0, connectionInfo[i.next()]);
 
     prev_cids = curr_cids;

@@ -5,14 +5,12 @@ LIBESTATS_LDADDS = @STRIP_BEGIN@ \
 	$(top_builddir)/lib/estats/libestats.la \
 	@STRIP_END@
 			
-# For a program:
 bin_PROGRAMS = estatsview
-#estatsview_SOURCES = main.cc qt_main.cpp
-estatsview_SOURCES = EstatsView.cpp conn_tablemodel.cpp estats_itemdelegate.cpp estats_tablemodel.cpp main.cpp mainwindow.cpp var_tablemodel.cpp varwindow.cpp moc_conn_tablemodel.cpp moc_estats_itemdelegate.cpp moc_estats_tablemodel.cpp moc_mainwindow.cpp moc_var_tablemodel.cpp moc_varwindow.cpp
+estatsview_SOURCES = EstatsView.cpp EstatsView.hpp conn_tablemodel.cpp conn_tablemodel.hpp estats_itemdelegate.cpp estats_itemdelegate.hpp estats_tablemodel.cpp estats_tablemodel.hpp main.cpp mainwindow.cpp mainwindow.hpp statswindow.cpp statswindow.hpp var_tablemodel.cpp var_tablemodel.hpp varwindow.cpp varwindow.hpp conn_tablemodel.moc.cpp estats_itemdelegate.moc.cpp estats_tablemodel.moc.cpp mainwindow.moc.cpp statswindow.moc.cpp var_tablemodel.moc.cpp varwindow.moc.cpp
 
 estatsview_CXXFLAGS = $(QT_CXXFLAGS) $(AM_CXXFLAGS)
 estatsview_CPPFLAGS = $(QT_CPPFLAGS) $(AM_CPPFLAGS)
 estatsview_LDFLAGS  = $(QT_LDFLAGS) $(LDFLAGS)
 estatsview_LDADD    = $(QT_LIBS) $(LIBESTATS_LDADDS) $(LDADD)
 
-BUILT_SOURCES = moc_conn_tablemodel.cpp moc_estats_itemdelegate.cpp moc_estats_tablemodel.cpp moc_mainwindow.cpp moc_var_tablemodel.cpp moc_varwindow.cpp
+BUILT_SOURCES = conn_tablemodel.moc.cpp estats_itemdelegate.moc.cpp estats_tablemodel.moc.cpp mainwindow.moc.cpp statswindow.moc.cpp var_tablemodel.moc.cpp varwindow.moc.cpp

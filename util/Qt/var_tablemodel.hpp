@@ -19,9 +19,10 @@ public:
 
 protected:
     int cid;
-//    estats_connection_spec spec;
-//    estats_snapshot* newsnap;
-//    estats_snapshot* oldsnap;
+    
+    estats_data* newdata;
+    estats_data* olddata;
+    estats_data* deldata;
 
     QMap<quint32, QList<QStandardItem*> > varInfo;
 

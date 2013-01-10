@@ -103,7 +103,7 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libestats_la_LIBADD =
 am__objects_1 = debug-int.lo error.lo libcwrap-int.lo resolve-int.lo \
 	estats-connection.lo estats-data.lo estats-genl.lo \
-	estats-nl-client.lo estats-var.lo
+	estats-nl-client.lo estats-val.lo estats-var.lo
 am__objects_2 =
 am_libestats_la_OBJECTS = $(am__objects_1) $(am__objects_2) \
 	$(am__objects_2)
@@ -290,6 +290,7 @@ estats_pub_h_sources = \
 	estats-genl.h \
 	estats-nl.h \
 	estats-nl-client.h \
+	estats-val.h \
 	list-int.h \
 	types.h
 
@@ -314,6 +315,7 @@ estats_c_sources = \
 	estats-data.c \
 	estats-genl.c \
 	estats-nl-client.c \
+	estats-val.c \
 	estats-var.c
 
 
@@ -423,6 +425,7 @@ include ./$(DEPDIR)/estats-connection.Plo
 include ./$(DEPDIR)/estats-data.Plo
 include ./$(DEPDIR)/estats-genl.Plo
 include ./$(DEPDIR)/estats-nl-client.Plo
+include ./$(DEPDIR)/estats-val.Plo
 include ./$(DEPDIR)/estats-var.Plo
 include ./$(DEPDIR)/libcwrap-int.Plo
 include ./$(DEPDIR)/resolve-int.Plo
