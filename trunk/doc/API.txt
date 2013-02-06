@@ -1,0 +1,63 @@
+
+
+This is an overview of the Web10G API. The detailed implementation of
+the examples mentioned below may be found in the util/C directory.
+One can also generate doxygen output from the source, or view it
+online at ?.
+
+The namespace for the API library is "estats", a shortening of the
+prefix "tcp_estats", as used for the kernel functions, all in
+reference to RFC 4898 "TCP Extended Statistics MIB".
+
+All API functions have prefix "estats"; the library generated is
+"libestats".
+
+General patterns:
+-----------------
+
+All API functions (except for *_free/*_destroy) return
+
+struct estats_error*
+
+with return values passed by reference as the first parameter, for
+example:
+
+struct estats_error* estats_read_vars(struct estats_data*, args...);
+
+or, for initialization/allocation, e.g.
+
+struct estats_error* estats_nl_client_init(struct estats_nl_client**);
+
+This is commonly used with simple macro wrapping Chk() to pass the
+error up the chain of function calls.
+
+
+Here is a sketch of readvars.c:
+
+main {
+
+    Chk(estats_init());  // general initialization
+
+    Chk(estats_nl_client_init(&client));  // netlink initialization
+
+    Chk(estats_data_new(&data));  // new data 
+
+    Chk(estats_read_vars(data, cid, client));  // read from kernel
+
+    ...do things...
+
+  Cleanup:
+    
+    estats_data_free(&data);
+
+    estats_nl_client_destroy(&cl);
+
+    estats_destroy();
+
+    ...print or log error, if any, or return 0...
+
+     }
+
+
+
+
