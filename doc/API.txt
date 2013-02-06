@@ -58,10 +58,44 @@ main {
 
      }
 
-------
 
 In the above, struct data contains the read values of the extended
 MIB, received from the kernel over netlink, as an array.
+
+
+General initialization:
+-----------------------
+
+
+
+
+Netlink functions:
+------------------
+
+
+
+
+Connection list and associated information:
+-------------------------------------------
+
+
+
+
+Read/write data structures and functions:
+-----------------------------------------
+
+
+
+
+Error handling:
+---------------
+
+
+
+
+Miscellaneous utility functions:
+-------------------------------
+
 
 
 
