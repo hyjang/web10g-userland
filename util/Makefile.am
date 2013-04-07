@@ -1,1 +1,1 @@
-SUBDIRS = C Qt
+SUBDIRS = C
