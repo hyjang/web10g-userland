@@ -1,6 +1,7 @@
 ACLOCAL_AMFLAGS = -I build-aux
 
 SUBDIRS = lib util
+#SUBDIRS = lib
 
 bin_SCRIPTS = estats-config
 CLEANFILES = estats-config

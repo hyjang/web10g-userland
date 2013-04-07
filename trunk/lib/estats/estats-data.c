@@ -71,8 +71,8 @@ struct estats_error* estats_data_delta(struct estats_data* data, const struct es
 
 	for (i = 0; i < data->length; i++) {
 
-		if (data2->val[i].mask || data1->val[i].mask) {
-			data->val[i].mask = 1;
+		if (data2->val[i].masked || data1->val[i].masked) {
+			data->val[i].masked = 1;
 			continue;
 		}
 		switch(estats_var_array[i].valtype) {

@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 			printf("\n\n Tune Table\n\n");
 
 
-		if (data->val[j].mask) continue;
+		if (data->val[j].masked) continue;
 
 		switch(estats_var_array[j].valtype) {
 			case ESTATS_UNSIGNED64:
