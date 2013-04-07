@@ -140,7 +140,7 @@ static void parse_table(struct nlattr *nested, int index)
                                 break;
                         }
                 }
-		else stat_val[j].mask = 1;
+		else stat_val[j].masked = 1;
         }
 }
 

@@ -82,6 +82,7 @@ union estats_union {
 };
 
 struct estats_val {
+        uint64_t masked; /* uint64_t for alignment when r/w to records */
         union {
                 uint64_t uv64;
                 uint32_t uv32;
@@ -89,7 +90,6 @@ struct estats_val {
                 uint16_t uv16;
                 uint8_t  uv8;
         };
-        int mask;
 };
 
 struct estats_var {

@@ -322,6 +322,10 @@ LIBESTATS_LDADDS = $(strip $(STRIP_DUMMY) \
 	$(top_builddir)/lib/estats/libestats.la \
 	)
 
+INCLUDES = $(strip $(STRIP_DUMMY) \
+	-I$(top_srcdir)/lib \
+	)
+
 estatsview_SOURCES = EstatsView.cpp EstatsView.hpp conn_tablemodel.cpp conn_tablemodel.hpp estats_itemdelegate.cpp estats_itemdelegate.hpp estats_tablemodel.cpp estats_tablemodel.hpp graph.cpp graph.hpp main.cpp mainwindow.cpp mainwindow.hpp statswindow.cpp statswindow.hpp var_tablemodel.cpp var_tablemodel.hpp varwindow.cpp varwindow.hpp conn_tablemodel.moc.cpp estats_itemdelegate.moc.cpp estats_tablemodel.moc.cpp graph.moc.cpp mainwindow.moc.cpp statswindow.moc.cpp var_tablemodel.moc.cpp varwindow.moc.cpp
 estatsview_CXXFLAGS = $(QT_CXXFLAGS) $(AM_CXXFLAGS)
 estatsview_CPPFLAGS = $(QT_CPPFLAGS) $(AM_CPPFLAGS)
