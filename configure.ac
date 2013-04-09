@@ -1,6 +1,6 @@
 
 AC_PREREQ([2.68])
-AC_INIT([Web10G-userland], [2.1.0], [web10g-user@web10g.org])
+AC_INIT([Web10G-userland], [2.0.5], [web10g-user@web10g.org])
 
 dnl libtcpestats libtool versioning
 LIBTCPESTATS_LT_CURRENT=1
@@ -32,11 +32,11 @@ AC_PROG_CC
 AC_LANG([C++])
 AC_PROG_CXX
 
-AX_CXX_COMPILE_STDCXX_11
+dnl For Qt
+#AX_CXX_COMPILE_STDCXX_11
 
-
-# AutoTroll with Qt.
-AT_WITH_QT
+dnl AutoTroll with Qt.
+# AT_WITH_QT
 
 AC_ARG_ENABLE(debug,
               AC_HELP_STRING([--enable-debug],
@@ -125,7 +125,6 @@ AC_CONFIG_FILES([Makefile
                  lib/estats/Makefile
 		 util/Makefile
 		 util/C/Makefile
-		 util/Qt/Makefile
 		 ])
 
 AC_OUTPUT

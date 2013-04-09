@@ -9,7 +9,7 @@ CLEANFILES = estats-config
 m4datadir = $(datadir)/aclocal
 m4data_DATA = estats.m4
 
-EXTRA_DIST = estats-config.in estats.m4
+EXTRA_DIST = estats-config.in estats.m4 libmnl-1.0.3.tar.bz2
 
 #EXTRA_DIST = estats-nl-0.4-3.5.patch libmnl-1.0.3.tar.bz2
 
