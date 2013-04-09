@@ -19,11 +19,6 @@
  */
 #include "scripts.h"
 
-void usage(void)
-{
-	;
-}
-
 int main(int argc, char **argv)
 {
 
@@ -32,7 +27,7 @@ int main(int argc, char **argv)
 	estats_record* record = NULL;
 	estats_val val;
 	char* str;
-	int cid, i, j; 
+	int i, j; 
 	int opt, option;
 
 	
