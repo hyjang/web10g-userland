@@ -9,6 +9,7 @@ estats_pub_h_sources = \
 	estats-nl-client.h \
 	estats-val.h \
 	list-int.h \
+	record.h \
 	types.h
 
 # Header files not installed
@@ -31,7 +32,8 @@ estats_c_sources = \
 	estats-genl.c \
 	estats-nl-client.c \
 	estats-val.c \
-	estats-var.c
+	estats-var.c \
+	record.c
 
 # cpp flags to be used with all compilation
 # Note: -D_GNU_SOURCE required so headers declare vfscanf (possibly among
