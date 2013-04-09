@@ -46,8 +46,6 @@ int main(int argc, char **argv)
 	    printf("%s:  %s\n", estats_var_array[i].name, str);
 	}
 
-	printf("length: %lu\n", data->length);
-
  Cleanup:
 	estats_data_free(&data);
 	Chk(estats_record_close(&record));
