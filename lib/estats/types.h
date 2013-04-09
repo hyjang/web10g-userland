@@ -54,19 +54,21 @@ typedef enum ESTATS_TYPE {
 } ESTATS_TYPE;
 
 typedef enum ESTATS_ERROR {
-        ESTATS_ERR_SUCCESS        = 0,
-        ESTATS_ERR_ACK            = 1,
-        ESTATS_ERR_RET_DATA       = 2,
-        ESTATS_ERR_INVAL          = 3,
-        ESTATS_ERR_NOMEM          = 4,
-        ESTATS_ERR_NOENT          = 5,
-        ESTATS_ERR_NOLINK         = 6,
-        ESTATS_ERR_LIBC           = 7,
+        ESTATS_ERR_SUCCESS	= 0,
+        ESTATS_ERR_ACK		= 1,
+        ESTATS_ERR_RET_DATA	= 2,
+        ESTATS_ERR_INVAL	= 3,
+        ESTATS_ERR_NOMEM	= 4,
+        ESTATS_ERR_NOENT	= 5,
+        ESTATS_ERR_NOLINK	= 6,
+        ESTATS_ERR_LIBC		= 7,
 	ESTATS_ERR_EOF		= 8,
-        ESTATS_ERR_CHKSUM         = 9,
+        ESTATS_ERR_CHKSUM	= 9,
 	ESTATS_ERR_STR_CONV	= 10,
 	ESTATS_ERR_GENL		= 11,
-        ESTATS_ERR_UNKNOWN        = 12,
+	ESTATS_ERR_FILE		= 12,
+	ESTATS_ERR_ACCESS	= 13,
+        ESTATS_ERR_UNKNOWN	= 14,
 } ESTATS_ERROR;
 
 typedef enum ESTATS_EVENT {
@@ -96,6 +98,11 @@ struct estats_var {
         char *name;
         enum ESTATS_VAL_TYPE valtype;
 	enum ESTATS_TYPE type;
+};
+
+struct estats_timeval {
+	uint32_t sec;
+	uint32_t usec;
 };
 
 struct estats_data {
@@ -168,6 +175,26 @@ struct estats_connection_list {
 
 typedef void (*estats_connection_func)(struct estats_connection_tuple*);
 
+/*
+struct estats_record_entry {
+	struct estats_timeval tv;
+	struct estats_data*   data;
+};
+*/
+
+typedef enum ESTATS_RECORD_MODE {
+	R_MODE,
+	W_MODE
+} ESTATS_RECORD_MODE;
+
+struct estats_record {
+	FILE*  fp;
+	int    swap;
+	int    bufsize;
+	int    nvars;
+	ESTATS_RECORD_MODE  mode;
+};
+
 extern int max_index[];
 
 extern struct estats_var estats_var_array[];
@@ -178,6 +205,7 @@ typedef struct estats_connection_list	estats_connection_list;
 typedef struct estats_data		estats_data;
 typedef struct estats_error		estats_error;
 typedef struct estats_nl_client		estats_nl_client;
+typedef struct estats_record		estats_record;
 typedef struct estats_val		estats_val;
 
 static inline int single_index(int inda, int indb)

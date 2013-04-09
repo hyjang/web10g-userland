@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 The Board of Trustees of the University of Illinois,
+ * Copyright (c) 2013 The Board of Trustees of the University of Illinois,
  *                    Carnegie Mellon University.
  *
  * This library is free software; you can redistribute it and/or modify it
@@ -17,30 +17,20 @@
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  *
  */
-#ifndef ESTATS_H
-#define ESTATS_H
+#ifndef ESTATS_RECORD_H
+#define ESTATS_RECORD_H
 
-#include <sys/types.h> 
-#include <netinet/in.h>
-#include <inttypes.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 
-#include <libmnl/libmnl.h>
-#include <linux/genetlink.h>
+estats_error* estats_record_open( estats_record **,
+                         const char * /* path */,
+                         const char * /* mode */);
 
-#include <estats/types.h> /* Must be first */
-#include <estats/estats-connection.h>
-#include <estats/estats-data.h>
-#include <estats/estats-genl.h>
-#include <estats/estats-nl.h>
-#include <estats/estats-nl-client.h>
-#include <estats/estats-val.h>
-#include <estats/error.h>
+estats_error* estats_record_close( estats_record **);
 
-#include <estats/list-int.h>
-#include <estats/record.h>
+estats_error* estats_record_read_data( estats_data **,
+                                       estats_record *);
 
-#endif /* ESTATS_H */
+estats_error* estats_record_write_data( estats_record *,
+                                        estats_data *);
+
+#endif /* ESTATS_RECORD_H */
