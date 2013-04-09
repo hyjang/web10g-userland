@@ -56,8 +56,6 @@ int main(int argc, char **argv)
         }
 	Chk(estats_record_write_data(record, data));
 
-	printf("length: %lu\n", data->length);
-
  Cleanup:
 	estats_data_free(&data);
 	estats_nl_client_destroy(&cl);
