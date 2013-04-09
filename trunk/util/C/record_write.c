@@ -21,7 +21,7 @@
 
 void usage(void)
 {
-	;
+	printf("Usage: record_write cid\n");
 }
 
 int main(int argc, char **argv)
