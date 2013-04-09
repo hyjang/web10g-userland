@@ -1,4 +1,4 @@
-bin_PROGRAMS = deltavars listconninfo listconns readvars watchvars writevar
+bin_PROGRAMS = deltavars listconninfo listconns readvars record_read record_write watchvars writevar
 
 LIBESTATS_LDADDS = @STRIP_BEGIN@ \
 	$(top_builddir)/lib/estats/libestats.la \
@@ -14,6 +14,12 @@ deltavars_LDADD = $(LIBESTATS_LDADDS)
 
 readvars_SOURCES = readvars.c scripts.h
 readvars_LDADD = $(LIBESTATS_LDADDS)
+
+record_read_SOURCES = record_read.c scripts.h
+record_read_LDADD = $(LIBESTATS_LDADDS)
+
+record_write_SOURCES = record_write.c scripts.h
+record_write_LDADD = $(LIBESTATS_LDADDS)
 
 listconninfo_SOURCES = listconninfo.c scripts.h
 listconninfo_LDADD = $(LIBESTATS_LDADDS)
