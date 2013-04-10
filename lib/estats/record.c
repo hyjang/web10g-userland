@@ -95,7 +95,7 @@ estats_record_read_data(estats_data** data, estats_record* record)
 
     Chk(estats_data_new(data));
 
-    Chk(Fread(NULL, *data, (size_t)(sizeof(estats_data) + ((*data)->length)*sizeof(estats_val)), 1, record->fp));
+    Chk(Fread(NULL, (*data)->val, (size_t)(((*data)->length)*sizeof(estats_val)), 1, record->fp));
 
     if (record->swap) {
 	for (i=0; i < (*data)->length; i++) {
@@ -121,7 +121,7 @@ estats_record_write_data(estats_record* record, estats_data* data)
     ErrIf(record->mode != W_MODE, ESTATS_ERR_ACCESS);
     ErrIf(record->fp == NULL, ESTATS_ERR_FILE);
 
-    Chk(Fwrite(NULL, data, (size_t)(sizeof(estats_data) + (data->length)*sizeof(estats_val)), 1, record->fp));
+    Chk(Fwrite(NULL, data->val, (size_t)((data->length)*sizeof(estats_val)), 1, record->fp));
 
 Cleanup:
 
