@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 The Board of Trustees of the University of Illinois,
+ * Copyright (c) 2013 The Board of Trustees of the University of Illinois,
  *                    Carnegie Mellon University.
  *
  * This library is free software; you can redistribute it and/or modify it
@@ -18,7 +18,7 @@
  *
  */
 #include "scripts.h"
-
+/*
 void connection_callback(struct estats_connection_tuple* ct)
 {
 	char rem_addr_str[46];
@@ -36,7 +36,7 @@ void connection_callback(struct estats_connection_tuple* ct)
 
 	printf("%-8d %-20s %-8d %-20s %-8d\n", ct->cid, local_addr_str, ct->local_port, rem_addr_str, ct->rem_port);
 }
-
+*/
 int main(int argc, char **argv)
 {
 
@@ -45,12 +45,13 @@ int main(int argc, char **argv)
 	struct estats_connection_list* clist = NULL;
 	struct estats_list* head;
 	struct estats_list* pos;
+	struct estats_connection_tuple_ascii tuple_ascii;
 
 	Chk(estats_nl_client_init(&cl));
 	Chk(estats_connection_list_new(&clist));
 
-	printf("%-8s %-20s %-8s %-20s %-8s\n", "CID", "LocalAddr", "LocalPort", "RemAddr", "RemPort");
-	printf("-------- -------------------- -------- -------------------- --------\n");
+	printf("%-8s %-12s %-8s %-8s %-8s %-20s %-8s %-20s %-8s\n", "CID", "cmdline", "PID", "UID", "INO", "LocalAddr", "LocalPort", "RemAddr", "RemPort");
+	printf("-------- ------------ -------- -------- -------- -------------------- -------- -------------------- --------\n");
 	printf("\n");
 
 	Chk(estats_list_conns(clist, NULL, cl));
@@ -60,8 +61,10 @@ int main(int argc, char **argv)
 	head = &clist->connection_info_head;
 
 	ESTATS_LIST_FOREACH(pos, head) {
-	    estats_connection_info* ci = ESTATS_LIST_ENTRY(pos, estats_connection_info, list);
-	    printf("CID: %d, CMD: %s\n", ci->cid, ci->cmdline);
+	    estats_connection_info* ct = ESTATS_LIST_ENTRY(pos, estats_connection_info, list);
+	    Chk(estats_connection_tuple_as_strings(&tuple_ascii, &ct->tuple)); 
+
+	    printf("%-8d %-12s %-8u %-8u %-8u %-20s %-8s %-20s %-8s\n", ct->cid, ct->cmdline, ct->pid, ct->uid, ct->ino, tuple_ascii.local_addr, tuple_ascii.local_port, tuple_ascii.rem_addr, tuple_ascii.rem_port);
 	}
 
  Cleanup:
