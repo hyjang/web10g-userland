@@ -259,6 +259,8 @@ estats_connection_list_add_info(struct estats_connection_list* connection_list)
 			conninfo->addrtype = tcp_ent->addrtype; 
 
                         conninfo->tuple = tcp_ent->tuple;
+			
+			conninfo->ino = ino_ent->ino;
 
                         _estats_list_add_tail(&(conninfo->list), head);
 		    }

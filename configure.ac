@@ -36,7 +36,7 @@ dnl For Qt
 #AX_CXX_COMPILE_STDCXX_11
 
 dnl AutoTroll with Qt.
-# AT_WITH_QT
+#AT_WITH_QT
 
 AC_ARG_ENABLE(debug,
               AC_HELP_STRING([--enable-debug],

@@ -154,7 +154,7 @@ struct estats_connection {
 	struct estats_list  list;
 };
 
-#define ESTATS_CMDLINE_LEN_MAX 32
+#define ESTATS_CMDLINE_LEN_MAX 16
 
 struct estats_connection_info {
 	struct estats_connection_tuple  tuple;
