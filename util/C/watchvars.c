@@ -117,6 +117,8 @@ int main(int argc, char **argv)
 
 	Chk(estats_read_vars(data, cid, cl));
 
+	printf("Timestamp sec: %u, usec: %u\n", data->tv.sec, data->tv.usec);
+
 	for (j = 0; j < data->length; j++) {
 
 		if (j == 0)

@@ -20,6 +20,7 @@
 #include <estats/estats-int.h>
 
 static struct estats_val stat_val[TOTAL_INDEX_MAX];
+static struct estats_timeval stat_tv;
 
 struct index_attr {
         struct nlattr **tb;
@@ -144,6 +145,54 @@ static void parse_table(struct nlattr *nested, int index)
         }
 }
 
+static int parse_time_cb(const struct nlattr *attr, void *data)
+{
+	const struct nlattr **tb = (const struct nlattr **)data;
+	int type = mnl_attr_get_type(attr);
+
+	if (mnl_attr_type_valid(attr, NEA_TIME_MAX) < 0) {
+		perror("mnl_attr_type_valid");
+		return MNL_CB_ERROR;
+	}
+
+	switch(type) {
+	case NEA_TIME_SEC:
+		if (mnl_attr_validate(attr, MNL_TYPE_U32) < 0) {
+			perror("mnl_attr_validate");
+			return MNL_CB_ERROR;
+		}
+		break;
+	case NEA_TIME_USEC:
+		if (mnl_attr_validate(attr, MNL_TYPE_U32) < 0) {
+			perror("mnl_attr_validate");
+			return MNL_CB_ERROR;
+		}
+		break;
+	}
+	tb[type] = attr;
+
+	return MNL_CB_OK;
+}
+
+static void parse_time(struct nlattr *nested, void *data)
+{
+	struct nlattr *tb[NEA_TIME_MAX+1];
+	uint32_t sec = 0;
+	uint32_t usec = 0;
+
+	mnl_attr_parse_nested(nested, parse_time_cb, tb);
+
+	if (tb[NEA_TIME_SEC]) {
+		sec = mnl_attr_get_u32(tb[NEA_TIME_SEC]);
+	}
+	if (tb[NEA_TIME_USEC]) {
+		usec = mnl_attr_get_u32(tb[NEA_TIME_USEC]);
+	}
+
+	stat_tv.sec = sec;
+	stat_tv.usec = usec;
+}
+
 static int parse_4tuple_cb(const struct nlattr *attr, void *data)
 {
         const struct nlattr **tb = (const struct nlattr **)data;
@@ -251,6 +300,12 @@ static int data_attr_cb(const struct nlattr *attr, void *data)
                         return MNL_CB_ERROR;
                 }
                 break;
+        case NLE_ATTR_TIME:
+                if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
+                        dbgprintf("mnl_attr_validate NLE_ATTR_4TUPLE");
+                        return MNL_CB_ERROR;
+                }
+                break;
         case NLE_ATTR_PERF:
                 if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
                         dbgprintf("mnl_attr_validate NLE_ATTR_PERF");
@@ -290,12 +345,16 @@ static int data_cb(const struct nlmsghdr *nlh, void *data)
 {
         struct nlattr *tb[NLE_ATTR_MAX+1] = {};
         struct genlmsghdr *genl = mnl_nlmsg_get_payload(nlh);
-	struct estats_connection_list *cli = (struct estats_connection_list*) data;
+	struct estats_connection_list *cli;
 
 	mnl_attr_parse(nlh, sizeof(*genl), data_attr_cb, tb);
 
-        if (tb[NLE_ATTR_4TUPLE])
+        if (tb[NLE_ATTR_4TUPLE]) {
+		cli = (struct estats_connection_list*) data;
                 parse_4tuple(tb[NLE_ATTR_4TUPLE], cli);
+	}
+        if (tb[NLE_ATTR_TIME])
+                parse_time(tb[NLE_ATTR_TIME], NULL);
         if (tb[NLE_ATTR_PERF])
                 parse_table(tb[NLE_ATTR_PERF], PERF_TABLE);
         if (tb[NLE_ATTR_PATH])
@@ -442,6 +501,9 @@ estats_read_vars(struct estats_data* data, int cid, const estats_nl_client* cl)
 		printf("%s\n", strerror(errno));
 		Err2(ESTATS_ERR_GENL, "mnl_cb_run error");
 	}
+
+	data->tv.sec = stat_tv.sec;
+	data->tv.usec = stat_tv.usec;
 
 	for (k = 0; k < TOTAL_INDEX_MAX; k++) {
 		data->val[k] = stat_val[k];

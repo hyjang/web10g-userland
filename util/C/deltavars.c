@@ -125,6 +125,8 @@ int main(int argc, char **argv)
 
 	Chk(estats_data_delta(data, data_new, data_prev));
 
+	printf("Timestamp sec: %u, usec: %u\n", data_new->tv.sec, data_new->tv.usec);
+
 	for (j = 0; j < data->length; j++) {
 
 		if (j == 0)

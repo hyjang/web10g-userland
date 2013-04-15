@@ -106,6 +106,7 @@ struct estats_timeval {
 };
 
 struct estats_data {
+	struct estats_timeval tv;
 	int length;
 	struct estats_val val[0];
 };
@@ -206,6 +207,7 @@ typedef struct estats_data		estats_data;
 typedef struct estats_error		estats_error;
 typedef struct estats_nl_client		estats_nl_client;
 typedef struct estats_record		estats_record;
+typedef struct estats_timeval		estats_timeval;
 typedef struct estats_val		estats_val;
 
 static inline int single_index(int inda, int indb)
