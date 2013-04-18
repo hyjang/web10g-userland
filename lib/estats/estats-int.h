@@ -45,19 +45,19 @@
 
 /* estats public headers */
 #include <estats/error.h>
-#include <estats/estats-connection.h>
-#include <estats/estats-data.h>
-#include <estats/estats-genl.h>
+#include <estats/connection.h>
+#include <estats/data.h>
+#include <estats/genl.h>
 #include <estats/estats.h>
-#include <estats/estats-nl.h>
-#include <estats/estats-nl-client.h>
-#include <estats/estats-val.h>
+#include <estats/list.h>
+#include <estats/tcp_estats_nl.h>
+#include <estats/nl-client.h>
+#include <estats/val.h>
 
 /* estats internal headers */
 #include <estats/debug-int.h>
 #include <estats/error-int.h>
 #include <estats/libcwrap-int.h>
-#include <estats/list-int.h>
 #include <estats/resolve-int.h>
 
 #endif /* ESTATS_INT_H */

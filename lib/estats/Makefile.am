@@ -2,13 +2,13 @@
 estats_pub_h_sources = \
 	error.h \
 	estats.h \
-	estats-connection.h \
-	estats-data.h \
-	estats-genl.h \
-	estats-nl.h \
-	estats-nl-client.h \
-	estats-val.h \
-	list-int.h \
+	connection.h \
+	data.h \
+	genl.h \
+	tcp_estats_nl.h \
+	nl-client.h \
+	val.h \
+	list.h \
 	record.h \
 	types.h
 
@@ -27,12 +27,12 @@ estats_c_sources = \
 	error.c \
 	libcwrap-int.c \
 	resolve-int.c \
-	estats-connection.c \
-	estats-data.c \
-	estats-genl.c \
-	estats-nl-client.c \
-	estats-val.c \
-	estats-var.c \
+	connection.c \
+	data.c \
+	genl.c \
+	nl-client.c \
+	val.c \
+	var.c \
 	record.c
 
 # cpp flags to be used with all compilation
