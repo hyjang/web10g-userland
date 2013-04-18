@@ -32,15 +32,14 @@
 #include <linux/genetlink.h>
 
 #include <estats/types.h> /* Must be first */
-#include <estats/estats-connection.h>
-#include <estats/estats-data.h>
-#include <estats/estats-genl.h>
-#include <estats/estats-nl.h>
-#include <estats/estats-nl-client.h>
-#include <estats/estats-val.h>
+#include <estats/connection.h>
+#include <estats/data.h>
+#include <estats/genl.h>
+#include <estats/tcp_estats_nl.h>
+#include <estats/nl-client.h>
+#include <estats/val.h>
 #include <estats/error.h>
-
-#include <estats/list-int.h>
+#include <estats/list.h>
 #include <estats/record.h>
 
 #endif /* ESTATS_H */
