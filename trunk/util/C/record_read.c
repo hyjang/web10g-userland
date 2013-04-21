@@ -35,6 +35,8 @@ int main(int argc, char **argv)
 
 	Chk(estats_record_read_data(&data, record));
 
+	printf("Timestamp sec: %u, usec: %u\n", data->tv.sec, data->tv.usec);
+
 	for (i = 0; i < data->length; i++) {
 	    Chk(estats_val_as_string(&str, &data->val[i], estats_var_array[i].valtype));
 

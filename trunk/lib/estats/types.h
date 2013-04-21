@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 The Board of Trustees of the University of Illinois,
+ * Copyright (c) 2013 The Board of Trustees of the University of Illinois,
  *                    Carnegie Mellon University.
  *
  * This library is free software; you can redistribute it and/or modify it
@@ -175,13 +175,6 @@ struct estats_connection_list {
 };
 
 typedef void (*estats_connection_func)(struct estats_connection_tuple*);
-
-/*
-struct estats_record_entry {
-	struct estats_timeval tv;
-	struct estats_data*   data;
-};
-*/
 
 typedef enum ESTATS_RECORD_MODE {
 	R_MODE,

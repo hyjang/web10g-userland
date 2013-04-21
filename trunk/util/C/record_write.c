@@ -19,6 +19,8 @@
  */
 #include "scripts.h"
 
+static const char* argv0 = NULL;
+
 void usage(void)
 {
 	printf("Usage: record_write cid\n");
@@ -36,6 +38,8 @@ int main(int argc, char **argv)
 	int cid, i, j; 
 	int opt, option;
 
+	argv0 = argv[0];
+
 	if (argc < 2) {
                 usage();
                 exit(EXIT_FAILURE);
@@ -48,6 +52,8 @@ int main(int argc, char **argv)
 	Chk(estats_record_open(&record, "./test-record", "w"));
 
 	Chk(estats_read_vars(data, cid, cl));
+
+	    printf("Timestamp sec: %u, usec: %u\n", data->tv.sec, data->tv.usec);
 
 	for (i = 0; i < data->length; i++) {
             Chk(estats_val_as_string(&str, &data->val[i], estats_var_array[i].valtype));
