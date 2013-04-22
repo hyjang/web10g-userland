@@ -14,10 +14,10 @@ EXTRA_DIST = estats-config.in estats.m4 libmnl-1.0.3.tar.bz2
 #EXTRA_DIST = estats-nl-0.4-3.5.patch libmnl-1.0.3.tar.bz2
 
 edit = @STRIP_BEGIN@ \
-   sed -e 's,@TCPE_VERSION\@,$(TCPE_VERSION),g' \
+   sed -e 's,@ESTATS_VERSION\@,$(ESTATS_VERSION),g' \
        -e 's,@PREFIX\@,$(prefix),g' \
        -e 's,@EXEC_PREFIX\@,$(exec_prefix),g' \
-       -e 's,@TCPE_INCLUDE_DIR\@,$(TCPE_INCLUDE_DIR),g' \
+       -e 's,@ESTATS_INCLUDE_DIR\@,$(ESTATS_INCLUDE_DIR),g' \
        -e 's,@LIBDIR\@,$(libdir),g' \
        @STRIP_END@
 

@@ -46,7 +46,7 @@ AM_CPPFLAGS = @STRIP_BEGIN@ \
 
 AM_LDFLAGS = @STRIP_BEGIN@ \
 	$(LIBMNL_LIBS) \
-	-version-info $(LIBTCPESTATS_LT_CURRENT):$(LIBTCPESTATS_LT_REVISION):$(LIBTCPESTATS_LT_AGE) \
+	-version-info $(LIBESTATS_LT_CURRENT):$(LIBESTATS_LT_REVISION):$(LIBESTATS_LT_AGE) \
 	-export-symbols-regex '^estats_.*' \
 	@STRIP_END@
 
@@ -54,9 +54,8 @@ AM_LDFLAGS = @STRIP_BEGIN@ \
 lib_LTLIBRARIES = libestats.la
 
 libestats_la_SOURCES = $(estats_c_sources) $(estats_pub_h_sources) $(estats_pri_h_sources)
-#libestats_la_LDFLAGS = -version-info=0:1:0
 
 # Install headers into include/estats
 # NOTE: If you update this, be sure to update estats-config
-libestatsincludedir = $(TCPESTATS_INCLUDE_DIR)/estats
+libestatsincludedir = $(ESTATS_INCLUDE_DIR)/estats
 libestatsinclude_HEADERS = $(estats_pub_h_sources)
