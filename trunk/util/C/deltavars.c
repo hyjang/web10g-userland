@@ -46,9 +46,9 @@ int main(int argc, char **argv)
 
 	estats_error* err = NULL;
 	estats_nl_client* cl = NULL;
-	estats_data* data = NULL;
-	estats_data* data_new = NULL;
-	estats_data* data_prev = NULL;
+	estats_val_data* data = NULL;
+	estats_val_data* data_new = NULL;
+	estats_val_data* data_prev = NULL;
 	int cid, i, j; 
 	int opt, option;
 
@@ -112,9 +112,9 @@ int main(int argc, char **argv)
 
 	Chk(estats_nl_client_init(&cl));
 	Chk(estats_nl_client_set_mask(cl, &mask));
-	Chk(estats_data_new(&data));
-	Chk(estats_data_new(&data_new));
-	Chk(estats_data_new(&data_prev));
+	Chk(estats_val_data_new(&data));
+	Chk(estats_val_data_new(&data_new));
+	Chk(estats_val_data_new(&data_prev));
 
 
 	while (1) {
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
 
 	Chk(estats_read_vars(data_new, cid, cl));
 
-	Chk(estats_data_delta(data, data_new, data_prev));
+	Chk(estats_val_data_delta(data, data_new, data_prev));
 
 	printf("Timestamp sec: %u, usec: %u\n", data_new->tv.sec, data_new->tv.usec);
 
@@ -170,9 +170,9 @@ int main(int argc, char **argv)
 
  Cleanup:
 
-	estats_data_free(&data);
-	estats_data_free(&data_new);
-	estats_data_free(&data_prev);
+	estats_val_data_free(&data);
+	estats_val_data_free(&data_new);
+	estats_val_data_free(&data_prev);
 	estats_nl_client_destroy(&cl);
 
 

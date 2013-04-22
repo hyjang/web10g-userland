@@ -105,7 +105,7 @@ struct estats_timeval {
 	uint32_t usec;
 };
 
-struct estats_data {
+struct estats_val_data {
 	struct estats_timeval tv;
 	int length;
 	struct estats_val val[0];
@@ -196,7 +196,7 @@ extern struct estats_var estats_var_array[];
 typedef struct estats_connection	estats_connection;
 typedef struct estats_connection_info	estats_connection_info;
 typedef struct estats_connection_list	estats_connection_list;
-typedef struct estats_data		estats_data;
+typedef struct estats_val_data		estats_val_data;
 typedef struct estats_error		estats_error;
 typedef struct estats_nl_client		estats_nl_client;
 typedef struct estats_record		estats_record;

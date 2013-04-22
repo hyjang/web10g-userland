@@ -81,7 +81,7 @@ Cleanup:
 }
 
 estats_error*
-estats_record_read_data(estats_data** data, estats_record* record)
+estats_record_read_data(estats_val_data** data, estats_record* record)
 {
     estats_error* err = NULL;
     int i;
@@ -93,7 +93,7 @@ estats_record_read_data(estats_data** data, estats_record* record)
 
     *data = NULL;
 
-    Chk(estats_data_new(data));
+    Chk(estats_val_data_new(data));
 
     Chk(Fread(NULL, &((*data)->tv.sec), 4, 1, record->fp));
     Chk(Fread(NULL, &(*data)->tv.usec, 4, 1, record->fp));
@@ -110,14 +110,14 @@ estats_record_read_data(estats_data** data, estats_record* record)
 
 Cleanup:
     if (err != NULL) {
-        estats_data_free(data);
+        estats_val_data_free(data);
     }
 
     return err;
 }
 
 estats_error*
-estats_record_write_data(estats_record* record, estats_data* data)
+estats_record_write_data(estats_record* record, estats_val_data* data)
 {
     estats_error* err = NULL;
 

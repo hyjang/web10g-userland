@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 {
 
 	estats_error* err = NULL; 
-	estats_data* data = NULL;
+	estats_val_data* data = NULL;
 	estats_record* record = NULL;
 	estats_val val;
 	char* str;
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 	}
 
  Cleanup:
-	estats_data_free(&data);
+	estats_val_data_free(&data);
 	Chk(estats_record_close(&record));
 
 	if (err != NULL) {

@@ -20,9 +20,9 @@
 #ifndef ESTATS_DATA_H
 #define ESTATS_DATA_H
 
-struct estats_error* estats_data_new(struct estats_data**);
-struct estats_error* estats_data_sized_new(struct estats_data**, int /*length*/);
-struct estats_error* estats_data_free(struct estats_data**);
-struct estats_error* estats_data_delta(struct estats_data*, const struct estats_data*, const struct estats_data*);
+struct estats_error* estats_val_data_new(struct estats_val_data**);
+struct estats_error* estats_val_data_sized_new(struct estats_val_data**, int /*length*/);
+struct estats_error* estats_val_data_free(struct estats_val_data**);
+struct estats_error* estats_val_data_delta(struct estats_val_data*, const struct estats_val_data*, const struct estats_val_data*);
 
 #endif /* ESTATS_DATA_H */
