@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 The Board of Trustees of the University of Illinois,
+ * Copyright (c) 2013 The Board of Trustees of the University of Illinois,
  *                    Carnegie Mellon University.
  *
  * This library is free software; you can redistribute it and/or modify it
@@ -21,7 +21,6 @@
 #define ESTATS_DATA_H
 
 struct estats_error* estats_val_data_new(struct estats_val_data**);
-struct estats_error* estats_val_data_sized_new(struct estats_val_data**, int /*length*/);
 struct estats_error* estats_val_data_free(struct estats_val_data**);
 struct estats_error* estats_val_data_delta(struct estats_val_data*, const struct estats_val_data*, const struct estats_val_data*);
 
