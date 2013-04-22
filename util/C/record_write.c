@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 
 	estats_error* err = NULL;
 	struct estats_nl_client* cl = NULL;
-	estats_data* data = NULL;
+	estats_val_data* data = NULL;
 	estats_record* record = NULL;
 	estats_val val;
 	char* str;
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 	cid = atoi(argv[1]);
 	
 	Chk(estats_nl_client_init(&cl));
-	Chk(estats_data_new(&data));
+	Chk(estats_val_data_new(&data));
 	Chk(estats_record_open(&record, "./test-record", "w"));
 
 	Chk(estats_read_vars(data, cid, cl));
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 	Chk(estats_record_write_data(record, data));
 
  Cleanup:
-	estats_data_free(&data);
+	estats_val_data_free(&data);
 	estats_nl_client_destroy(&cl);
 	Chk(estats_record_close(&record));
 

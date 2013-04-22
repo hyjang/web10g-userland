@@ -437,7 +437,7 @@ estats_list_conns(estats_connection_list* cli, estats_connection_func func, cons
 }
 
 struct estats_error*
-estats_read_vars(struct estats_data* data, int cid, const estats_nl_client* cl)
+estats_read_vars(struct estats_val_data* data, int cid, const estats_nl_client* cl)
 {
 	estats_error* err = NULL;
 	struct mnl_socket* nl;

@@ -20,7 +20,7 @@
 #include <estats/estats-int.h>
 
 struct estats_error*
-estats_data_new(struct estats_data** data)
+estats_val_data_new(struct estats_val_data** data)
 {
 	estats_error* err = NULL;
 	int len = TOTAL_INDEX_MAX;
@@ -28,8 +28,8 @@ estats_data_new(struct estats_data** data)
 	ErrIf(data == NULL, ESTATS_ERR_INVAL);
 	*data = NULL;
 
-	Chk(Malloc((void**) data, sizeof(estats_data) + len*sizeof(struct estats_val)));
-	memset((void*) *data, 0, sizeof(estats_data) + len*sizeof(struct estats_val));
+	Chk(Malloc((void**) data, sizeof(estats_val_data) + len*sizeof(struct estats_val)));
+	memset((void*) *data, 0, sizeof(estats_val_data) + len*sizeof(struct estats_val));
 	(*data)->length = len;
 
  Cleanup:
@@ -37,15 +37,15 @@ estats_data_new(struct estats_data** data)
 }
 
 struct estats_error*
-estats_data_sized_new(struct estats_data** data, int len)
+estats_val_data_sized_new(struct estats_val_data** data, int len)
 {
 	estats_error* err = NULL;
 
 	ErrIf(data == NULL, ESTATS_ERR_INVAL);
 	*data = NULL;
 
-	Chk(Malloc((void**) data, sizeof(estats_data) + len*sizeof(struct estats_val)));
-	memset((void*) *data, 0, sizeof(estats_data) + len*sizeof(struct estats_val));
+	Chk(Malloc((void**) data, sizeof(estats_val_data) + len*sizeof(struct estats_val)));
+	memset((void*) *data, 0, sizeof(estats_val_data) + len*sizeof(struct estats_val));
 	(*data)->length = len;
 
  Cleanup:
@@ -53,7 +53,7 @@ estats_data_sized_new(struct estats_data** data, int len)
 }
 
 struct estats_error*
-estats_data_free(struct estats_data** data)
+estats_val_data_free(struct estats_val_data** data)
 {
 	if (data == NULL || *data == NULL)
 		return;
@@ -62,7 +62,7 @@ estats_data_free(struct estats_data** data)
 	*data = NULL;
 }
 
-struct estats_error* estats_data_delta(struct estats_data* data, const struct estats_data* data2, const struct estats_data* data1)
+struct estats_error* estats_val_data_delta(struct estats_val_data* data, const struct estats_val_data* data2, const struct estats_val_data* data1)
 {
 	estats_error* err = NULL;
 	int i;

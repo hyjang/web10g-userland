@@ -27,10 +27,10 @@ estats_error* estats_record_open( estats_record **,
 
 estats_error* estats_record_close( estats_record **);
 
-estats_error* estats_record_read_data( estats_data **,
+estats_error* estats_record_read_data( estats_val_data **,
                                        estats_record *);
 
 estats_error* estats_record_write_data( estats_record *,
-                                        estats_data *);
+                                        estats_val_data *);
 
 #endif /* ESTATS_RECORD_H */

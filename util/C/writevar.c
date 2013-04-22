@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 
 	estats_error* err = NULL;
 	struct estats_nl_client* cl = NULL;
-	estats_data* data = NULL;
+	estats_val_data* data = NULL;
 	int cid, i, j; 
 	int opt, option;
 	char varname[24];
