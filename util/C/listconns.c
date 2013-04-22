@@ -19,30 +19,14 @@
  */
 #include "scripts.h"
 
-void connection_callback(struct estats_connection_tuple* ct)
-{
-	char rem_addr_str[46];
-	char local_addr_str[46];
-
-	if ((ct->local_addr[16]) == ESTATS_ADDRTYPE_IPV4) {
-		inet_ntop(AF_INET, &(ct->rem_addr[0]), &rem_addr_str[0], 40);
-		inet_ntop(AF_INET, &(ct->local_addr[0]), &local_addr_str[0], 40);
-	}
-	else if ((ct->local_addr[16]) == ESTATS_ADDRTYPE_IPV6) {
-		inet_ntop(AF_INET6, &(ct->rem_addr[0]), &rem_addr_str[0], 40);
-		inet_ntop(AF_INET6, &(ct->local_addr[0]), &local_addr_str[0], 40);
-	}
-	else printf("Unknown INET address type\n");
-
-	printf("%-8d %-20s %-8d %-20s %-8d\n", ct->cid, local_addr_str, ct->local_port, rem_addr_str, ct->rem_port);
-}
-
 int main(int argc, char **argv)
 {
 
 	struct estats_error* err = NULL;
 	struct estats_nl_client* cl = NULL;
 	struct estats_connection_list* clist = NULL;
+	struct estats_list* list_pos;
+	struct estats_connection_tuple_ascii asc;
 
 	Chk(estats_nl_client_init(&cl));
 	Chk(estats_connection_list_new(&clist));
@@ -51,7 +35,15 @@ int main(int argc, char **argv)
 	printf("-------- -------------------- -------- -------------------- --------\n");
 	printf("\n");
 
-	Chk(estats_list_conns(clist, connection_callback, cl));
+	Chk(estats_list_conns(clist, cl));
+
+	ESTATS_LIST_FOREACH(list_pos, &(clist->connection_head)) {
+		struct estats_connection* cp = ESTATS_LIST_ENTRY(list_pos, estats_connection, list);
+		struct estats_connection_tuple* ct = (struct estats_connection_tuple*) cp;
+		Chk(estats_connection_tuple_as_strings(&asc, ct));
+
+		printf("%-8s %-20s %-8s %-20s %-8s\n", asc.cid, asc.local_addr, asc.local_port, asc.rem_addr, asc.rem_port);
+	}
 
  Cleanup:
 	estats_connection_list_free(&clist);

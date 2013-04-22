@@ -136,6 +136,8 @@ estats_connection_tuple_as_strings(struct estats_connection_tuple_ascii* tuple_a
 {
 	estats_error* err = NULL;
 
+	ErrIf(tuple_ascii == NULL || tuple == NULL, ESTATS_ERR_INVAL);
+
 	Chk(Sprintf(NULL, tuple_ascii->rem_port, "%u", tuple->rem_port));
 	Chk(Sprintf(NULL, tuple_ascii->local_port, "%u", tuple->local_port));
 	Chk(Sprintf(NULL, tuple_ascii->cid, "%d", tuple->cid));
