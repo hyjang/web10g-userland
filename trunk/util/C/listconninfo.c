@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 	printf("-------- ------------ -------- -------- -------- -------------------- -------- -------------------- --------\n");
 	printf("\n");
 
-	Chk(estats_list_conns(clist, NULL, cl));
+	Chk(estats_list_conns(clist, cl));
 
 	Chk(estats_connection_list_add_info(clist));
 

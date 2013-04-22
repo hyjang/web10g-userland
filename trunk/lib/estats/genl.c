@@ -405,7 +405,7 @@ static int data_cb(const struct nlmsghdr *nlh, void *data)
 }
 
 struct estats_error*
-estats_list_conns(estats_connection_list* cli, estats_connection_func func, const estats_nl_client* cl)
+estats_list_conns(estats_connection_list* cli, const estats_nl_client* cl)
 {
 	estats_error* err = NULL;
 	struct mnl_socket* nl;
@@ -459,13 +459,6 @@ estats_list_conns(estats_connection_list* cli, estats_connection_func func, cons
 	}
 
 	Err2If(ret == -1, ESTATS_ERR_GENL, "error");
-
-	if (func)
-	ESTATS_LIST_FOREACH(list_pos, &(cli->connection_head)) {
-		estats_connection* cp = ESTATS_LIST_ENTRY(list_pos, estats_connection, list);
-		struct estats_connection_tuple* ct = (struct estats_connection_tuple*) cp;
-		func(ct);
-	}
 
  Cleanup:
  	return err;
