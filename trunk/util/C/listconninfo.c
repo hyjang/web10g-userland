@@ -18,25 +18,7 @@
  *
  */
 #include "scripts.h"
-/*
-void connection_callback(struct estats_connection_tuple* ct)
-{
-	char rem_addr_str[46];
-	char local_addr_str[46];
 
-	if ((ct->local_addr[16]) == ESTATS_ADDRTYPE_IPV4) {
-		inet_ntop(AF_INET, &(ct->rem_addr[0]), &rem_addr_str[0], 40);
-		inet_ntop(AF_INET, &(ct->local_addr[0]), &local_addr_str[0], 40);
-	}
-	else if ((ct->local_addr[16]) == ESTATS_ADDRTYPE_IPV6) {
-		inet_ntop(AF_INET6, &(ct->rem_addr[0]), &rem_addr_str[0], 40);
-		inet_ntop(AF_INET6, &(ct->local_addr[0]), &local_addr_str[0], 40);
-	}
-	else printf("Unknown INET address type\n");
-
-	printf("%-8d %-20s %-8d %-20s %-8d\n", ct->cid, local_addr_str, ct->local_port, rem_addr_str, ct->rem_port);
-}
-*/
 int main(int argc, char **argv)
 {
 
