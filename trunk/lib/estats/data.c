@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 The Board of Trustees of the University of Illinois,
+ * Copyright (c) 2013 The Board of Trustees of the University of Illinois,
  *                    Carnegie Mellon University.
  *
  * This library is free software; you can redistribute it and/or modify it
@@ -24,22 +24,6 @@ estats_val_data_new(struct estats_val_data** data)
 {
 	estats_error* err = NULL;
 	int len = TOTAL_INDEX_MAX;
-
-	ErrIf(data == NULL, ESTATS_ERR_INVAL);
-	*data = NULL;
-
-	Chk(Malloc((void**) data, sizeof(estats_val_data) + len*sizeof(struct estats_val)));
-	memset((void*) *data, 0, sizeof(estats_val_data) + len*sizeof(struct estats_val));
-	(*data)->length = len;
-
- Cleanup:
- 	return err;
-}
-
-struct estats_error*
-estats_val_data_sized_new(struct estats_val_data** data, int len)
-{
-	estats_error* err = NULL;
 
 	ErrIf(data == NULL, ESTATS_ERR_INVAL);
 	*data = NULL;

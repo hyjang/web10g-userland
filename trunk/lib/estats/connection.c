@@ -92,22 +92,22 @@ estats_connection_tuple_compare(int* res,
                                const struct estats_connection_tuple *s1,
                                const struct estats_connection_tuple *s2)
 {
-    estats_error* err = NULL;
+	estats_error* err = NULL;
 
-    ErrIf(s1 == NULL || s2 == NULL, ESTATS_ERR_INVAL);
+	ErrIf(s1 == NULL || s2 == NULL, ESTATS_ERR_INVAL);
 
-    *res = 1;
+	*res = 1;
 
-    if ( (s1->rem_port == s2->rem_port) &&
-         strcmp((char *)(s1->rem_addr), (char *)(s2->rem_addr)) == 0 &&
-         (s1->local_port == s2->local_port) &&
-         strcmp((char *)(s1->local_addr), (char *)(s2->local_addr)) == 0 ) {
+	if ( (s1->rem_port == s2->rem_port) &&
+        	strcmp((char *)(s1->rem_addr), (char *)(s2->rem_addr)) == 0 &&
+         	(s1->local_port == s2->local_port) &&
+         	strcmp((char *)(s1->local_addr), (char *)(s2->local_addr)) == 0 ) {
 
-        *res = 0;
-    }
+	*res = 0;
+	}
 
 Cleanup:
-    return err;
+	return err;
 }
 
 struct estats_error*
@@ -159,62 +159,62 @@ estats_connection_tuple_as_strings(struct estats_connection_tuple_ascii* tuple_a
 estats_error*
 estats_connection_info_get_cid(int* cid, const estats_connection_info* connection_info)
 {
-    estats_error* err = NULL;
+	estats_error* err = NULL;
 
-    ErrIf(cid == NULL || connection_info == NULL, ESTATS_ERR_INVAL);
-    *cid = connection_info->cid;
+	ErrIf(cid == NULL || connection_info == NULL, ESTATS_ERR_INVAL);
+	*cid = connection_info->cid;
 
 Cleanup:
-    return err;
+	return err;
 }
 	
 estats_error*
 estats_connection_info_get_pid(int* pid, const estats_connection_info* connection_info)
 {
-    estats_error* err = NULL;
+	estats_error* err = NULL;
 
-    ErrIf(pid == NULL || connection_info == NULL, ESTATS_ERR_INVAL);
-    *pid = connection_info->pid;
+	ErrIf(pid == NULL || connection_info == NULL, ESTATS_ERR_INVAL);
+	*pid = connection_info->pid;
 
 Cleanup:
-    return err;
+	return err;
 }
 	
 estats_error*
 estats_connection_info_get_uid(int* uid, const estats_connection_info* connection_info)
 {
-    estats_error* err = NULL;
+	estats_error* err = NULL;
 
-    ErrIf(uid == NULL || connection_info == NULL, ESTATS_ERR_INVAL);
-    *uid = connection_info->uid;
+	ErrIf(uid == NULL || connection_info == NULL, ESTATS_ERR_INVAL);
+	*uid = connection_info->uid;
 
 Cleanup:
-    return err;
+	return err;
 }
 
 estats_error*
 estats_connection_info_get_cmdline(char** str, const estats_connection_info* connection_info)
 {
-    estats_error* err = NULL;
+	estats_error* err = NULL;
 
-    ErrIf(connection_info == NULL, ESTATS_ERR_INVAL);
-    Chk(Strdup(str, connection_info->cmdline));
+	ErrIf(connection_info == NULL, ESTATS_ERR_INVAL);
+	Chk(Strdup(str, connection_info->cmdline));
 
 Cleanup:
-    return err;
+	return err;
 }
 
 estats_error*
 estats_connection_info_get_tuple(struct estats_connection_tuple* tuple, const estats_connection_info* connection_info)
 {
-    estats_error* err = NULL;
+	estats_error* err = NULL;
 
-    ErrIf(tuple == NULL || connection_info == NULL, ESTATS_ERR_INVAL);
+	ErrIf(tuple == NULL || connection_info == NULL, ESTATS_ERR_INVAL);
 
-    *tuple = connection_info->tuple;
+	*tuple = connection_info->tuple;
 
 Cleanup:
-    return err;
+	return err;
 }
 
 static struct estats_error* _estats_get_tcp_list(struct estats_list*, const struct estats_connection_list*);

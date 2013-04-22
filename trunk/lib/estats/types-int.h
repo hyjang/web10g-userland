@@ -34,17 +34,5 @@ struct estats_error {
         int line;
         const char* function;
 };
-/*
-struct estats_connection_info {
-	struct estats_connection_tuple  tuple;
-	char             cmdline[ESTATS_CMDLINE_LEN_MAX];
-	pid_t            pid;
-	uid_t            uid;
-	ino_t            ino;
-	int              state;
-	int		 cid;
-	ESTATS_ADDRTYPE  addrtype;
-	struct estats_list  list;
-};
-*/
+
 #endif /* ESTATS_TYPES_INT_H */
