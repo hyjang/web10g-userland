@@ -111,6 +111,27 @@ Cleanup:
 }
 
 struct estats_error*
+estats_connection_tuple_copy(struct estats_connection_tuple *s1,
+			const struct estats_connection_tuple *s2)
+{
+	estats_error* err = NULL;
+	int i;
+
+	ErrIf(s1 == NULL || s2 == NULL, ESTATS_ERR_INVAL);
+
+	for (i = 0; i < 17; i++) {
+		s1->rem_addr[i] = s2->rem_addr[i];
+		s1->local_addr[i] = s2->local_addr[i];
+	}
+	s1->rem_port = s2->rem_port;
+	s1->local_port = s2->local_port;
+	s1->cid = s2->cid;
+
+Cleanup:
+    return err;
+}
+
+struct estats_error*
 estats_connection_tuple_as_strings(struct estats_connection_tuple_ascii* tuple_ascii, struct estats_connection_tuple* tuple)
 {
 	estats_error* err = NULL;

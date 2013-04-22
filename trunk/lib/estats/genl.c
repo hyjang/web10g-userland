@@ -21,6 +21,7 @@
 
 static struct estats_val stat_val[TOTAL_INDEX_MAX];
 static struct estats_timeval stat_tv;
+static struct estats_connection_tuple stat_tuple;
 
 struct index_attr {
         struct nlattr **tb;
@@ -234,7 +235,7 @@ static int parse_4tuple_cb(const struct nlattr *attr, void *data)
         return MNL_CB_OK;
 }
 
-static void parse_4tuple(struct nlattr *nested, struct estats_connection_list *cli)
+static void parse_4tuple_list(struct nlattr *nested, struct estats_connection_list *cli)
 {
         struct nlattr *tb[NEA_4TUPLE_MAX+1];
         struct nlattr *attr;
@@ -282,6 +283,36 @@ static void parse_4tuple(struct nlattr *nested, struct estats_connection_list *c
 		
 		_estats_list_add_tail(&(cp->list), conn_head);
         	cp = NULL;
+        }
+}
+
+static void parse_4tuple(struct nlattr *nested)
+{
+        struct nlattr *tb[NEA_4TUPLE_MAX+1];
+        struct nlattr *attr;
+
+	uint8_t rem_addr[17];
+	uint8_t local_addr[17];
+        uint16_t rem_port = 0;
+        uint16_t local_port = 0;
+        int cid = 0;
+
+        mnl_attr_parse_nested(nested, parse_4tuple_cb, tb);
+
+        if (tb[NEA_LOCAL_ADDR]) {
+		memcpy(&stat_tuple.local_addr, mnl_attr_get_payload(tb[NEA_LOCAL_ADDR]), 17);
+        }
+        if (tb[NEA_REM_ADDR]) {
+		memcpy(&stat_tuple.rem_addr, mnl_attr_get_payload(tb[NEA_REM_ADDR]), 17);
+        }
+        if (tb[NEA_LOCAL_PORT]) {
+                stat_tuple.local_port = mnl_attr_get_u16(tb[NEA_LOCAL_PORT]);
+        }
+        if (tb[NEA_REM_PORT]) {
+                stat_tuple.rem_port = mnl_attr_get_u16(tb[NEA_REM_PORT]);
+        }
+        if (tb[NEA_CID]) {
+                stat_tuple.cid = mnl_attr_get_u32(tb[NEA_CID]);
         }
 }
 
@@ -350,8 +381,12 @@ static int data_cb(const struct nlmsghdr *nlh, void *data)
 	mnl_attr_parse(nlh, sizeof(*genl), data_attr_cb, tb);
 
         if (tb[NLE_ATTR_4TUPLE]) {
-		cli = (struct estats_connection_list*) data;
-                parse_4tuple(tb[NLE_ATTR_4TUPLE], cli);
+		if (data != NULL) {
+			cli = (struct estats_connection_list*) data;
+			parse_4tuple_list(tb[NLE_ATTR_4TUPLE], cli);
+		}
+		else
+			parse_4tuple(tb[NLE_ATTR_4TUPLE]);
 	}
         if (tb[NLE_ATTR_TIME])
                 parse_time(tb[NLE_ATTR_TIME], NULL);
@@ -501,6 +536,8 @@ estats_read_vars(struct estats_val_data* data, int cid, const estats_nl_client* 
 		printf("%s\n", strerror(errno));
 		Err2(ESTATS_ERR_GENL, "mnl_cb_run error");
 	}
+
+	Chk(estats_connection_tuple_copy(&data->tuple, &stat_tuple));
 
 	data->tv.sec = stat_tv.sec;
 	data->tv.usec = stat_tv.usec;
