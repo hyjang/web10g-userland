@@ -105,7 +105,20 @@ struct estats_timeval {
 	uint32_t usec;
 };
 
+/*
+ * estats_addrtype is sent in *_addr[16], below
+ */
+
+struct estats_connection_tuple {
+	uint8_t   rem_addr[17];
+	uint8_t   local_addr[17];
+	uint16_t  rem_port;
+	uint16_t  local_port;
+	int       cid;
+};
+
 struct estats_val_data {
+	struct estats_connection_tuple tuple;
 	struct estats_timeval tv;
 	int length;
 	struct estats_val val[0];
@@ -120,18 +133,6 @@ typedef enum ESTATS_ADDRTYPE {
 	ESTATS_ADDRTYPE_IPV4 = 1,
 	ESTATS_ADDRTYPE_IPV6 = 2
 } ESTATS_ADDRTYPE;
-
-/*
- * estats_addrtype is sent in *_addr[16], below
- */
-
-struct estats_connection_tuple {
-	uint8_t   rem_addr[17];
-	uint8_t   local_addr[17];
-	uint16_t  rem_port;
-	uint16_t  local_port;
-	int       cid;
-};
 
 struct estats_connection_tuple_ascii {
 	char rem_addr[INET6_ADDRSTRLEN];
