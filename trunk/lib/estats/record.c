@@ -95,13 +95,24 @@ estats_record_read_data(estats_val_data** data, estats_record* record)
 
     Chk(estats_val_data_new(data));
 
-    Chk(Fread(NULL, &((*data)->tv.sec), 4, 1, record->fp));
+    Chk(Fread(NULL, &(*data)->tv.sec, 4, 1, record->fp));
     Chk(Fread(NULL, &(*data)->tv.usec, 4, 1, record->fp));
+    for (i =0; i < 17; i++) {
+	    Chk(Fread(NULL, &(*data)->tuple.rem_addr[i], 1, 1, record->fp));
+    }
+    for (i =0; i < 17; i++) {
+	    Chk(Fread(NULL, &(*data)->tuple.local_addr[i], 1, 1, record->fp));
+    }
+    Chk(Fread(NULL, &(*data)->tuple.rem_port, 2, 1, record->fp));
+    Chk(Fread(NULL, &(*data)->tuple.local_port, 2, 1, record->fp));
+    
     Chk(Fread(NULL, (*data)->val, (size_t)(((*data)->length)*sizeof(estats_val)), 1, record->fp));
 
     if (record->swap) {
 	(*data)->tv.sec = bswap_32((*data)->tv.sec);
 	(*data)->tv.usec = bswap_32((*data)->tv.usec);
+	(*data)->tuple.rem_port = bswap_16((*data)->tuple.rem_port);
+	(*data)->tuple.local_port = bswap_16((*data)->tuple.local_port);
 	for (i=0; i < (*data)->length; i++) {
 	    bswap_64((*data)->val[i].masked);
 	    _estats_swap_val(&(*data)->val[i], estats_var_array[i].valtype);
@@ -120,6 +131,7 @@ estats_error*
 estats_record_write_data(estats_record* record, estats_val_data* data)
 {
     estats_error* err = NULL;
+    int i;
 
     ErrIf(record == NULL || data == NULL, ESTATS_ERR_INVAL);
     ErrIf(record->mode != W_MODE, ESTATS_ERR_ACCESS);
@@ -127,6 +139,15 @@ estats_record_write_data(estats_record* record, estats_val_data* data)
 
     Chk(Fwrite(NULL, &data->tv.sec, 4, 1, record->fp));
     Chk(Fwrite(NULL, &data->tv.usec, 4, 1, record->fp));
+    for (i =0; i < 17; i++) {
+	    Chk(Fwrite(NULL, &data->tuple.rem_addr[i], 1, 1, record->fp));
+    }
+    for (i =0; i < 17; i++) {
+	    Chk(Fwrite(NULL, &data->tuple.local_addr[i], 1, 1, record->fp));
+    }
+    Chk(Fwrite(NULL, &data->tuple.rem_port, 2, 1, record->fp));
+    Chk(Fwrite(NULL, &data->tuple.local_port, 2, 1, record->fp));
+    
     Chk(Fwrite(NULL, data->val, (size_t)((data->length)*sizeof(estats_val)), 1, record->fp));
 
 Cleanup:

@@ -28,14 +28,17 @@ int main(int argc, char **argv)
 	estats_val val;
 	char* str;
 	int i, j; 
-	int opt, option;
-
+	struct estats_connection_tuple_ascii tuple_ascii;
 	
 	Chk(estats_record_open(&record, "./test-record", "r"));
 
 	Chk(estats_record_read_data(&data, record));
 
 	printf("Timestamp sec: %u, usec: %u\n", data->tv.sec, data->tv.usec);
+
+	Chk(estats_connection_tuple_as_strings(&tuple_ascii, &data->tuple));
+
+        printf("Address: %s %s %s %s\n", tuple_ascii.local_addr, tuple_ascii.local_port, tuple_ascii.rem_addr, tuple_ascii.rem_port);
 
 	for (i = 0; i < data->length; i++) {
 	    Chk(estats_val_as_string(&str, &data->val[i], estats_var_array[i].valtype));
