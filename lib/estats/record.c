@@ -63,21 +63,17 @@ Cleanup:
     return err;
 }
 
-estats_error*
+void
 estats_record_close(estats_record** record)
 {
-    estats_error* err = NULL;
-
-    ErrIf(record == NULL || *record == NULL, ESTATS_ERR_INVAL);
+    if (record == NULL || *record == NULL) return;
 
     if ((*record)->mode == W_MODE) {
-        Chk(_estats_record_write_checksum(*record));
+        if (_estats_record_write_checksum(*record) != NULL)
+	    dbgprintf("_estats_record_write_checksum");
     }
 
-Cleanup:
     _estats_record_free(record);
-
-    return err;
 }
 
 estats_error*

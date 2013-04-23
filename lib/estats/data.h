@@ -21,7 +21,7 @@
 #define ESTATS_DATA_H
 
 struct estats_error* estats_val_data_new(struct estats_val_data**);
-struct estats_error* estats_val_data_free(struct estats_val_data**);
+void   estats_val_data_free(struct estats_val_data**);
 struct estats_error* estats_val_data_delta(struct estats_val_data*, const struct estats_val_data*, const struct estats_val_data*);
 
 #endif /* ESTATS_DATA_H */

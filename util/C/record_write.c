@@ -64,8 +64,8 @@ int main(int argc, char **argv)
 
  Cleanup:
 	estats_val_data_free(&data);
+	estats_record_close(&record);
 	estats_nl_client_destroy(&cl);
-	Chk(estats_record_close(&record));
 
 	if (err != NULL) {
 		PRINT_AND_FREE(err);
@@ -73,5 +73,4 @@ int main(int argc, char **argv)
 	}
 
 	return EXIT_SUCCESS;
-
 }

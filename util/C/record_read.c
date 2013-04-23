@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 
  Cleanup:
 	estats_val_data_free(&data);
-	Chk(estats_record_close(&record));
+	estats_record_close(&record);
 
 	if (err != NULL) {
 		PRINT_AND_FREE(err);

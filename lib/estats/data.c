@@ -36,7 +36,7 @@ estats_val_data_new(struct estats_val_data** data)
  	return err;
 }
 
-struct estats_error*
+void
 estats_val_data_free(struct estats_val_data** data)
 {
 	if (data == NULL || *data == NULL)
