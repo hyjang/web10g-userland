@@ -25,7 +25,7 @@ estats_error* estats_record_open( estats_record **,
                          const char * /* path */,
                          const char * /* mode */);
 
-estats_error* estats_record_close( estats_record **);
+void          estats_record_close( estats_record **);
 
 estats_error* estats_record_read_data( estats_val_data **,
                                        estats_record *);
