@@ -6,7 +6,7 @@ There are 3 steps to installation of Web10G userland:
 	The Web10G kernel patch is available from the project web site,
 	http://web10g.org. For the current Alpha versions, there is a
 	tight correlation between the kernel patch and userland releases,
-	indicated by the version number, this being 0.6.2.
+	indicated by the version number, currently 0.6.2.
 	
 	The kernel patches are against a mainline kernel, available
 	from kernel.org, of micro version 0; for example, the current
