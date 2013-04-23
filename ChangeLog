@@ -1,4 +1,17 @@
 
+web10g-userland-2.0.6.2:
+
+	Added record-to-file read/write functions and data type.
+
+	Added listconninfo structure and functions for associating uid,
+	pid, cmdline, to connection tuple.
+
+	Reverted naming conventions for functions/lib to "estats".
+
+	Added doc/API.txt giving an overview and explication of main lib
+	functions.
+
+	Minor bug fixes.
 
 web10g-userland-2.0.4:
 
