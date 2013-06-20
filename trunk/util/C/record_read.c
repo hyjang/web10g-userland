@@ -44,6 +44,7 @@ int main(int argc, char **argv)
 	    Chk(estats_val_as_string(&str, &data->val[i], estats_var_array[i].valtype));
 
 	    printf("%s:  %s\n", estats_var_array[i].name, str);
+	    free(str);
 	}
 
  Cleanup:
