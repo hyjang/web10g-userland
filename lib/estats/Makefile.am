@@ -30,6 +30,7 @@ estats_c_sources = \
 	connection.c \
 	data.c \
 	genl.c \
+	list.c \
 	nl-client.c \
 	val.c \
 	var.c \

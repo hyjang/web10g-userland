@@ -3,18 +3,14 @@
  *                    Carnegie Mellon University.
  *
  * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation; either version 2.1 of the License, or (at your
- * option) any later version.
+ * under the terms of the MIT License.
  *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- * for more details.
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the MIT License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+ * You should have received a copy of the MIT License along with this library;
+ * if not, see http://opensource.org/licenses/MIT.
  *
  */
 #include "scripts.h"
@@ -46,9 +42,10 @@ int main(int argc, char **argv)
 
 	estats_error* err = NULL;
 	estats_nl_client* cl = NULL;
-	estats_val_data* data = NULL;
+	estats_val_data* data_delta = NULL;
 	estats_val_data* data_new = NULL;
 	estats_val_data* data_prev = NULL;
+	estats_val_data* data_ptr;
 	int cid, i, j; 
 	int opt, option;
 
@@ -112,7 +109,7 @@ int main(int argc, char **argv)
 
 	Chk(estats_nl_client_init(&cl));
 	Chk(estats_nl_client_set_mask(cl, &mask));
-	Chk(estats_val_data_new(&data));
+	Chk(estats_val_data_new(&data_delta));
 	Chk(estats_val_data_new(&data_new));
 	Chk(estats_val_data_new(&data_prev));
 
@@ -123,11 +120,11 @@ int main(int argc, char **argv)
 
 	Chk(estats_read_vars(data_new, cid, cl));
 
-	Chk(estats_val_data_delta(data, data_new, data_prev));
+	Chk(estats_val_data_delta(data_delta, data_new, data_prev));
 
 	printf("Timestamp sec: %u, usec: %u\n", data_new->tv.sec, data_new->tv.usec);
 
-	for (j = 0; j < data->length; j++) {
+	for (j = 0; j < data_new->length; j++) {
 
 		if (j == 0)
 			printf("\n\n Perf Table\n\n");
@@ -141,23 +138,26 @@ int main(int argc, char **argv)
 			printf("\n\n Tune Table\n\n");
 
 
-		if (data->val[j].masked) continue;
+		if (data_new->val[j].masked) continue;
+
+		if (estats_var_array[i].type == (ESTATS_TYPE_COUNTER32 || ESTATS_TYPE_COUNTER64)) data_ptr = data_delta;
+		else data_ptr = data_new;
 
 		switch(estats_var_array[j].valtype) {
 			case ESTATS_UNSIGNED64:
-				printf("%s=%"PRIu64"\n", estats_var_array[j].name, data->val[j].uv64);
+				printf("%s=%"PRIu64"\n", estats_var_array[j].name, data_ptr->val[j].uv64);
                 		break;
                         case ESTATS_UNSIGNED32:
-				printf("%s=%"PRIu32"\n", estats_var_array[j].name, data->val[j].uv32);
+				printf("%s=%"PRIu32"\n", estats_var_array[j].name, data_ptr->val[j].uv32);
 				break;
                         case ESTATS_SIGNED32:
-				printf("%s=%"PRId32"\n", estats_var_array[j].name, data->val[j].sv32);
+				printf("%s=%"PRId32"\n", estats_var_array[j].name, data_ptr->val[j].sv32);
                         	break;
                         case ESTATS_UNSIGNED16:
-				printf("%s=%"PRIu16"\n", estats_var_array[j].name, data->val[j].uv16);
+				printf("%s=%"PRIu16"\n", estats_var_array[j].name, data_ptr->val[j].uv16);
                         	break;
                         case ESTATS_UNSIGNED8:
-				printf("%s=%"PRIu8"\n", estats_var_array[j].name, data->val[j].uv8);
+				printf("%s=%"PRIu8"\n", estats_var_array[j].name, data_ptr->val[j].uv8);
                         	break;
                         default:
                                 break;
@@ -170,7 +170,7 @@ int main(int argc, char **argv)
 
  Cleanup:
 
-	estats_val_data_free(&data);
+	estats_val_data_free(&data_delta);
 	estats_val_data_free(&data_new);
 	estats_val_data_free(&data_prev);
 	estats_nl_client_destroy(&cl);
