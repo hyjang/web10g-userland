@@ -3,22 +3,20 @@
  *                    Carnegie Mellon University.
  *
  * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation; either version 2.1 of the License, or (at your
- * option) any later version.
+ * under the terms of the MIT License.
  *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- * for more details.
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the MIT License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+ * You should have received a copy of the MIT License along with this library;
+ * if not, see http://opensource.org/licenses/MIT.
  *
  */
 #ifndef ESTATS_TYPES_H
 #define ESTATS_TYPES_H
+
+#include <estats/list.h>
 
 enum MIB_TABLE {
         PERF_TABLE,
@@ -142,18 +140,13 @@ struct estats_connection_tuple_ascii {
 	char cid[11];
 };
 
-struct estats_list {
-        struct estats_list* next;
-        struct estats_list* prev;
-};
-
 struct estats_connection {
 	uint8_t   rem_addr[17];
 	uint8_t   local_addr[17];
 	uint16_t  rem_port;
 	uint16_t  local_port;
 	int       cid;
-	struct estats_list  list;
+	struct list_node  list;
 };
 
 #define ESTATS_CMDLINE_LEN_MAX 16
@@ -167,12 +160,12 @@ struct estats_connection_info {
 	int              state;
 	int		 cid;
 	ESTATS_ADDRTYPE  addrtype;
-	struct estats_list  list;
+	struct list_node  list;
 };
 
 struct estats_connection_list {
-	struct estats_list  connection_head;
-	struct estats_list  connection_info_head;
+	struct list_head  connection_head;
+	struct list_head  connection_info_head;
 };
 
 typedef void (*estats_connection_func)(struct estats_connection_tuple*);

@@ -3,18 +3,14 @@
  *                    Carnegie Mellon University.
  *
  * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation; either version 2.1 of the License, or (at your
- * option) any later version.
+ * under the terms of the MIT License.
  *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- * for more details.
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the MIT License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+ * You should have received a copy of the MIT License along with this library;
+ * if not, see http://opensource.org/licenses/MIT.
  *
  */
 #include <estats/estats-int.h>
@@ -240,7 +236,7 @@ static void parse_4tuple_list(struct nlattr *nested, struct estats_connection_li
         struct nlattr *tb[NEA_4TUPLE_MAX+1];
         struct nlattr *attr;
 	struct estats_connection* cp = NULL;
-	struct estats_list* conn_head;
+	struct list_head* conn_head;
 
 	uint8_t rem_addr[17];
 	uint8_t local_addr[17];
@@ -280,8 +276,8 @@ static void parse_4tuple_list(struct nlattr *nested, struct estats_connection_li
 		cp->rem_port = rem_port;
 		cp->local_port = local_port;
 		cp->cid = cid;
-		
-		_estats_list_add_tail(&(cp->list), conn_head);
+
+		list_add_tail(conn_head, &cp->list);
         	cp = NULL;
         }
 }
@@ -415,23 +411,22 @@ estats_list_conns(estats_connection_list* cli, const estats_nl_client* cl)
 	char buf[MNL_SOCKET_BUFFER_SIZE];
 	struct nlmsghdr *nlh;
 	struct genlmsghdr *genl;
-
 	unsigned int seq, portid;
 
-	struct estats_list* conn_head;
+	struct list_head* conn_head;
 	struct estats_list* conn_pos;
 	struct estats_list* list_pos;
-	struct estats_list* tmp;
 	estats_connection* cp = NULL;
+	estats_connection* conn;
+	estats_connection* tmp;
 
 	ErrIf(cli == NULL, ESTATS_ERR_INVAL);
 
 	conn_head = &(cli->connection_head);
 
-    	ESTATS_LIST_FOREACH_SAFE(conn_pos, tmp, conn_head) {
-        	estats_connection* curr_conn = ESTATS_LIST_ENTRY(conn_pos, estats_connection, list);
-        	_estats_list_del(conn_pos);
-        	free(curr_conn);
+	list_for_each_safe(conn_head, conn, tmp, list) {
+		list_del(&conn->list);
+		free(conn);
 	}
 
 	nl = cl->mnl_sock;
