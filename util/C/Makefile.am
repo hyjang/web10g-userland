@@ -1,4 +1,4 @@
-bin_PROGRAMS = deltavars listconninfo listconns readvars record_read record_write watchvars writevar
+bin_PROGRAMS = web10g-deltavars web10g-listconninfo web10g-listconns web10g-readvars web10g-record_read web10g-record_write web10g-watchvars web10g-writevar
 
 LIBESTATS_LDADDS = @STRIP_BEGIN@ \
 	$(top_builddir)/lib/estats/libestats.la \
@@ -9,26 +9,26 @@ AM_CPPFLAGS = @STRIP_BEGIN@ \
 	-I$(top_srcdir)/lib \
 	@STRIP_END@
 
-deltavars_SOURCES = deltavars.c scripts.h
-deltavars_LDADD = $(LIBESTATS_LDADDS)
+web10g_deltavars_SOURCES = web10g-deltavars.c scripts.h
+web10g_deltavars_LDADD = $(LIBESTATS_LDADDS)
 
-readvars_SOURCES = readvars.c scripts.h
-readvars_LDADD = $(LIBESTATS_LDADDS)
+web10g_listconninfo_SOURCES = web10g-listconninfo.c scripts.h
+web10g_listconninfo_LDADD = $(LIBESTATS_LDADDS)
 
-record_read_SOURCES = record_read.c scripts.h
-record_read_LDADD = $(LIBESTATS_LDADDS)
+web10g_listconns_SOURCES = web10g-listconns.c scripts.h
+web10g_listconns_LDADD = $(LIBESTATS_LDADDS)
 
-record_write_SOURCES = record_write.c scripts.h
-record_write_LDADD = $(LIBESTATS_LDADDS)
+web10g_readvars_SOURCES = web10g-readvars.c scripts.h
+web10g_readvars_LDADD = $(LIBESTATS_LDADDS)
 
-listconninfo_SOURCES = listconninfo.c scripts.h
-listconninfo_LDADD = $(LIBESTATS_LDADDS)
+web10g_record_read_SOURCES = web10g-record_read.c scripts.h
+web10g_record_read_LDADD = $(LIBESTATS_LDADDS)
 
-listconns_SOURCES = listconns.c scripts.h
-listconns_LDADD = $(LIBESTATS_LDADDS)
+web10g_record_write_SOURCES = web10g-record_write.c scripts.h
+web10g_record_write_LDADD = $(LIBESTATS_LDADDS)
 
-watchvars_SOURCES = watchvars.c scripts.h
-watchvars_LDADD = $(LIBESTATS_LDADDS)
+web10g_watchvars_SOURCES = web10g-watchvars.c scripts.h
+web10g_watchvars_LDADD = $(LIBESTATS_LDADDS)
 
-writevar_SOURCES = writevar.c scripts.h
-writevar_LDADD = $(LIBESTATS_LDADDS)
+web10g_writevar_SOURCES = web10g-writevar.c scripts.h
+web10g_writevar_LDADD = $(LIBESTATS_LDADDS)
