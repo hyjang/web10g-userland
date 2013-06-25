@@ -1,4 +1,24 @@
 
+web10g-userland-2.0.7:
+
+	N.B.  Changed licensing to MIT license.
+
+	As a result of the change of license, the underlying intrusive
+	list structure has been changed from that of glibc (LGPL) to a
+	version from CCAN (http://ccodearchive.net). This implementation
+	has several benefits, beyond the MIT licensing. It performs several
+	sanity checks when configured with --enable-debug; list_for_each
+	has a more user-friendly interface. As a consequence of the latter,
+	code that had previously used ESTATS_LIST_FOREACH will have to
+	accommodate minor changes, as detailed below:
+
+
+
+	Added web10g- prefix to utils to distinguish from those similarly
+	named web100 utils, for those uers comparing the two.
+
+	Added missing free(str) following allocation by estats_val_as_string.
+	
 web10g-userland-2.0.6.2:
 
 	Added record-to-file read/write functions and data type.

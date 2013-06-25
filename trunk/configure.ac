@@ -1,9 +1,9 @@
 
 AC_PREREQ([2.68])
-AC_INIT([Web10G-userland], [2.0.6.2], [web10g-user@web10g.org])
+AC_INIT([Web10G-userland], [2.0.7], [web10g-user@web10g.org])
 
 dnl libestats libtool versioning
-LIBESTATS_LT_CURRENT=1
+LIBESTATS_LT_CURRENT=2
 LIBESTATS_LT_REVISION=0
 LIBESTATS_LT_AGE=1
 
