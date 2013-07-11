@@ -1,3 +1,16 @@
+#
+# This is a modification of autotroll (git://repo.or.cz/autotroll.git),
+# git commit f14c468579f538c93faa9d137825282df1f4b61a .
+# 
+# It fixes the problem with path searches in a different way than that of
+# git commit 767eda171276dbf378aef86a50087e36df445fdb , which confused m4
+# with error 137.
+#
+# John Estabrook <jestabro@ncsa.illinois.edu>
+#
+#
+#
+#
 # Build Qt apps with the autotools (Autoconf/Automake).
 # M4 macros.
 # This file is part of AutoTroll.
