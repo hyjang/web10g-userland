@@ -3,8 +3,12 @@
 # git commit f14c468579f538c93faa9d137825282df1f4b61a .
 # 
 # It fixes the problem with path searches in a different way than that of
+# the later
 # git commit 767eda171276dbf378aef86a50087e36df445fdb , which confused m4
 # with error 137.
+#
+# It also fixes another issue with some failed logic in the --with-qt
+# switch modifications from the previous commit.
 #
 # John Estabrook <jestabro@ncsa.illinois.edu>
 #
@@ -160,6 +164,9 @@ dnl Memo: AC_ARG_WITH(package, help-string, [if-given], [if-not-given])
        or a path to Qt binaries; if `yes' or empty,
        use PATH and some default directories to find Qt binaries]))
 
+  # this is a hack to get decent flow control with 'break'
+  for _qt_ignored in once; do
+
   if test x"$with_qt" = x"no"; then
     break
   else
@@ -172,9 +179,6 @@ dnl Memo: AC_ARG_WITH(package, help-string, [if-given], [if-not-given])
   else
     QT_PATH=$with_qt
   fi
-
-  # this is a hack to get decent flow control with 'break'
-  for _qt_ignored in once; do
 
   # Find Qt.
   AC_ARG_VAR([QT_PATH], [Path to the Qt binaries])
