@@ -32,7 +32,7 @@
 #include <estats/data.h>
 #include <estats/error.h>
 #include <estats/genl.h>
-#include <estats/list.h>
+//#include <estats/list.h>
 #include <estats/nl-client.h>
 #include <estats/record.h>
 #include <estats/tcp_estats_nl.h>

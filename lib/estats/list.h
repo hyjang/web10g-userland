@@ -28,6 +28,10 @@ THE SOFTWARE.
 #ifndef LIST_H
 #define LIST_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdbool.h>
 #include <assert.h>
 #include <stddef.h>
@@ -386,6 +390,7 @@ static inline const void *list_tail_(const struct list_head *h, size_t off)
 #define list_for_each(h, i, member)					\
 	list_for_each_off(h, i, list_off_var_(i, member))
 
+#define estats_list_for_each(h, i, member) list_for_each(h, i, member)
 /**
  * list_for_each_rev - iterate through a list backwards.
  * @h: the list_head
@@ -777,5 +782,9 @@ static inline struct list_node *list_node_from_off_(void *ptr, size_t off)
  */
 #define BUILD_ASSERT_OR_ZERO(cond) \
 	(sizeof(char [1 - 2*!(cond)]) - 1)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* LIST_H */

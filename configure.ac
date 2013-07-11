@@ -34,10 +34,10 @@ AC_LANG([C++])
 AC_PROG_CXX
 
 dnl For Qt
-#AX_CXX_COMPILE_STDCXX_11
+AX_CXX_COMPILE_STDCXX_11
 
 dnl AutoTroll with Qt.
-#AT_WITH_QT
+AT_WITH_QT
 
 AC_ARG_ENABLE(debug,
               AC_HELP_STRING([--enable-debug],
@@ -126,6 +126,7 @@ AC_CONFIG_FILES([Makefile
                  lib/estats/Makefile
 		 util/Makefile
 		 util/C/Makefile
+		 util/Qt/Makefile
 		 ])
 
 AC_OUTPUT

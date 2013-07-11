@@ -209,6 +209,7 @@ void StatsWindow::closeEvent(QCloseEvent *event)
     event->accept();
     QSettings settings;
     settings.setValue("StatsWindow/geometry", saveGeometry());
+//    disconnect(timer, SIGNAL(timeout()), this, SLOT(update()));
 //    QWidget::closeEvent(event);
 }
 
