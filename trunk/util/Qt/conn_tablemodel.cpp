@@ -36,8 +36,9 @@ void ConnTableModel::clear()
 void ConnTableModel::update()
 {
     struct estats_connection_list* connlist = NULL;
-    struct estats_list* ci_head = NULL;
-    struct estats_list* ci_pos;
+//    struct list_head* ci_head = NULL;
+//    struct estats_list* ci_pos;
+    struct estats_connection_info* ci;
 
     quint32 qucid;
 
@@ -46,19 +47,20 @@ void ConnTableModel::update()
     QSet<quint32> curr_cids = QSet<quint32>();
 
     estats::Check(estats_connection_list_new(&connlist));
-    estats::Check(estats_list_conns(connlist, NULL, nl_client));
+    estats::Check(estats_list_conns(connlist, nl_client));
     estats::Check(estats_connection_list_add_info(connlist));
 
-    ci_head = &connlist->connection_info_head;
+//    ci_head = &connlist->connection_info_head;
 
-    ESTATS_LIST_FOREACH(ci_pos, ci_head) {
+//    ESTATS_LIST_FOREACH(ci_pos, ci_head) {
+    estats_list_for_each(&connlist->connection_info_head, ci, list) {
         int cid, pid, uid;
         char* cmdline;
         struct estats_connection_tuple tuple;
         struct estats_connection_tuple_ascii tuple_ascii;
-	struct estats_connection_info* conninfo = ESTATS_LIST_ENTRY(ci_pos, estats_connection_info, list);
+//	struct estats_connection_info* conninfo = ESTATS_LIST_ENTRY(ci_pos, estats_connection_info, list);
 
-        estats::Check(estats_connection_info_get_cid(&cid, conninfo));
+        estats::Check(estats_connection_info_get_cid(&cid, ci));
 
         qucid = (quint32)cid;
 
@@ -66,11 +68,11 @@ void ConnTableModel::update()
 
         if (prev_cids.contains(qucid)) continue;
 
-        estats::Check(estats_connection_info_get_pid(&pid, conninfo));
-        estats::Check(estats_connection_info_get_uid(&uid, conninfo));
+        estats::Check(estats_connection_info_get_pid(&pid, ci));
+        estats::Check(estats_connection_info_get_uid(&uid, ci));
 
-        estats::Check(estats_connection_info_get_cmdline(&cmdline, conninfo));
-        estats::Check(estats_connection_info_get_tuple(&tuple, conninfo));
+        estats::Check(estats_connection_info_get_cmdline(&cmdline, ci));
+        estats::Check(estats_connection_info_get_tuple(&tuple, ci));
         estats::Check(estats_connection_tuple_as_strings(&tuple_ascii, &tuple));
 
         QList<QStandardItem*> items;

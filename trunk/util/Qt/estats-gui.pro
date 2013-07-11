@@ -25,3 +25,4 @@ SOURCES += EstatsView.cpp \
 	mainwindow.cpp \
 	var_tablemodel.cpp \
 	varwindow.cpp
+RESOURCES += application.qrc

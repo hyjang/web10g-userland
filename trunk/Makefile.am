@@ -9,7 +9,7 @@ CLEANFILES = estats-config
 m4datadir = $(datadir)/aclocal
 m4data_DATA = estats.m4
 
-EXTRA_DIST = estats-config.in estats.m4
+EXTRA_DIST = estats-config.in estats.m4 libmnl-1.0.3.tar.bz2 web10g-0.7-patches.tar.gz
 
 edit = @STRIP_BEGIN@ \
    sed -e 's,@ESTATS_VERSION\@,$(ESTATS_VERSION),g' \

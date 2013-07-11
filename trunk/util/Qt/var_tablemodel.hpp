@@ -20,9 +20,9 @@ public:
 protected:
     int cid;
     
-    estats_data* newdata;
-    estats_data* olddata;
-    estats_data* deldata;
+    estats_val_data* newdata;
+    estats_val_data* olddata;
+    estats_val_data* deldata;
 
     QMap<quint32, QList<QStandardItem*> > varInfo;
 

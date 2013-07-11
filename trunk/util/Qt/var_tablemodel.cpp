@@ -9,9 +9,9 @@ VarTableModel::VarTableModel(QObject *parent, estats_nl_client *nl_client, int c
     this->cid = cid;
     this->nl_client = nl_client;
 
-    estats::Check(estats_data_new(&newdata));
-    estats::Check(estats_data_new(&olddata));
-    estats::Check(estats_data_new(&deldata));
+    estats::Check(estats_val_data_new(&newdata));
+    estats::Check(estats_val_data_new(&olddata));
+    estats::Check(estats_val_data_new(&deldata));
 
     initialize();
 }
@@ -67,7 +67,7 @@ void VarTableModel::update()
     static int first_update = 1;
 
     quint32 index = 0;
-    estats_data* tmp;
+    estats_val_data* tmp;
  
     estats::Check(estats_read_vars(newdata, cid, nl_client));
 
@@ -85,7 +85,7 @@ void VarTableModel::update()
         free((void*)valstr);
 
         if (!first_update && (type == ESTATS_TYPE_COUNTER32 || type == ESTATS_TYPE_COUNTER64)) {
-            estats::Check(estats_data_delta(deldata, newdata, olddata));
+            estats::Check(estats_val_data_delta(deldata, newdata, olddata));
 
 	    estats::Check(estats_val_as_string(&valstr, &deldata->val[i], valtype));
 
