@@ -17,7 +17,7 @@
 
 /*
  * Array of error code -> string mappings, in the style of sys_errlist.
- * Must be kept in sync with the defined errors in estats.h.
+ * Must be kept in sync with the defined errors in types.h.
  */
 
 static const char* const _estats_sys_errlist[] = {
@@ -31,8 +31,11 @@ static const char* const _estats_sys_errlist[] = {
         NULL, /* from strerror */       /* ESTATS_ERR_LIBC */
 	"End of file",                  /* ESTATS_ERR_EOF */
         "Checksum error",               /* ESTATS_ERR_CHKSUM */
-	"Error while converting value from string", /* ESTATS_ERR_STRING_CONVERSION */
+	"Error while converting value from string", /* ESTATS_ERR_STR_CONV */
 	"Error thrown from genetlink library", /* ESTATS_ERR_GENL */
+	"File I/O error",		/* ESTATS_ERR_FILE */
+	"Access denied",		/* ESTATS_ERR_ACCESS */
+	"Unknown address type",		/* ESTATS_ADDR_TYPE */
         "Error not in error table",     /* ESTATS_ERR_UNKNOWN */
 };
 

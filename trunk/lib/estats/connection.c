@@ -113,7 +113,7 @@ estats_connection_tuple_copy(struct estats_connection_tuple *s1,
 
 	ErrIf(s1 == NULL || s2 == NULL, ESTATS_ERR_INVAL);
 
-	for (i = 0; i < 17; i++) {
+	for (i = 0; i < 16; i++) {
 		s1->rem_addr[i] = s2->rem_addr[i];
 		s1->local_addr[i] = s2->local_addr[i];
 	}
@@ -136,17 +136,17 @@ estats_connection_tuple_as_strings(struct estats_connection_tuple_ascii* tuple_a
 	Chk(Sprintf(NULL, tuple_ascii->local_port, "%u", tuple->local_port));
 	Chk(Sprintf(NULL, tuple_ascii->cid, "%d", tuple->cid));
 
-	if (tuple->rem_addr[16] == ESTATS_ADDRTYPE_IPV4)
+	if (tuple->addr_type == ESTATS_ADDRTYPE_IPV4) {
         	Chk(Inet_ntop(AF_INET, (void*) (tuple->rem_addr), tuple_ascii->rem_addr, INET_ADDRSTRLEN));
-	else if (tuple->rem_addr[16] == ESTATS_ADDRTYPE_IPV6)
-        	Chk(Inet_ntop(AF_INET6, (void*) (tuple->rem_addr), tuple_ascii->rem_addr, INET6_ADDRSTRLEN));
-	else Err(ESTATS_ERR_UNKNOWN);
-
-	if (tuple->local_addr[16] == ESTATS_ADDRTYPE_IPV4)
         	Chk(Inet_ntop(AF_INET, (void*) (tuple->local_addr), tuple_ascii->local_addr, INET_ADDRSTRLEN));
-	else if (tuple->rem_addr[16] == ESTATS_ADDRTYPE_IPV6)
+		Chk(Sprintf(NULL, tuple_ascii->addr_type, "%s", "IPV4"));
+	}
+	else if (tuple->addr_type == ESTATS_ADDRTYPE_IPV6) {
+        	Chk(Inet_ntop(AF_INET6, (void*) (tuple->rem_addr), tuple_ascii->rem_addr, INET6_ADDRSTRLEN));
         	Chk(Inet_ntop(AF_INET6, (void*) (tuple->local_addr), tuple_ascii->local_addr, INET6_ADDRSTRLEN));
-	else Err(ESTATS_ERR_UNKNOWN);
+		Chk(Sprintf(NULL, tuple_ascii->addr_type, "%s", "IPV6"));
+	}
+	else Err(ESTATS_ADDR_TYPE);
 
  Cleanup:
     return err;
@@ -351,9 +351,9 @@ _estats_get_tcp_list(struct list_head* head, const estats_connection_list* conne
 		Chk(estats_connection_info_new(&conninfo));
 
 		conninfo->cid = conn->cid;
-		for (i = 0; i < 17; i++)
+		for (i = 0; i < 16; i++)
 			conninfo->tuple.rem_addr[i] = conn->rem_addr[i];
-		for (i = 0; i < 17; i++)
+		for (i = 0; i < 16; i++)
 			conninfo->tuple.local_addr[i] = conn->local_addr[i];
 		conninfo->tuple.rem_port = conn->rem_port;
 		conninfo->tuple.local_port = conn->local_port;

@@ -34,12 +34,12 @@ AC_LANG([C++])
 AC_PROG_CXX
 
 dnl For Qt
-AX_CXX_COMPILE_STDCXX_11
+#AX_CXX_COMPILE_STDCXX_11
 
 dnl AutoTroll with Qt.
-AT_WITH_QT([], [], [], [want_gui=no], [want_gui=yes])
+#AT_WITH_QT([], [], [], [want_gui=no], [want_gui=yes])
 
-AM_CONDITIONAL([COND_GUI], [test "$want_gui" = yes])
+#AM_CONDITIONAL([COND_GUI], [test "$want_gui" = yes])
 
 AC_ARG_ENABLE(debug,
               AC_HELP_STRING([--enable-debug],

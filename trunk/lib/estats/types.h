@@ -16,6 +16,7 @@
 #ifndef ESTATS_TYPES_H
 #define ESTATS_TYPES_H
 
+#include <linux/types.h>
 #include <estats/list.h>
 
 enum MIB_TABLE {
@@ -66,7 +67,8 @@ typedef enum ESTATS_ERROR {
 	ESTATS_ERR_GENL		= 11,
 	ESTATS_ERR_FILE		= 12,
 	ESTATS_ERR_ACCESS	= 13,
-        ESTATS_ERR_UNKNOWN	= 14,
+	ESTATS_ADDR_TYPE	= 14,
+        ESTATS_ERR_UNKNOWN	= 15,
 } ESTATS_ERROR;
 
 typedef enum ESTATS_EVENT {
@@ -108,10 +110,11 @@ struct estats_timeval {
  */
 
 struct estats_connection_tuple {
-	uint8_t   rem_addr[17];
-	uint8_t   local_addr[17];
+	uint8_t   rem_addr[16];
+	uint8_t   local_addr[16];
 	uint16_t  rem_port;
 	uint16_t  local_port;
+	uint8_t   addr_type;
 	int       cid;
 };
 
@@ -137,14 +140,16 @@ struct estats_connection_tuple_ascii {
 	char local_addr[INET6_ADDRSTRLEN];
 	char rem_port[6];
 	char local_port[6];
+	char addr_type[5];
 	char cid[11];
 };
 
 struct estats_connection {
-	uint8_t   rem_addr[17];
-	uint8_t   local_addr[17];
+	uint8_t   rem_addr[16];
+	uint8_t   local_addr[16];
 	uint16_t  rem_port;
 	uint16_t  local_port;
+	uint8_t   addr_type;
 	int       cid;
 	struct list_node  list;
 };
@@ -353,6 +358,22 @@ typedef enum ESTATS_TUNE_INDEX {
 #define TUNE_INDEX_MAX __TUNE_INDEX_MAX
 
 #define TOTAL_INDEX_MAX PERF_INDEX_MAX+PATH_INDEX_MAX+STACK_INDEX_MAX+APP_INDEX_MAX+TUNE_INDEX_MAX
+
+#if BITS_PER_LONG == 64
+#define DEFAULT_PERF_MASK	(1UL << PERF_INDEX_MAX)-1
+#define DEFAULT_PATH_MASK	(1UL << PATH_INDEX_MAX)-1
+#define DEFAULT_STACK_MASK	(1UL << STACK_INDEX_MAX)-1
+#define DEFAULT_APP_MASK	(1UL << APP_INDEX_MAX)-1
+#define DEFAULT_TUNE_MASK	(1UL << TUNE_INDEX_MAX)-1
+#define DEFAULT_EXTRAS_MASK	(1UL << EXTRAS_INDEX_MAX)-1
+#else
+#define DEFAULT_PERF_MASK	(1ULL << PERF_INDEX_MAX)-1
+#define DEFAULT_PATH_MASK	(1ULL << PATH_INDEX_MAX)-1
+#define DEFAULT_STACK_MASK	(1ULL << STACK_INDEX_MAX)-1
+#define DEFAULT_APP_MASK	(1ULL << APP_INDEX_MAX)-1
+#define DEFAULT_TUNE_MASK	(1ULL << TUNE_INDEX_MAX)-1
+#define DEFAULT_EXTRAS_MASK	(1ULL << EXTRAS_INDEX_MAX)-1
+#endif
 
 #define ARRAYSIZE(x) (sizeof(x) / sizeof(x[0]))
 

@@ -1,26 +1,5 @@
-/*
- * Copyright (c) 2013 The Board of Trustees of the University of Illinois,
- *                    Carnegie Mellon University.
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the MIT License.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the MIT License for more details.
- *
- * You should have received a copy of the MIT License along with this library;
- * if not, see http://opensource.org/licenses/MIT.
- *
- */
-#ifndef ESTATS_NL_H
-#define ESTATS_NL_H
-
-#define DEFAULT_PERF_MASK  0x3ffffffffUL
-#define DEFAULT_PATH_MASK  0x3ffffffUL
-#define DEFAULT_STACK_MASK 0x1ffffffffffUL
-#define DEFAULT_APP_MASK   0xfffUL
-#define DEFAULT_TUNE_MASK  0xfUL
+#ifndef _TCP_ESTATS_NL_H_
+#define _TCP_ESTATS_NL_H_
 
 enum nl_estats_msg_types {
         TCPE_CMD_LIST_CONNS,
@@ -37,11 +16,13 @@ enum nl_estats_attr {
         NLE_ATTR_STACK,
         NLE_ATTR_APP,
         NLE_ATTR_TUNE,
+        NLE_ATTR_EXTRAS,
         NLE_ATTR_PERF_MASK,
         NLE_ATTR_PATH_MASK,
         NLE_ATTR_STACK_MASK,
         NLE_ATTR_APP_MASK,
         NLE_ATTR_TUNE_MASK,
+        NLE_ATTR_EXTRAS_MASK,
         NLE_ATTR_MASK,
         NLE_ATTR_4TUPLE,
 	NLE_ATTR_WRITE,
@@ -56,6 +37,7 @@ enum neattr_4tuple {
         NEA_REM_PORT,
         NEA_LOCAL_ADDR,
         NEA_LOCAL_PORT,
+	NEA_ADDR_TYPE,
         NEA_CID,
         __NEA_4TUPLE_MAX
 };
@@ -68,6 +50,7 @@ enum neattr_mask {
         NEA_STACK_MASK,
         NEA_APP_MASK,
         NEA_TUNE_MASK,
+	NEA_EXTRAS_MASK,
         __NEA_MASK_MAX
 };
 #define NEA_MASK_MAX (__NEA_MASK_MAX - 1)
@@ -88,4 +71,4 @@ enum neattr_time {
 };
 #define NEA_TIME_MAX (__NEA_TIME_MAX - 1)
 
-#endif /* ESTATS_NL_H */
+#endif /* _TCP_ESTATS_NL_H_ */
