@@ -89,10 +89,10 @@ estats_record_read_data(estats_val_data** data, estats_record* record)
 
     Chk(Fread(NULL, &(*data)->tv.sec, 4, 1, record->fp));
     Chk(Fread(NULL, &(*data)->tv.usec, 4, 1, record->fp));
-    for (i =0; i < 17; i++) {
+    for (i =0; i < 16; i++) {
 	    Chk(Fread(NULL, &(*data)->tuple.rem_addr[i], 1, 1, record->fp));
     }
-    for (i =0; i < 17; i++) {
+    for (i =0; i < 16; i++) {
 	    Chk(Fread(NULL, &(*data)->tuple.local_addr[i], 1, 1, record->fp));
     }
     Chk(Fread(NULL, &(*data)->tuple.rem_port, 2, 1, record->fp));
@@ -131,10 +131,10 @@ estats_record_write_data(estats_record* record, estats_val_data* data)
 
     Chk(Fwrite(NULL, &data->tv.sec, 4, 1, record->fp));
     Chk(Fwrite(NULL, &data->tv.usec, 4, 1, record->fp));
-    for (i =0; i < 17; i++) {
+    for (i =0; i < 16; i++) {
 	    Chk(Fwrite(NULL, &data->tuple.rem_addr[i], 1, 1, record->fp));
     }
-    for (i =0; i < 17; i++) {
+    for (i =0; i < 16; i++) {
 	    Chk(Fwrite(NULL, &data->tuple.local_addr[i], 1, 1, record->fp));
     }
     Chk(Fwrite(NULL, &data->tuple.rem_port, 2, 1, record->fp));
