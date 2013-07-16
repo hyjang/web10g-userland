@@ -105,10 +105,6 @@ struct estats_timeval {
 	uint32_t usec;
 };
 
-/*
- * estats_addrtype is sent in *_addr[16], below
- */
-
 struct estats_connection_tuple {
 	uint8_t   rem_addr[16];
 	uint8_t   local_addr[16];
@@ -164,7 +160,7 @@ struct estats_connection_info {
 	ino_t            ino;
 	int              state;
 	int		 cid;
-	ESTATS_ADDRTYPE  addrtype;
+	uint8_t		 addr_type;
 	struct list_node  list;
 };
 
@@ -247,9 +243,11 @@ typedef enum ESTATS_PERF_INDEX {
 	SNDLIMTRANSRWIN,
 	SNDLIMTRANSCWND,
 	SNDLIMTRANSSND,
+	SNDLIMTRANSTSODEFER,
 	SNDLIMTIMERWIN,
 	SNDLIMTIMECWND,
 	SNDLIMTIMESND,
+	SNDLIMTIMETSODEFER,
         __PERF_INDEX_MAX
 } ESTATS_PERF_INDEX;
 #define PERF_INDEX_MAX __PERF_INDEX_MAX
@@ -327,6 +325,8 @@ typedef enum ESTATS_STACK_INDEX {
 	MAXRETXQUEUE,
 	CURREASMQUEUE,
 	MAXREASMQUEUE,
+	EARLYRETRANS,
+	EARLYRETRANSDELAY,
         __STACK_INDEX_MAX
 } ESTATS_STACK_INDEX;
 #define STACK_INDEX_MAX __STACK_INDEX_MAX

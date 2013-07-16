@@ -92,7 +92,8 @@ estats_connection_tuple_compare(int* res,
 
 	*res = 1;
 
-	if ( (s1->rem_port == s2->rem_port) &&
+	if ( (s1->addr_type != s2->addr_type) &&
+		(s1->rem_port == s2->rem_port) &&
         	strcmp((char *)(s1->rem_addr), (char *)(s2->rem_addr)) == 0 &&
          	(s1->local_port == s2->local_port) &&
          	strcmp((char *)(s1->local_addr), (char *)(s2->local_addr)) == 0 ) {
@@ -119,6 +120,7 @@ estats_connection_tuple_copy(struct estats_connection_tuple *s1,
 	}
 	s1->rem_port = s2->rem_port;
 	s1->local_port = s2->local_port;
+	s1->addr_type = s2->addr_type;
 	s1->cid = s2->cid;
 
 Cleanup:
@@ -139,14 +141,18 @@ estats_connection_tuple_as_strings(struct estats_connection_tuple_ascii* tuple_a
 	if (tuple->addr_type == ESTATS_ADDRTYPE_IPV4) {
         	Chk(Inet_ntop(AF_INET, (void*) (tuple->rem_addr), tuple_ascii->rem_addr, INET_ADDRSTRLEN));
         	Chk(Inet_ntop(AF_INET, (void*) (tuple->local_addr), tuple_ascii->local_addr, INET_ADDRSTRLEN));
-		Chk(Sprintf(NULL, tuple_ascii->addr_type, "%s", "IPV4"));
+//		Chk(Sprintf(NULL, tuple_ascii->addr_type, "%s", "IPV4"));
 	}
 	else if (tuple->addr_type == ESTATS_ADDRTYPE_IPV6) {
         	Chk(Inet_ntop(AF_INET6, (void*) (tuple->rem_addr), tuple_ascii->rem_addr, INET6_ADDRSTRLEN));
         	Chk(Inet_ntop(AF_INET6, (void*) (tuple->local_addr), tuple_ascii->local_addr, INET6_ADDRSTRLEN));
-		Chk(Sprintf(NULL, tuple_ascii->addr_type, "%s", "IPV6"));
+//		Chk(Sprintf(NULL, tuple_ascii->addr_type, "%s", "IPV6"));
 	}
-	else Err(ESTATS_ADDR_TYPE);
+	else {
+printf("In tuple_as_strings: %u\n", tuple->addr_type);
+
+		Err(ESTATS_ADDR_TYPE);
+	}
 
  Cleanup:
     return err;
@@ -267,7 +273,7 @@ estats_connection_list_add_info(struct estats_connection_list* connection_list)
                         conninfo->uid = ino_info->uid;
 		       	conninfo->state = ino_info->state;
 			conninfo->cid = tcp_info->cid;
-			conninfo->addrtype = tcp_info->addrtype;
+			conninfo->addr_type = tcp_info->addr_type;
                         conninfo->tuple = tcp_info->tuple;
 			conninfo->ino = ino_info->ino;
 
@@ -282,7 +288,7 @@ estats_connection_list_add_info(struct estats_connection_list* connection_list)
 			conninfo->uid = ino_info->uid;
 		       	conninfo->state = ino_info->state;
 			conninfo->cid = tcp_info->cid;
-			conninfo->addrtype = tcp_info->addrtype;
+			conninfo->addr_type = tcp_info->addr_type;
                         conninfo->tuple = tcp_info->tuple;
 			if (ino_info->ino) conninfo->ino = ino_info->ino;
 			else conninfo->ino = -1;
@@ -298,7 +304,7 @@ estats_connection_list_add_info(struct estats_connection_list* connection_list)
             Chk(estats_connection_info_new(&conninfo));
 
 	    conninfo->cid = tcp_info->cid; 
-	    conninfo->addrtype = tcp_info->addrtype;
+	    conninfo->addr_type = tcp_info->addr_type;
             conninfo->tuple = tcp_info->tuple;
 	    conninfo->pid = -1;
             conninfo->uid = -1;
@@ -357,8 +363,8 @@ _estats_get_tcp_list(struct list_head* head, const estats_connection_list* conne
 			conninfo->tuple.local_addr[i] = conn->local_addr[i];
 		conninfo->tuple.rem_port = conn->rem_port;
 		conninfo->tuple.local_port = conn->local_port;
-		conninfo->addrtype = conn->local_addr[16];
-
+		conninfo->addr_type = conn->addr_type;
+printf("In get_tcp_list: %u\n", conninfo->addr_type);
 		list_add_tail(head, &conninfo->list);
 	}
 
@@ -400,7 +406,7 @@ _estats_get_ino_list(struct list_head* head)
 				(ino_t *) &(conninfo->ino)
 				)) == 7) {
 
-				conninfo->addrtype = ESTATS_ADDRTYPE_IPV4;
+				conninfo->addr_type = ESTATS_ADDRTYPE_IPV4;
 				list_add_tail(head, &conninfo->list);
 			} else {
 				estats_connection_info_free(&conninfo);
@@ -437,7 +443,7 @@ _estats_get_ino_list(struct list_head* head)
 
                 		memcpy(&(conninfo->tuple.rem_addr), &in6.s6_addr, 16);
 
-				conninfo->addrtype = ESTATS_ADDRTYPE_IPV6;
+				conninfo->addr_type = ESTATS_ADDRTYPE_IPV6;
 				list_add_tail(head, &conninfo->list);
 			} else {
 				estats_connection_info_free(&conninfo);

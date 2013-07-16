@@ -33,7 +33,7 @@ static int parse_table_cb(const struct nlattr *attr, void *data)
 	int j;
 
 	if (mnl_attr_type_valid(attr, max_index[tblnum]) < 0) {
-		dbgprintf("mnl_attr_type_valid");
+		dbgprintf("mnl_attr_type_valid max_index[tblnum]\n");
 		return MNL_CB_ERROR;
 	}
 
@@ -43,26 +43,26 @@ static int parse_table_cb(const struct nlattr *attr, void *data)
 
 	case ESTATS_UNSIGNED8:
 		if (mnl_attr_validate(attr, MNL_TYPE_U8) < 0) {
-			dbgprintf("mnl_attr_validate");
+			dbgprintf("mnl_attr_validate ESTATS_UNSIGNED8\n");
 			return MNL_CB_ERROR;
 		}
 		break;
 	case ESTATS_UNSIGNED16:
 		if (mnl_attr_validate(attr, MNL_TYPE_U16) < 0) {
-			dbgprintf("mnl_attr_validate");
+			dbgprintf("mnl_attr_validate ESTATS_UNSIGNED16\n");
 			return MNL_CB_ERROR;
 		}
 		break;
 	case ESTATS_UNSIGNED32:
 	case ESTATS_SIGNED32:
 		if (mnl_attr_validate(attr, MNL_TYPE_U32) < 0) {
-			dbgprintf("mnl_attr_validate");
+			dbgprintf("mnl_attr_validate ESTATS_(UN)SIGNED32\n");
 			return MNL_CB_ERROR;
 		}
 		break;
 	case ESTATS_UNSIGNED64:
 		if (mnl_attr_validate(attr, MNL_TYPE_U64) < 0) {
-			dbgprintf("mnl_attr_validate");
+			dbgprintf("mnl_attr_validate ESTATS_UNSIGNED64\n");
 			return MNL_CB_ERROR;
 		}
 		break;
@@ -148,20 +148,20 @@ static int parse_time_cb(const struct nlattr *attr, void *data)
 	int type = mnl_attr_get_type(attr);
 
 	if (mnl_attr_type_valid(attr, NEA_TIME_MAX) < 0) {
-		perror("mnl_attr_type_valid");
+		perror("mnl_attr_type_valid NEA_TIME_MAX\n");
 		return MNL_CB_ERROR;
 	}
 
 	switch(type) {
 	case NEA_TIME_SEC:
 		if (mnl_attr_validate(attr, MNL_TYPE_U32) < 0) {
-			perror("mnl_attr_validate");
+			perror("mnl_attr_validate NEA_TIME_SEC\n");
 			return MNL_CB_ERROR;
 		}
 		break;
 	case NEA_TIME_USEC:
 		if (mnl_attr_validate(attr, MNL_TYPE_U32) < 0) {
-			perror("mnl_attr_validate");
+			perror("mnl_attr_validate NEA_TIME_USEC\n");
 			return MNL_CB_ERROR;
 		}
 		break;
@@ -196,32 +196,32 @@ static int parse_4tuple_cb(const struct nlattr *attr, void *data)
         int type = mnl_attr_get_type(attr);
 
 	if (mnl_attr_type_valid(attr, NEA_4TUPLE_MAX) < 0) {
-		perror("mnl_attr_type_valid");
+		perror("mnl_attr_type_valid NEA_4TUPLE_MAX\n");
 		return MNL_CB_ERROR;
 	}
 
 	switch(type) {
 	case NEA_REM_ADDR:
 		if (mnl_attr_validate(attr, MNL_TYPE_BINARY) < 0) {
-			perror("mnl_attr_validate");
+			perror("mnl_attr_validate MNL_TYPE_BINARY\n");
 			return MNL_CB_ERROR;
 		}
 		break;
 	case NEA_LOCAL_ADDR:
 		if (mnl_attr_validate(attr, MNL_TYPE_BINARY) < 0) {
-			perror("mnl_attr_validate");
+			perror("mnl_attr_validate MNL_TYPE_BINARY\n");
 			return MNL_CB_ERROR;
 		}
 		break;
 	case NEA_REM_PORT:
 		if (mnl_attr_validate(attr, MNL_TYPE_U16) < 0) {
-			perror("mnl_attr_validate");
+			perror("mnl_attr_validate MNL_TYPE_U16\n");
 			return MNL_CB_ERROR;
 		}
 		break;
 	case NEA_LOCAL_PORT:
 		if (mnl_attr_validate(attr, MNL_TYPE_U16) < 0) {
-			perror("mnl_attr_validate");
+			perror("mnl_attr_validate MNL_TYPE_U16\n");
 			return MNL_CB_ERROR;
 		}
 		break;
@@ -262,6 +262,7 @@ static void parse_4tuple_list(struct nlattr *nested, struct estats_connection_li
 	if (tb[NEA_ADDR_TYPE]) {
 		addr_type = mnl_attr_get_u8(tb[NEA_ADDR_TYPE]);
 	}
+	else printf("No addrtype from kernel\n");
         if (tb[NEA_CID]) {
                 cid = mnl_attr_get_u32(tb[NEA_CID]);
         }
@@ -270,6 +271,7 @@ static void parse_4tuple_list(struct nlattr *nested, struct estats_connection_li
 		conn_head = &(cli->connection_head);
 
 		cp = malloc(sizeof(estats_connection));
+		memset((void*) cp, 0, sizeof(estats_connection_list));
 		if (cp == NULL) {
 			dbgprintf("No mem; malloc failed");
 			return;
@@ -331,43 +333,43 @@ static int data_attr_cb(const struct nlattr *attr, void *data)
         switch(type) {
         case NLE_ATTR_4TUPLE:
                 if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
-                        dbgprintf("mnl_attr_validate NLE_ATTR_4TUPLE");
+                        dbgprintf("mnl_attr_validate NLE_ATTR_4TUPLE\n");
                         return MNL_CB_ERROR;
                 }
                 break;
         case NLE_ATTR_TIME:
                 if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
-                        dbgprintf("mnl_attr_validate NLE_ATTR_4TUPLE");
+                        dbgprintf("mnl_attr_validate NLE_ATTR_TIME\n");
                         return MNL_CB_ERROR;
                 }
                 break;
         case NLE_ATTR_PERF:
                 if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
-                        dbgprintf("mnl_attr_validate NLE_ATTR_PERF");
+                        dbgprintf("mnl_attr_validate NLE_ATTR_PERF\n");
                         return MNL_CB_ERROR;
                 }
                 break;
         case NLE_ATTR_PATH:
                 if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
-                        dbgprintf("mnl_attr_validate NLE_ATTR_PATH");
+                        dbgprintf("mnl_attr_validate NLE_ATTR_PATH\n");
                         return MNL_CB_ERROR;
                 }
                 break;
         case NLE_ATTR_STACK:
                 if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
-                        dbgprintf("mnl_attr_validate NLE_ATTR_STACK");
+                        dbgprintf("mnl_attr_validate NLE_ATTR_STACK\n");
                         return MNL_CB_ERROR;
                 }
                 break;
         case NLE_ATTR_APP:
                 if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
-                        dbgprintf("mnl_attr_validate NLE_ATTR_APP");
+                        dbgprintf("mnl_attr_validate NLE_ATTR_APP\n");
                         return MNL_CB_ERROR;
                 }
                 break;
         case NLE_ATTR_TUNE:
                 if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
-                        dbgprintf("mnl_attr_validate NLE_ATTR_TUNE");
+                        dbgprintf("mnl_attr_validate NLE_ATTR_TUNE\n");
                         return MNL_CB_ERROR;
                 }
                 break;
