@@ -535,7 +535,9 @@ estats_read_vars(struct estats_val_data* data, int cid, const estats_nl_client* 
 		Err2(ESTATS_ERR_GENL, "mnl_cb_run error");
 	}
 
-	Chk(estats_connection_tuple_copy(&data->tuple, &stat_tuple));
+//	Chk(estats_connection_tuple_copy(&data->tuple, &stat_tuple));
+
+	data->tuple = stat_tuple;
 
 	data->tv.sec = stat_tv.sec;
 	data->tv.usec = stat_tv.usec;

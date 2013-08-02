@@ -92,7 +92,7 @@ estats_connection_tuple_compare(int* res,
 
 	*res = 1;
 
-	if ( (s1->addr_type != s2->addr_type) &&
+	if ( (s1->addr_type == s2->addr_type) &&
 		(s1->rem_port == s2->rem_port) &&
         	strcmp((char *)(s1->rem_addr), (char *)(s2->rem_addr)) == 0 &&
          	(s1->local_port == s2->local_port) &&
@@ -103,28 +103,6 @@ estats_connection_tuple_compare(int* res,
 
 Cleanup:
 	return err;
-}
-
-struct estats_error*
-estats_connection_tuple_copy(struct estats_connection_tuple *s1,
-			const struct estats_connection_tuple *s2)
-{
-	estats_error* err = NULL;
-	int i;
-
-	ErrIf(s1 == NULL || s2 == NULL, ESTATS_ERR_INVAL);
-
-	for (i = 0; i < 16; i++) {
-		s1->rem_addr[i] = s2->rem_addr[i];
-		s1->local_addr[i] = s2->local_addr[i];
-	}
-	s1->rem_port = s2->rem_port;
-	s1->local_port = s2->local_port;
-	s1->addr_type = s2->addr_type;
-	s1->cid = s2->cid;
-
-Cleanup:
-    return err;
 }
 
 struct estats_error*
@@ -141,20 +119,14 @@ estats_connection_tuple_as_strings(struct estats_connection_tuple_ascii* tuple_a
 	if (tuple->addr_type == ESTATS_ADDRTYPE_IPV4) {
         	Chk(Inet_ntop(AF_INET, (void*) (tuple->rem_addr), tuple_ascii->rem_addr, INET_ADDRSTRLEN));
         	Chk(Inet_ntop(AF_INET, (void*) (tuple->local_addr), tuple_ascii->local_addr, INET_ADDRSTRLEN));
-//		Chk(Sprintf(NULL, tuple_ascii->addr_type, "%s", "IPV4"));
 	}
 	else if (tuple->addr_type == ESTATS_ADDRTYPE_IPV6) {
         	Chk(Inet_ntop(AF_INET6, (void*) (tuple->rem_addr), tuple_ascii->rem_addr, INET6_ADDRSTRLEN));
         	Chk(Inet_ntop(AF_INET6, (void*) (tuple->local_addr), tuple_ascii->local_addr, INET6_ADDRSTRLEN));
-//		Chk(Sprintf(NULL, tuple_ascii->addr_type, "%s", "IPV6"));
 	}
-	else {
-printf("In tuple_as_strings: %u\n", tuple->addr_type);
+	else Err(ESTATS_ERR_ADDR_TYPE); 
 
-		Err(ESTATS_ADDR_TYPE);
-	}
-
- Cleanup:
+Cleanup:
     return err;
 }
 
@@ -247,64 +219,58 @@ estats_connection_list_add_info(struct estats_connection_list* connection_list)
 	Chk(_estats_get_ino_list(&ino_head));
 	Chk(_estats_get_pid_list(&pid_head));
 
-    list_for_each(&tcp_head, tcp_info, list) {
- 
-	tcp_entry = 0;
+	estats_list_for_each(&tcp_head, tcp_info, list) {
+	    tcp_entry = 0;
+	    
+	    estats_list_for_each(&ino_head, ino_info, list) {
+		Chk(estats_connection_tuple_compare(&dif, &ino_info->tuple,
+						    &tcp_info->tuple));
+		if (!dif) {
+		    tcp_entry = 1;
+		    fd_entry = 0;
 
-	list_for_each(&ino_head, ino_info, list) {
+		    estats_list_for_each(&pid_head, pid_info, list) {
+			if((ino_info->ino) &&
+			    (pid_info->ino == ino_info->ino)) { //add entry 
+			    fd_entry = 1;
+			    
+			    Chk(estats_connection_info_new(&conninfo));
+			    
+			    conninfo->pid = pid_info->pid;
+			    strncpy(conninfo->cmdline, pid_info->cmdline,
+				    sizeof(pid_info->cmdline));
+			    conninfo->uid = ino_info->uid;
+			    conninfo->state = ino_info->state;
+			    conninfo->cid = tcp_info->cid;
+			    conninfo->tuple = tcp_info->tuple;
+			    conninfo->ino = ino_info->ino;
 
-	    Chk(estats_connection_tuple_compare(&dif, &ino_info->tuple, &tcp_info->tuple));
-
-	    if (!dif) {
-	       	tcp_entry = 1;
-	       	fd_entry = 0;
-
-		    list_for_each(&pid_head, pid_info, list) {
-
-		    if((ino_info->ino) && (pid_info->ino == ino_info->ino)) { //then create entry 
-			fd_entry = 1;
-
-                        Chk(estats_connection_info_new(&conninfo));
-
-			conninfo->pid = pid_info->pid; 
-
-                        strncpy(conninfo->cmdline, pid_info->cmdline, sizeof(pid_info->cmdline));
-
-                        conninfo->uid = ino_info->uid;
-		       	conninfo->state = ino_info->state;
-			conninfo->cid = tcp_info->cid;
-			conninfo->addr_type = tcp_info->addr_type;
-                        conninfo->tuple = tcp_info->tuple;
-			conninfo->ino = ino_info->ino;
-
-                        list_add_tail(head, &conninfo->list);
+			    list_add_tail(head, &conninfo->list);
+			}
 		    }
-	       	}
-	       	if(!fd_entry) { // add entry w/out cmdline 
-
-                        Chk(estats_connection_info_new(&conninfo));
+		    
+		    if(!fd_entry) { // add entry w/out cmdline
+			Chk(estats_connection_info_new(&conninfo));
 
 			conninfo->pid = -1;
 			conninfo->uid = ino_info->uid;
-		       	conninfo->state = ino_info->state;
+			conninfo->state = ino_info->state;
 			conninfo->cid = tcp_info->cid;
-			conninfo->addr_type = tcp_info->addr_type;
-                        conninfo->tuple = tcp_info->tuple;
+			conninfo->tuple = tcp_info->tuple;
 			if (ino_info->ino) conninfo->ino = ino_info->ino;
 			else conninfo->ino = -1;
-                        
-                        strncpy(conninfo->cmdline, "\0", 1);
-                        
-                        list_add_tail(head, &conninfo->list);
-	       	}
+			strncpy(conninfo->cmdline, "\0", 1);
+			
+			list_add_tail(head, &conninfo->list);
+		    }
+		}
 	    }
-	}
-	if(!tcp_entry) { // then connection has vanished; add residual cid info
+	    
+	    if(!tcp_entry) { // then connection has vanished;
+			     // add residual cid info
+	    Chk(estats_connection_info_new(&conninfo));
 
-            Chk(estats_connection_info_new(&conninfo));
-
-	    conninfo->cid = tcp_info->cid; 
-	    conninfo->addr_type = tcp_info->addr_type;
+	    conninfo->cid = tcp_info->cid;
             conninfo->tuple = tcp_info->tuple;
 	    conninfo->pid = -1;
             conninfo->uid = -1;
@@ -314,27 +280,27 @@ estats_connection_list_add_info(struct estats_connection_list* connection_list)
             strncpy(conninfo->cmdline, "\0", 1);
 
             list_add_tail(head, &conninfo->list);
-       	}
-    }
+	    }
+	}
 
 Cleanup:
 
-    list_for_each_safe(&tcp_head, tcp_info, tmp, list) {
-	list_del(&tcp_info->list);
-	free(tcp_info);
-    }
+	list_for_each_safe(&tcp_head, tcp_info, tmp, list) {
+		list_del(&tcp_info->list);
+		free(tcp_info);
+	}
 
-    list_for_each_safe(&ino_head, ino_info, tmp, list) {
-	list_del(&ino_info->list);
-	free(ino_info);
-    }
+	list_for_each_safe(&ino_head, ino_info, tmp, list) {
+		list_del(&ino_info->list);
+		free(ino_info);
+	}
 
-    list_for_each_safe(&pid_head, pid_info, tmp, list) {
-	list_del(&pid_info->list);
-	free(pid_info);
-    }
-
-    return err;
+	list_for_each_safe(&pid_head, pid_info, tmp, list) {
+		list_del(&pid_info->list);
+		free(pid_info);
+	}
+	
+	return err;
 }
 
 static struct estats_error*
@@ -351,7 +317,7 @@ _estats_get_tcp_list(struct list_head* head, const estats_connection_list* conne
 	
 	connection_head = &connection_list->connection_head;
 
-	list_for_each(connection_head, conn, list) {
+	estats_list_for_each(connection_head, conn, list) {
 
 		estats_connection_info* conninfo;
 		Chk(estats_connection_info_new(&conninfo));
@@ -363,8 +329,8 @@ _estats_get_tcp_list(struct list_head* head, const estats_connection_list* conne
 			conninfo->tuple.local_addr[i] = conn->local_addr[i];
 		conninfo->tuple.rem_port = conn->rem_port;
 		conninfo->tuple.local_port = conn->local_port;
-		conninfo->addr_type = conn->addr_type;
-printf("In get_tcp_list: %u\n", conninfo->addr_type);
+		conninfo->tuple.addr_type = conn->addr_type;
+
 		list_add_tail(head, &conninfo->list);
 	}
 
@@ -406,8 +372,9 @@ _estats_get_ino_list(struct list_head* head)
 				(ino_t *) &(conninfo->ino)
 				)) == 7) {
 
-				conninfo->addr_type = ESTATS_ADDRTYPE_IPV4;
+				conninfo->tuple.addr_type = ESTATS_ADDRTYPE_IPV4;
 				list_add_tail(head, &conninfo->list);
+
 			} else {
 				estats_connection_info_free(&conninfo);
 			}
@@ -443,8 +410,9 @@ _estats_get_ino_list(struct list_head* head)
 
                 		memcpy(&(conninfo->tuple.rem_addr), &in6.s6_addr, 16);
 
-				conninfo->addr_type = ESTATS_ADDRTYPE_IPV6;
+				conninfo->tuple.addr_type = ESTATS_ADDRTYPE_IPV6;
 				list_add_tail(head, &conninfo->list);
+
 			} else {
 				estats_connection_info_free(&conninfo);
 	    		}
@@ -500,7 +468,9 @@ _estats_get_pid_list(struct list_head* head)
        	
 	                Chk(estats_connection_info_new(&conninfo));
 
-			if (sscanf(buf, "Name: %16s\n", conninfo->cmdline) != 1) {
+			if (sscanf(buf, "Name: %16s\n",
+				   conninfo->cmdline) != 1) {
+
 			    estats_connection_info_free(&conninfo);
 			    goto FileCleanup;
 		       	}

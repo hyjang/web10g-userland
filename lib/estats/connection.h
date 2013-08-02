@@ -24,10 +24,6 @@ struct	estats_error* estats_connection_info_new( struct estats_connection_info**
 
 void	estats_connection_info_free( struct estats_connection_info** );
 
-struct estats_error* estats_connection_tuple_copy(
-			struct estats_connection_tuple*,
-                        const struct estats_connection_tuple*);
-
 struct	estats_error* estats_connection_tuple_as_strings(
 				struct estats_connection_tuple_ascii*,
 				struct estats_connection_tuple* );

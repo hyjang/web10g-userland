@@ -19,16 +19,6 @@
 #include <linux/types.h>
 #include <estats/list.h>
 
-enum MIB_TABLE {
-        PERF_TABLE,
-        PATH_TABLE,
-        STACK_TABLE,
-        APP_TABLE,
-        TUNE_TABLE,
-        __MAX_TABLE
-};
-#define MAX_TABLE __MAX_TABLE
-
 typedef enum ESTATS_VAL_TYPE {
         ESTATS_UNSIGNED64,
         ESTATS_UNSIGNED32,
@@ -52,6 +42,11 @@ typedef enum ESTATS_TYPE {
 	ESTATS_TYPE_OCTET,
 } ESTATS_TYPE;
 
+typedef enum ESTATS_ADDRTYPE {
+	ESTATS_ADDRTYPE_IPV4 = 1,
+	ESTATS_ADDRTYPE_IPV6 = 2
+} ESTATS_ADDRTYPE;
+
 typedef enum ESTATS_ERROR {
         ESTATS_ERR_SUCCESS	= 0,
         ESTATS_ERR_ACK		= 1,
@@ -67,20 +62,73 @@ typedef enum ESTATS_ERROR {
 	ESTATS_ERR_GENL		= 11,
 	ESTATS_ERR_FILE		= 12,
 	ESTATS_ERR_ACCESS	= 13,
-	ESTATS_ADDR_TYPE	= 14,
+	ESTATS_ERR_ADDR_TYPE	= 14,
         ESTATS_ERR_UNKNOWN	= 15,
 } ESTATS_ERROR;
 
 typedef enum ESTATS_EVENT {
         ESTATS_NEW_CONN           = 0,
 } ESTATS_EVENT;
-
+/*
 union estats_union {
 	uint64_t uv64;
 	uint32_t uv32;
 	int32_t  sv32;
 	uint16_t uv16;
 	uint8_t  uv8;
+};
+*/
+
+struct estats_connection_tuple {
+	uint8_t   rem_addr[16];
+	uint8_t   local_addr[16];
+	uint16_t  rem_port;
+	uint16_t  local_port;
+	uint8_t   addr_type;
+	int       cid;
+};
+
+struct estats_connection {
+	uint8_t   rem_addr[16];
+	uint8_t   local_addr[16];
+	uint16_t  rem_port;
+	uint16_t  local_port;
+	uint8_t   addr_type;
+	int       cid;
+	struct list_node  list;
+};
+
+struct estats_connection_tuple_ascii {
+	char rem_addr[INET6_ADDRSTRLEN];
+	char local_addr[INET6_ADDRSTRLEN];
+	char rem_port[6];
+	char local_port[6];
+	char addr_type[5];
+	char cid[11];
+};
+
+#define ESTATS_CMDLINE_LEN_MAX 16
+
+struct estats_connection_info {
+	struct estats_connection_tuple  tuple;
+	char             cmdline[ESTATS_CMDLINE_LEN_MAX];
+	pid_t            pid;
+	uid_t            uid;
+	ino_t            ino;
+	int              state;
+	int		 cid;
+	struct list_node  list;
+};
+
+struct estats_connection_list {
+	struct list_head  connection_head;
+	struct list_head  connection_info_head;
+};
+
+struct estats_var {
+        char *name;
+        enum ESTATS_VAL_TYPE valtype;
+	enum ESTATS_TYPE type;
 };
 
 struct estats_val {
@@ -94,10 +142,11 @@ struct estats_val {
         };
 };
 
-struct estats_var {
-        char *name;
-        enum ESTATS_VAL_TYPE valtype;
-	enum ESTATS_TYPE type;
+struct estats_var_data {
+	int num_tables;
+	int *max_index;
+	int length;
+	struct estats_var var[0];
 };
 
 struct estats_timeval {
@@ -105,71 +154,13 @@ struct estats_timeval {
 	uint32_t usec;
 };
 
-struct estats_connection_tuple {
-	uint8_t   rem_addr[16];
-	uint8_t   local_addr[16];
-	uint16_t  rem_port;
-	uint16_t  local_port;
-	uint8_t   addr_type;
-	int       cid;
-};
-
 struct estats_val_data {
 	struct estats_connection_tuple tuple;
 	struct estats_timeval tv;
+	struct estats_var_data *var_data;
 	int length;
 	struct estats_val val[0];
 };
-
-struct estats_mask {
-	uint64_t masks[MAX_TABLE];
-	int      if_mask[MAX_TABLE];
-};
-
-typedef enum ESTATS_ADDRTYPE {
-	ESTATS_ADDRTYPE_IPV4 = 1,
-	ESTATS_ADDRTYPE_IPV6 = 2
-} ESTATS_ADDRTYPE;
-
-struct estats_connection_tuple_ascii {
-	char rem_addr[INET6_ADDRSTRLEN];
-	char local_addr[INET6_ADDRSTRLEN];
-	char rem_port[6];
-	char local_port[6];
-	char addr_type[5];
-	char cid[11];
-};
-
-struct estats_connection {
-	uint8_t   rem_addr[16];
-	uint8_t   local_addr[16];
-	uint16_t  rem_port;
-	uint16_t  local_port;
-	uint8_t   addr_type;
-	int       cid;
-	struct list_node  list;
-};
-
-#define ESTATS_CMDLINE_LEN_MAX 16
-
-struct estats_connection_info {
-	struct estats_connection_tuple  tuple;
-	char             cmdline[ESTATS_CMDLINE_LEN_MAX];
-	pid_t            pid;
-	uid_t            uid;
-	ino_t            ino;
-	int              state;
-	int		 cid;
-	uint8_t		 addr_type;
-	struct list_node  list;
-};
-
-struct estats_connection_list {
-	struct list_head  connection_head;
-	struct list_head  connection_info_head;
-};
-
-typedef void (*estats_connection_func)(struct estats_connection_tuple*);
 
 typedef enum ESTATS_RECORD_MODE {
 	R_MODE,
@@ -184,7 +175,20 @@ struct estats_record {
 	ESTATS_RECORD_MODE  mode;
 };
 
-extern int max_index[];
+enum MIB_TABLE {
+        PERF_TABLE,
+        PATH_TABLE,
+        STACK_TABLE,
+        APP_TABLE,
+        TUNE_TABLE,
+        __MAX_TABLE
+};
+#define MAX_TABLE __MAX_TABLE
+
+struct estats_mask {
+	uint64_t masks[MAX_TABLE];
+	int      if_mask[MAX_TABLE];
+};
 
 extern struct estats_var estats_var_array[];
 
@@ -197,183 +201,6 @@ typedef struct estats_nl_client		estats_nl_client;
 typedef struct estats_record		estats_record;
 typedef struct estats_timeval		estats_timeval;
 typedef struct estats_val		estats_val;
-
-static inline int single_index(int inda, int indb)
-{
-	int ret = indb;
-	int i;
-
-	if (inda > 0) {
-		for (i = 0; i < inda; i++) {
-			ret += max_index[i];
-		}
-	}
-	return ret;
-}
-
-typedef enum ESTATS_PERF_INDEX {
-	SEGSOUT                 = 0,
-	DATASEGSOUT,
-	DATAOCTETSOUT,
-	HCDATAOCTETSOUT, 
-	SEGSRETRANS,
-	OCTETSRETRANS,
-	SEGSIN,
-	DATASEGSIN,
-	DATAOCTETSIN,
-	HCDATAOCTETSIN, 
-	ELAPSEDSECS,
-	ELAPSEDMICROSECS,
-	STARTTIMESTAMP,
-	CURMSS,
-	PIPESIZE,
-	MAXPIPESIZE,
-	SMOOTHEDRTT,
-	CURRTO,
-	CONGSIGNALS,
-	CURCWND,
-	CURSSTHRESH,
-	TIMEOUTS,
-	CURRWINSENT,
-	MAXRWINSENT,
-	ZERORWINSENT,
-	CURRWINRCVD,
-	MAXRWINRCVD,
-	ZERORWINRCVD,
-	SNDLIMTRANSRWIN,
-	SNDLIMTRANSCWND,
-	SNDLIMTRANSSND,
-	SNDLIMTRANSTSODEFER,
-	SNDLIMTIMERWIN,
-	SNDLIMTIMECWND,
-	SNDLIMTIMESND,
-	SNDLIMTIMETSODEFER,
-        __PERF_INDEX_MAX
-} ESTATS_PERF_INDEX;
-#define PERF_INDEX_MAX __PERF_INDEX_MAX
-
-typedef enum ESTATS_PATH_INDEX {
-        RETRANTHRESH,
-        NONRECOVDAEPISODES,
-        SUMOCTETSREORDERED,
-        NONRECOVDA,
-        SAMPLERTT,
-        RTTVAR,
-        MAXRTT,
-        MINRTT,
-        SUMRTT,
-        HCSUMRTT,
-        COUNTRTT,
-        MAXRTO,
-        MINRTO,
-        IPTTL,
-        IPTOSIN,
-        IPTOSOUT,
-        PRECONGSUMCWND,
-        PRECONGSUMRTT,
-        POSTCONGSUMRTT,
-        POSTCONGCOUNTRTT,
-        ECNSIGNALS,
-        DUPACKEPISODES,
-        RCVRTT,
-        DUPACKSOUT,
-        CERCVD,
-        ECESENT,
-        __PATH_INDEX_MAX
-} ESTATS_PATH_INDEX;
-#define PATH_INDEX_MAX __PATH_INDEX_MAX
-
-typedef enum ESTATS_STACK_INDEX {
-	ACTIVEOPEN,
-	MSSSENT,
-	MSSRCVD,
-	WINSCALESENT,
-	WINSCALERCVD,
-	TIMESTAMPS,
-	ECN,
-	WILLSENDSACK,
-	WILLUSESACK,
-	STATE,
-	NAGLE,
-	MAXSSCWND,
-	MAXCACWND,
-	MAXSSTHRESH,
-	MINSSTHRESH,
-	INRECOVERY,
-	DUPACKSIN,
-	SPURIOUSFRDETECTED,
-	SPURIOUSRTODETECTED,
-	SOFTERRORS,
-	SOFTERRORREASON,
-	SLOWSTART,
-	CONGAVOID,
-	OTHERREDUCTIONS,
-	CONGOVERCOUNT,
-	FASTRETRAN,
-	SUBSEQUENTTIMEOUTS,
-	CURTIMEOUTCOUNT,
-	ABRUPTTIMEOUTS,
-	SACKSRCVD,
-	SACKBLOCKSRCVD,
-	SENDSTALL,
-	DSACKDUPS,
-	MAXMSS,
-	MINMSS,
-	SNDINITIAL,
-	RECINITIAL,
-	CURRETXQUEUE,
-	MAXRETXQUEUE,
-	CURREASMQUEUE,
-	MAXREASMQUEUE,
-	EARLYRETRANS,
-	EARLYRETRANSDELAY,
-        __STACK_INDEX_MAX
-} ESTATS_STACK_INDEX;
-#define STACK_INDEX_MAX __STACK_INDEX_MAX
-
-typedef enum ESTATS_APP_INDEX {
-        SNDUNA,
-        SNDNXT,
-        SNDMAX,
-        THRUOCTETSACKED,
-        HCTHRUOCTETSACKED, 
-        RCVNXT,
-        THRUOCTETSRECEIVED,
-        HCTHRUOCTETSRECEIVED, 
-        CURAPPWQUEUE,
-        MAXAPPWQUEUE,
-        CURAPPRQUEUE,
-        MAXAPPRQUEUE,
-        __APP_INDEX_MAX
-} ESTATS_APP_INDEX;
-#define APP_INDEX_MAX __APP_INDEX_MAX
-
-typedef enum ESTATS_TUNE_INDEX { 
-        LIMCWND,
-        LIMSSTHRESH,
-        LIMRWIN,
-        LIMMSS,
-        __TUNE_INDEX_MAX
-} ESTATS_TUNE_INDEX;
-#define TUNE_INDEX_MAX __TUNE_INDEX_MAX
-
-#define TOTAL_INDEX_MAX PERF_INDEX_MAX+PATH_INDEX_MAX+STACK_INDEX_MAX+APP_INDEX_MAX+TUNE_INDEX_MAX
-
-#if BITS_PER_LONG == 64
-#define DEFAULT_PERF_MASK	(1UL << PERF_INDEX_MAX)-1
-#define DEFAULT_PATH_MASK	(1UL << PATH_INDEX_MAX)-1
-#define DEFAULT_STACK_MASK	(1UL << STACK_INDEX_MAX)-1
-#define DEFAULT_APP_MASK	(1UL << APP_INDEX_MAX)-1
-#define DEFAULT_TUNE_MASK	(1UL << TUNE_INDEX_MAX)-1
-#define DEFAULT_EXTRAS_MASK	(1UL << EXTRAS_INDEX_MAX)-1
-#else
-#define DEFAULT_PERF_MASK	(1ULL << PERF_INDEX_MAX)-1
-#define DEFAULT_PATH_MASK	(1ULL << PATH_INDEX_MAX)-1
-#define DEFAULT_STACK_MASK	(1ULL << STACK_INDEX_MAX)-1
-#define DEFAULT_APP_MASK	(1ULL << APP_INDEX_MAX)-1
-#define DEFAULT_TUNE_MASK	(1ULL << TUNE_INDEX_MAX)-1
-#define DEFAULT_EXTRAS_MASK	(1ULL << EXTRAS_INDEX_MAX)-1
-#endif
 
 #define ARRAYSIZE(x) (sizeof(x) / sizeof(x[0]))
 

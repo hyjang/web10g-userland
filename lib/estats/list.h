@@ -25,15 +25,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#ifndef LIST_H
-#define LIST_H
+#ifndef ESTATS_LIST_H
+#define ESTATS_LIST_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include <stdbool.h>
-#include <assert.h>
+//#include <assert.h>
 #include <stddef.h>
 
 /**
@@ -235,9 +235,6 @@ static inline bool list_empty(const struct list_head *h)
  * Note that this leaves @n in an undefined state; it can be added to
  * another list, but not deleted again.
  *
- * See also:
- *	list_del_from()
- *
  * Example:
  *	list_del(&child->list);
  *	parent->num_children--;
@@ -247,40 +244,8 @@ static inline void list_del(struct list_node *n)
 	(void)list_debug_node(n);
 	n->next->prev = n->prev;
 	n->prev->next = n->next;
-#ifdef DEBUG
-	/* Catch use-after-del. */
+
 	n->next = n->prev = NULL;
-#endif
-}
-
-/**
- * list_del_from - delete an entry from a known linked list.
- * @h: the list_head the node is in.
- * @n: the list_node to delete from the list.
- *
- * This explicitly indicates which list a node is expected to be in,
- * which is better documentation and can catch more bugs.
- *
- * See also: list_del()
- *
- * Example:
- *	list_del_from(&parent->children, &child->list);
- *	parent->num_children--;
- */
-static inline void list_del_from(struct list_head *h, struct list_node *n)
-{
-#ifdef DEBUG
-	{
-		/* Thorough check: make sure it was in list! */
-		struct list_node *i;
-		for (i = h->n.next; i != n; i = i->next)
-			assert(i != &h->n);
-	}
-#endif /* DEBUG */
-
-	/* Quick test that catches a surprising number of bugs. */
-	assert(!list_empty(h));
-	list_del(n);
 }
 
 /**
@@ -390,7 +355,10 @@ static inline const void *list_tail_(const struct list_head *h, size_t off)
 #define list_for_each(h, i, member)					\
 	list_for_each_off(h, i, list_off_var_(i, member))
 
-#define estats_list_for_each(h, i, member) list_for_each(h, i, member)
+#define estats_list_for_each(h, i, member)				\
+	for (i = container_of_var(list_debug(h)->n.next, i, member);	\
+	     &i->member != &(h)->n;					\
+	     i = container_of_var(i->member.next, i, member))
 /**
  * list_for_each_rev - iterate through a list backwards.
  * @h: the list_head
@@ -569,9 +537,6 @@ static inline void list_prepend_list(struct list_head *to,
 #define list_del_off(n, off)                    \
 	list_del(list_node_from_off_((n), (off)))
 
-#define list_del_from_off(h, n, off)			\
-	list_del_from(h, list_node_from_off_((n), (off)))
-
 /* Offset helper functions so we only single-evaluate. */
 static inline void *list_node_to_off_(struct list_node *node, size_t off)
 {
@@ -664,6 +629,7 @@ static inline struct list_node *list_node_from_off_(void *ptr, size_t off)
  *		return i;
  *	}
  */
+/*
 #if HAVE_TYPEOF
 #define container_of_var(member_ptr, container_var, member) \
 	container_of(member_ptr, typeof(*container_var), member)
@@ -672,6 +638,12 @@ static inline struct list_node *list_node_from_off_(void *ptr, size_t off)
 	((void *)((char *)(member_ptr)	-			\
 		  container_off_var(container_var, member)))
 #endif
+*/
+
+
+#define container_of_var(member_ptr, container_var, member) \
+	container_of(member_ptr, typeof(*container_var), member)
+
 
 /**
  * container_off_var - get offset of a field in enclosing structure
@@ -683,6 +655,7 @@ static inline struct list_node *list_node_from_off_(void *ptr, size_t off)
  * structure memory layout.
  *
  */
+/*
 #if HAVE_TYPEOF
 #define container_off_var(var, member)		\
 	container_off(typeof(*var), member)
@@ -690,6 +663,9 @@ static inline struct list_node *list_node_from_off_(void *ptr, size_t off)
 #define container_off_var(var, member)			\
 	((char *)&(var)->member - (char *)(var))
 #endif
+*/
+#define container_off_var(var, member)		\
+	container_off(typeof(*var), member)
 
 /**
  * check_type - issue a warning or build failure if type is not correct.
@@ -733,6 +709,7 @@ static inline struct list_node *list_node_from_off_(void *ptr, size_t off)
  *		 ((encl_type *)						\
  *		  ((char *)(mbr_ptr) - offsetof(enclosing_type, mbr))))
  */
+/*
 #if HAVE_TYPEOF
 #define check_type(expr, type)			\
 	((typeof(expr) *)0 != (type *)0)
@@ -740,13 +717,22 @@ static inline struct list_node *list_node_from_off_(void *ptr, size_t off)
 #define check_types_match(expr1, expr2)		\
 	((typeof(expr1) *)0 != (typeof(expr2) *)0)
 #else
+*/
 /* Without typeof, we can only test the sizes. */
+/*
 #define check_type(expr, type)					\
 	BUILD_ASSERT_OR_ZERO(sizeof(expr) == sizeof(type))
 
 #define check_types_match(expr1, expr2)				\
 	BUILD_ASSERT_OR_ZERO(sizeof(expr1) == sizeof(expr2))
-#endif /* HAVE_TYPEOF */
+#endif
+*/
+
+#define check_type(expr, type)			\
+	((typeof(expr) *)0 != (type *)0)
+
+#define check_types_match(expr1, expr2)		\
+	((typeof(expr1) *)0 != (typeof(expr2) *)0)
 
 /**
  * BUILD_ASSERT - assert a build-time dependency.
@@ -787,4 +773,4 @@ static inline struct list_node *list_node_from_off_(void *ptr, size_t off)
 }
 #endif
 
-#endif /* LIST_H */
+#endif /* ESTATS_LIST_H */

@@ -35,7 +35,7 @@ static const char* const _estats_sys_errlist[] = {
 	"Error thrown from genetlink library", /* ESTATS_ERR_GENL */
 	"File I/O error",		/* ESTATS_ERR_FILE */
 	"Access denied",		/* ESTATS_ERR_ACCESS */
-	"Unknown address type",		/* ESTATS_ADDR_TYPE */
+	"Unknown address type",		/* ESTATS_ERR_ADDR_TYPE */
         "Error not in error table",     /* ESTATS_ERR_UNKNOWN */
 };
 

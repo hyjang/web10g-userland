@@ -5,12 +5,13 @@ estats_pub_h_sources = \
 	connection.h \
 	data.h \
 	genl.h \
-	tcp_estats_nl.h \
-	nl-client.h \
-	val.h \
 	list.h \
+	mib_var.h \
+	nl-client.h \
 	record.h \
-	types.h
+	tcp_estats_nl.h \
+	types.h \
+	val.h
 
 # Header files not installed
 estats_pri_h_sources = \

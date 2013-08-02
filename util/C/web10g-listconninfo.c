@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 	struct estats_nl_client* cl = NULL;
 	struct estats_connection_list* clist = NULL;
 	struct estats_connection_info* ci;
-	struct estats_connection_tuple_ascii tuple_ascii;
+	struct estats_connection_tuple_ascii tuple_ascii = { 0 };
 
 	Chk(estats_nl_client_init(&cl));
 	Chk(estats_connection_list_new(&clist));
@@ -35,8 +35,10 @@ int main(int argc, char **argv)
 
 	Chk(estats_connection_list_add_info(clist));
 
-	list_for_each(&clist->connection_info_head, ci, list) {
-	    Chk(estats_connection_tuple_as_strings(&tuple_ascii, &ci->tuple)); 
+	estats_list_for_each(&clist->connection_info_head, ci, list) {
+	    Chk(estats_connection_tuple_as_strings(&tuple_ascii, &ci->tuple));
+//	    if (estats_connection_tuple_as_strings(&tuple_ascii, &ci->tuple))
+//		    continue;
 
 	    if ((int)(ci->pid) == -1) {
 		if ((int)(ci->uid) == -1) {
