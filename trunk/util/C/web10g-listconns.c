@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 
 	Chk(estats_list_conns(clist, cl));
 
-	list_for_each(&clist->connection_head, cp, list) {
+	estats_list_for_each(&clist->connection_head, cp, list) {
 		struct estats_connection_tuple* ct = (struct estats_connection_tuple*) cp;
 		Chk(estats_connection_tuple_as_strings(&asc, ct));
 

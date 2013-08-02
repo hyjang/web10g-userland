@@ -7,6 +7,7 @@ LIBESTATS_LDADDS = @STRIP_BEGIN@ \
 AM_CPPFLAGS = @STRIP_BEGIN@ \
 	$(LIBMNL_CFLAGS) \
 	-I$(top_srcdir)/lib \
+	-D_GNU_SOURCE \
 	@STRIP_END@
 
 web10g_deltavars_SOURCES = web10g-deltavars.c scripts.h

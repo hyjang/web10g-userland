@@ -26,6 +26,7 @@ estats_val_data_new(struct estats_val_data** data)
 
 	Chk(Malloc((void**) data, sizeof(estats_val_data) + len*sizeof(struct estats_val)));
 	memset((void*) *data, 0, sizeof(estats_val_data) + len*sizeof(struct estats_val));
+	(*data)->var_data = NULL;
 	(*data)->length = len;
 
  Cleanup:
