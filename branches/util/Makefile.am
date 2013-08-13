@@ -1,0 +1,4 @@
+if COND_GUI
+    MAYBE_GUI = Qt
+endif
+SUBDIRS = C $(MAYBE_GUI)
