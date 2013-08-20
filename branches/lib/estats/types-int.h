@@ -19,6 +19,7 @@
 struct estats_nl_client {
         struct mnl_socket *mnl_sock;
         int fam_id;
+	struct estats_var_data *var_data;
 	struct estats_mask mask;
 };
 

@@ -16,6 +16,7 @@
 #ifndef ESTATS_GENL_H
 #define ESTATS_GENL_H
 
+struct estats_error* estats_get_mib(estats_var_data**, const estats_nl_client*);
 struct estats_error* estats_list_conns(estats_connection_list*, const estats_nl_client*);
 struct estats_error* estats_read_vars(struct estats_val_data*, int /*cid*/, const estats_nl_client*);
 struct estats_error* estats_write_var(const char* /*name*/, uint32_t /*val*/, int /*cid*/, const estats_nl_client*);
