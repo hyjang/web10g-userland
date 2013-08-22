@@ -2,6 +2,7 @@
 #define _TCP_ESTATS_NL_H_
 
 enum nl_estats_msg_types {
+	TCPE_CMD_INIT,
         TCPE_CMD_LIST_CONNS,
         TCPE_CMD_READ_ALL,
         TCPE_CMD_READ_VARS,
@@ -11,18 +12,20 @@ enum nl_estats_msg_types {
 
 enum nl_estats_attr {
         NLE_ATTR_UNSPEC,
-        NLE_ATTR_PERF,
-        NLE_ATTR_PATH,
-        NLE_ATTR_STACK,
-        NLE_ATTR_APP,
-        NLE_ATTR_TUNE,
-        NLE_ATTR_EXTRAS,
-        NLE_ATTR_PERF_MASK,
-        NLE_ATTR_PATH_MASK,
-        NLE_ATTR_STACK_MASK,
-        NLE_ATTR_APP_MASK,
-        NLE_ATTR_TUNE_MASK,
-        NLE_ATTR_EXTRAS_MASK,
+	NLE_ATTR_NUM_TABLES,
+	NLE_ATTR_NUM_VARS,
+        NLE_ATTR_PERF_VARS,
+        NLE_ATTR_PATH_VARS,
+        NLE_ATTR_STACK_VARS,
+        NLE_ATTR_APP_VARS,
+        NLE_ATTR_TUNE_VARS,
+        NLE_ATTR_EXTRAS_VARS,
+        NLE_ATTR_PERF_VALS,
+        NLE_ATTR_PATH_VALS,
+        NLE_ATTR_STACK_VALS,
+        NLE_ATTR_APP_VALS,
+        NLE_ATTR_TUNE_VALS,
+        NLE_ATTR_EXTRAS_VALS,
         NLE_ATTR_MASK,
         NLE_ATTR_4TUPLE,
 	NLE_ATTR_WRITE,
@@ -31,8 +34,16 @@ enum nl_estats_attr {
 };
 #define NLE_ATTR_MAX (__NLE_ATTR_MAX - 1)
 
+enum neattr_vars {
+        NEA_UNSPEC_VAR,
+        NEA_VAR_NAME,
+        NEA_VAR_TYPE,
+        __NEA_VAR_MAX
+};
+#define NEA_VAR_MAX (__NEA_VAR_MAX - 1)
+
 enum neattr_4tuple {
-        NEA_UNSPEC,
+        NEA_UNSPEC_TUPLE,
         NEA_REM_ADDR,
         NEA_REM_PORT,
         NEA_LOCAL_ADDR,
