@@ -18,7 +18,7 @@
 void usage(void)
 {
         printf("\n\n");
-        printf("deltavars cid [-m mask]\n");
+        printf("deltavars cid [-m mask] [-s]\n");
         printf("\n  Repeatedly list deltas of values for connection specified\n");
         printf("  by cid (which can be obtained with \"listconns\"),\n");
 	printf("  with optional mask given as a 5-tuple of hex\n");
@@ -48,6 +48,8 @@ int main(int argc, char **argv)
 	estats_val_data* data_ptr;
 	int cid, i, j; 
 	int opt, option;
+	int header_flag = 0;
+	int stdout_flag = 0;
 
 	char *strmask = NULL;
         const char delim = ',';
@@ -70,7 +72,7 @@ int main(int argc, char **argv)
                 exit(EXIT_FAILURE);
         }	
 
-        while ((opt = getopt(argc, argv, "hm:")) != -1) {
+        while ((opt = getopt(argc, argv, "hm:s")) != -1) {
                 switch (opt) {
 		case 'h':
 			usage();
@@ -94,6 +96,9 @@ int main(int argc, char **argv)
                         option = opt;
 
                         break;
+		case 's':
+			stdout_flag = 1;
+			break;
                 default:
                         exit(EXIT_FAILURE);
                         break;
@@ -122,10 +127,24 @@ int main(int argc, char **argv)
 
 	Chk(estats_val_data_delta(data_delta, data_new, data_prev));
 
+	if ((stdout_flag) && (!header_flag)) {
+		printf("sec\tusec\t");
+		for (j = 0; j < data_new->length; j++) {
+			if (data_new->val[j].masked) continue;
+			printf("%s\t", estats_var_array[j].name);
+		}
+		printf("\n");
+		header_flag = 1;
+	}
+
+	if (!stdout_flag)
 	printf("Timestamp sec: %u, usec: %u\n", data_new->tv.sec, data_new->tv.usec);
+	else
+		printf("%u\t%u\t", data_new->tv.sec, data_new->tv.usec);
 
 	for (j = 0; j < data_new->length; j++) {
 
+		if (!stdout_flag) {
 		if (j == 0)
 			printf("\n\n Perf Table\n\n");
 		if (j == PERF_INDEX_MAX)
@@ -136,36 +155,72 @@ int main(int argc, char **argv)
 			printf("\n\n App Table\n\n");
 		if (j == PERF_INDEX_MAX+PATH_INDEX_MAX+STACK_INDEX_MAX+APP_INDEX_MAX)
 			printf("\n\n Tune Table\n\n");
-
+		}
 
 		if (data_new->val[j].masked) continue;
 
-		if (estats_var_array[i].type == (ESTATS_TYPE_COUNTER32 || ESTATS_TYPE_COUNTER64)) data_ptr = data_delta;
-		else data_ptr = data_new;
+		switch(estats_var_array[j].type) {
+		case ESTATS_TYPE_COUNTER32:
+		case ESTATS_TYPE_COUNTER64:
+			data_ptr = data_delta;
+			break;
+		default:
+			data_ptr = data_new;
+			break;
+		}
 
+		/* I could have had an if in each case statement but that seems like i
+		 *  it would have been much more expensive - cjr
+		 */
+		if (!stdout_flag) {
 		switch(estats_var_array[j].valtype) {
 			case ESTATS_UNSIGNED64:
-				printf("%s=%"PRIu64"\n", estats_var_array[j].name, data_ptr->val[j].uv64);
+				printf("%-20s= %"PRIu64"\n", estats_var_array[j].name, data_ptr->val[j].uv64);
                 		break;
                         case ESTATS_UNSIGNED32:
-				printf("%s=%"PRIu32"\n", estats_var_array[j].name, data_ptr->val[j].uv32);
+				printf("%-20s= %"PRIu32"\n", estats_var_array[j].name, data_ptr->val[j].uv32);
 				break;
                         case ESTATS_SIGNED32:
-				printf("%s=%"PRId32"\n", estats_var_array[j].name, data_ptr->val[j].sv32);
+				printf("%-20s= %"PRId32"\n", estats_var_array[j].name, data_ptr->val[j].sv32);
                         	break;
                         case ESTATS_UNSIGNED16:
-				printf("%s=%"PRIu16"\n", estats_var_array[j].name, data_ptr->val[j].uv16);
+				printf("%-20s= %"PRIu16"\n", estats_var_array[j].name, data_ptr->val[j].uv16);
                         	break;
                         case ESTATS_UNSIGNED8:
-				printf("%s=%"PRIu8"\n", estats_var_array[j].name, data_ptr->val[j].uv8);
+				printf("%-20s= %"PRIu8"\n", estats_var_array[j].name, data_ptr->val[j].uv8);
+                        	break;
+                        default:
+                                break;
+			}
+		} else {
+			switch(estats_var_array[j].valtype) {
+                        case ESTATS_UNSIGNED64:
+                                printf("%"PRIu64"\t", data_ptr->val[j].uv64);
+                                break;
+                        case ESTATS_UNSIGNED32:
+                                printf("%"PRIu32"\t", data_ptr->val[j].uv32);
+                                break;
+                        case ESTATS_SIGNED32:
+                                printf("%"PRId32"\t", data_ptr->val[j].sv32);
+                                break;
+                        case ESTATS_UNSIGNED16:
+                                printf("%"PRIu16"\t", data_ptr->val[j].uv16);
+                                break;
+                        case ESTATS_UNSIGNED8:
+                                printf("%"PRIu8"\t", data_ptr->val[j].uv8);
                         	break;
                         default:
                                 break;
                 }
 	}
 
+	}
+
 	sleep(1);
+	if (!stdout_flag) 
 	printf("\n\n");
+	else
+		printf("\n");
 	}
 
  Cleanup:
@@ -174,7 +229,6 @@ int main(int argc, char **argv)
 	estats_val_data_free(&data_new);
 	estats_val_data_free(&data_prev);
 	estats_nl_client_destroy(&cl);
-
 
 	if (err != NULL) {
 		PRINT_AND_FREE(err);
