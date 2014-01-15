@@ -153,6 +153,7 @@ int main(int argc, char **argv)
 	estats_nl_client_destroy(&cl);
 
 	if (err != NULL) {
+		printf("wtf\n");
 		PRINT_AND_FREE(err);
 		return EXIT_FAILURE;
 	}

@@ -327,8 +327,10 @@ static int data_attr_cb(const struct nlattr *attr, void *data)
         const struct nlattr **tb = data;
         int type = mnl_attr_get_type(attr);
 
-        if (mnl_attr_type_valid(attr, NLE_ATTR_MAX) < 0)
-                return MNL_CB_OK;
+        if (mnl_attr_type_valid(attr, NLE_ATTR_MAX) < 0) {
+		perror("mnl_attr_type_valid NEA_ATTR_MAX\n");
+                return MNL_CB_ERROR;
+	}
 
         switch(type) {
         case NLE_ATTR_4TUPLE:
@@ -484,7 +486,8 @@ estats_read_vars(struct estats_val_data* data, int cid, const estats_nl_client* 
 	struct nlattr *attrp;
 
 	unsigned int seq, portid;
-
+printf("cid: %d\n", cid);
+if (cl == NULL) printf("cl is NULL; wtf\n");
 	ErrIf(cid < 1 || cl == NULL, ESTATS_ERR_INVAL);
 
 	nl = cl->mnl_sock;
@@ -523,19 +526,19 @@ estats_read_vars(struct estats_val_data* data, int cid, const estats_nl_client* 
 	Err2If(ret == -1, ESTATS_ERR_GENL, "mnl_socket_send");
 
 	ret = mnl_socket_recvfrom(nl, buf, sizeof(buf));
+printf("ret is %d\n", ret);
 	while (ret > 0) {
 		ret = mnl_cb_run(buf, ret, seq, portid, data_cb, NULL);
 		if (ret <= 0)
 			break;
 		ret = mnl_socket_recvfrom(nl, buf, sizeof(buf));
 	}
+printf("ret is %d\n", ret);
 
 	if (ret == -1) {
 		printf("%s\n", strerror(errno));
 		Err2(ESTATS_ERR_GENL, "mnl_cb_run error");
 	}
-
-//	Chk(estats_connection_tuple_copy(&data->tuple, &stat_tuple));
 
 	data->tuple = stat_tuple;
 
