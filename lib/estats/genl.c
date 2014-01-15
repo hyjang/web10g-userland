@@ -327,8 +327,10 @@ static int data_attr_cb(const struct nlattr *attr, void *data)
         const struct nlattr **tb = data;
         int type = mnl_attr_get_type(attr);
 
-        if (mnl_attr_type_valid(attr, NLE_ATTR_MAX) < 0)
-                return MNL_CB_OK;
+        if (mnl_attr_type_valid(attr, NLE_ATTR_MAX) < 0) {
+		perror("mnl_attr_type_valid NEA_ATTR_MAX\n");
+                return MNL_CB_ERROR;
+	}
 
         switch(type) {
         case NLE_ATTR_4TUPLE:
@@ -534,8 +536,6 @@ estats_read_vars(struct estats_val_data* data, int cid, const estats_nl_client* 
 		printf("%s\n", strerror(errno));
 		Err2(ESTATS_ERR_GENL, "mnl_cb_run error");
 	}
-
-//	Chk(estats_connection_tuple_copy(&data->tuple, &stat_tuple));
 
 	data->tuple = stat_tuple;
 
