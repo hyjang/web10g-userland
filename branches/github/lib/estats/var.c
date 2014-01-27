@@ -15,7 +15,7 @@
  */
 #include <estats/estats-int.h>
 
-#define ESTATSVAR(_name_,_valtype_,_type_) (struct estats_var) { .name = #_name_, .valtype = ESTATS_##_valtype_, .type = ESTATS_TYPE_##_type_ }
+#define ESTATSVAR(_name_,_valtype_,_type_) (struct estats_var) { .name = #_name_, .valtype = ESTATS_##_valtype_, .type = TCP_ESTATS_VAR_##_type_ }
 
 int max_index[MAX_TABLE] = { PERF_INDEX_MAX, PATH_INDEX_MAX, STACK_INDEX_MAX, APP_INDEX_MAX, TUNE_INDEX_MAX };
 
@@ -32,7 +32,7 @@ struct estats_var estats_var_array[TOTAL_INDEX_MAX] = {
         ESTATSVAR(HCDataOctetsIn,UNSIGNED64,COUNTER64),
         ESTATSVAR(ElapsedSecs,UNSIGNED32,COUNTER32),
         ESTATSVAR(ElapsedMicroSecs,UNSIGNED32,COUNTER32),
-        ESTATSVAR(StartTimeStamp,UNSIGNED8,TIME_TICKS),
+        ESTATSVAR(StartTimeStamp,UNSIGNED8,DATEANDTIME),
         ESTATSVAR(CurMSS,UNSIGNED32,GAUGE32),
         ESTATSVAR(PipeSize,UNSIGNED32,GAUGE32),
         ESTATSVAR(MaxPipeSize,UNSIGNED32,GAUGE32),
