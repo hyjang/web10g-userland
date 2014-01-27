@@ -160,8 +160,8 @@ int main(int argc, char **argv)
 		if (data_new->val[j].masked) continue;
 
 		switch(estats_var_array[j].type) {
-		case ESTATS_TYPE_COUNTER32:
-		case ESTATS_TYPE_COUNTER64:
+		case TCP_ESTATS_VAR_COUNTER32:
+		case TCP_ESTATS_VAR_COUNTER64:
 			data_ptr = data_delta;
 			break;
 		default:
