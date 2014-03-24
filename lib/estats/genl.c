@@ -322,15 +322,69 @@ static void parse_4tuple(struct nlattr *nested)
         }
 }
 
+static int data_attr_cb_get_mib(const struct nlattr *attr, void *data)
+{
+        const struct nlattr **tb = data;
+        int type = mnl_attr_get_type(attr);
+
+        if (mnl_attr_type_valid(attr, NLE_ATTR_MAX) < 0)
+                return MNL_CB_OK;
+
+        switch(type) {
+        case NLE_ATTR_NUM_TABLES:
+                if (mnl_attr_validate(attr, MNL_TYPE_U32) < 0) {
+                        dbgprintf("mnl_attr_validate NLE_ATTR_NUM_TABLES\n");
+                        return MNL_CB_ERROR;
+                }
+                break;
+        case NLE_ATTR_NUM_VARS:
+                if (mnl_attr_validate(attr, MNL_TYPE_U32) < 0) {
+                        dbgprintf("mnl_attr_validate NLE_ATTR_NUM_VARS\n");
+                        return MNL_CB_ERROR;
+                }
+                break;
+        case NLE_ATTR_PERF_VARS:
+                if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
+                        dbgprintf("mnl_attr_validate NLE_ATTR_PERF_VARS\n");
+                        return MNL_CB_ERROR;
+                }
+                break;
+        case NLE_ATTR_PATH_VARS:
+                if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
+                        dbgprintf("mnl_attr_validate NLE_ATTR_PATH_VARS\n");
+                        return MNL_CB_ERROR;
+                }
+                break;
+        case NLE_ATTR_STACK_VARS:
+                if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
+                        dbgprintf("mnl_attr_validate NLE_ATTR_STACK_VARS\n");
+                        return MNL_CB_ERROR;
+                }
+                break;
+        case NLE_ATTR_APP_VARS:
+                if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
+                        dbgprintf("mnl_attr_validate NLE_ATTR_APP_VARS\n");
+                        return MNL_CB_ERROR;
+                }
+                break;
+        case NLE_ATTR_TUNE_VARS:
+                if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
+                        dbgprintf("mnl_attr_validate NLE_ATTR_TUNE_VARS\n");
+                        return MNL_CB_ERROR;
+                }
+                break;
+        }
+        tb[type] = attr;
+        return MNL_CB_OK;
+}
+
 static int data_attr_cb(const struct nlattr *attr, void *data)
 {
         const struct nlattr **tb = data;
         int type = mnl_attr_get_type(attr);
 
-        if (mnl_attr_type_valid(attr, NLE_ATTR_MAX) < 0) {
-		perror("mnl_attr_type_valid NEA_ATTR_MAX\n");
-                return MNL_CB_ERROR;
-	}
+        if (mnl_attr_type_valid(attr, NLE_ATTR_MAX) < 0)
+                return MNL_CB_OK;
 
         switch(type) {
         case NLE_ATTR_4TUPLE:
@@ -345,39 +399,215 @@ static int data_attr_cb(const struct nlattr *attr, void *data)
                         return MNL_CB_ERROR;
                 }
                 break;
-        case NLE_ATTR_PERF:
+        case NLE_ATTR_PERF_VALS:
                 if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
-                        dbgprintf("mnl_attr_validate NLE_ATTR_PERF\n");
+                        dbgprintf("mnl_attr_validate NLE_ATTR_PERF_VALS\n");
                         return MNL_CB_ERROR;
                 }
                 break;
-        case NLE_ATTR_PATH:
+        case NLE_ATTR_PATH_VALS:
                 if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
-                        dbgprintf("mnl_attr_validate NLE_ATTR_PATH\n");
+                        dbgprintf("mnl_attr_validate NLE_ATTR_PATH_VALS\n");
                         return MNL_CB_ERROR;
                 }
                 break;
-        case NLE_ATTR_STACK:
+        case NLE_ATTR_STACK_VALS:
                 if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
-                        dbgprintf("mnl_attr_validate NLE_ATTR_STACK\n");
+                        dbgprintf("mnl_attr_validate NLE_ATTR_STACK_VALS\n");
                         return MNL_CB_ERROR;
                 }
                 break;
-        case NLE_ATTR_APP:
+        case NLE_ATTR_APP_VALS:
                 if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
-                        dbgprintf("mnl_attr_validate NLE_ATTR_APP\n");
+                        dbgprintf("mnl_attr_validate NLE_ATTR_APP_VALS\n");
                         return MNL_CB_ERROR;
                 }
                 break;
-        case NLE_ATTR_TUNE:
+        case NLE_ATTR_TUNE_VALS:
                 if (mnl_attr_validate(attr, MNL_TYPE_NESTED) < 0) {
-                        dbgprintf("mnl_attr_validate NLE_ATTR_TUNE\n");
+                        dbgprintf("mnl_attr_validate NLE_ATTR_TUNE_VALS\n");
                         return MNL_CB_ERROR;
                 }
                 break;
         }
         tb[type] = attr;
         return MNL_CB_OK;
+}
+
+static int data_cb_parse_table_vars(const struct nlattr *attr, void *data)
+{
+	int type = mnl_attr_get_type(attr);
+	int i = 0;
+	int j = 0;
+
+	switch(type) {
+	case MNL_TYPE_STRING:
+		printf("string number %d\n", ++i);
+		break;
+	case MNL_TYPE_U32:
+		printf("estats_type number %d\n", ++j);
+		break;
+	default:
+		printf("done\n");
+		break;
+	}
+
+	return 0;
+}
+
+static int data_cb_get_mib(const struct nlmsghdr *nlh, void *data)
+{
+	struct nlattr *tb[NLE_ATTR_MAX+1] = {};
+	struct nlattr *attr, *attr_var;
+	struct genlmsghdr *genl = mnl_nlmsg_get_payload(nlh);;
+	struct estats_var_data **var_data = (struct estats_var_data **) data;
+	int len, num_tables, i;
+	int k = 0;
+
+	mnl_attr_parse(nlh, sizeof(*genl), data_attr_cb_get_mib, tb);
+
+	if (tb[NLE_ATTR_NUM_TABLES] && tb[NLE_ATTR_NUM_VARS]) {
+		len = mnl_attr_get_u32(tb[NLE_ATTR_NUM_VARS]);
+
+		*var_data = malloc(sizeof(struct estats_var_data) + len*sizeof(struct estats_var));
+		(*var_data)->length = len;
+
+		num_tables = mnl_attr_get_u32(tb[NLE_ATTR_NUM_TABLES]);
+		(*var_data)->num_tables = num_tables;
+		
+		(*var_data)->max_index = malloc(num_tables*sizeof(int)); 
+	}
+	else return MNL_CB_ERROR;
+
+	if (!tb[NLE_ATTR_PERF_VARS] || !tb[NLE_ATTR_PATH_VARS] ||
+		!tb[NLE_ATTR_STACK_VARS] || !tb[NLE_ATTR_APP_VARS] ||
+		!tb[NLE_ATTR_TUNE_VARS] || !tb[NLE_ATTR_EXTRAS_VARS]) {
+
+		dbgprintf("missing table\n");
+		return MNL_CB_ERROR; 
+	}
+
+	i = 0;
+	mnl_attr_for_each_nested(attr, tb[NLE_ATTR_PERF_VARS]) {
+		if (mnl_attr_get_type(attr) == NLE_ATTR_VAR) {
+		mnl_attr_for_each_nested(attr_var, attr) {
+			if (mnl_attr_get_type(attr_var) == NEA_VAR_NAME) {
+				const char *tmp = mnl_attr_get_str(attr_var);
+				(*var_data)->var[k].name = strdup(tmp);
+			}
+			if (mnl_attr_get_type(attr_var) == NEA_VAR_TYPE) {
+				(*var_data)->var[k].type = mnl_attr_get_u32(attr_var);
+			}
+		}
+		}
+		else dbgprintf("no data for NLE_ATTR_PERF_VARS %d\n", k); 
+
+		i++;
+		k++;
+	}
+	(*var_data)->max_index[PERF_TABLE] = i;
+	
+	i = 0;
+	mnl_attr_for_each_nested(attr, tb[NLE_ATTR_PATH_VARS]) {
+		if (mnl_attr_get_type(attr) == NLE_ATTR_VAR) {
+		mnl_attr_for_each_nested(attr_var, attr) {
+			if (mnl_attr_get_type(attr_var) == NEA_VAR_NAME) {
+				const char *tmp = mnl_attr_get_str(attr_var);
+				(*var_data)->var[k].name = strdup(tmp);
+			}
+			if (mnl_attr_get_type(attr_var) == NEA_VAR_TYPE) {
+				(*var_data)->var[k].type = mnl_attr_get_u32(attr_var);
+			}
+		}
+		}
+		else dbgprintf("no data for NLE_ATTR_PATH_VARS %d\n", k); 
+
+		i++;
+		k++;
+	}
+	(*var_data)->max_index[PATH_TABLE] = i;
+
+	i = 0;
+	mnl_attr_for_each_nested(attr, tb[NLE_ATTR_STACK_VARS]) {
+		if (mnl_attr_get_type(attr) == NLE_ATTR_VAR) {
+		mnl_attr_for_each_nested(attr_var, attr) {
+			if (mnl_attr_get_type(attr_var) == NEA_VAR_NAME) {
+				const char *tmp = mnl_attr_get_str(attr_var);
+				(*var_data)->var[k].name = strdup(tmp);
+			}
+			if (mnl_attr_get_type(attr_var) == NEA_VAR_TYPE) {
+				(*var_data)->var[k].type = mnl_attr_get_u32(attr_var);
+			}
+		}
+		}
+		else dbgprintf("no data for NLE_ATTR_STACK_VARS %d\n", k); 
+
+		i++;
+		k++;
+	}
+	(*var_data)->max_index[STACK_TABLE] = i;
+
+	i = 0;
+	mnl_attr_for_each_nested(attr, tb[NLE_ATTR_APP_VARS]) {
+		if (mnl_attr_get_type(attr) == NLE_ATTR_VAR) {
+		mnl_attr_for_each_nested(attr_var, attr) {
+			if (mnl_attr_get_type(attr_var) == NEA_VAR_NAME) {
+				const char *tmp = mnl_attr_get_str(attr_var);
+				(*var_data)->var[k].name = strdup(tmp);
+			}
+			if (mnl_attr_get_type(attr_var) == NEA_VAR_TYPE) {
+				(*var_data)->var[k].type = mnl_attr_get_u32(attr_var);
+			}
+		}
+		}
+		else dbgprintf("no data for NLE_ATTR_APP_VARS %d\n", k); 
+
+		i++;
+		k++;
+	}
+	(*var_data)->max_index[APP_TABLE] = i;
+	
+	i = 0;
+	mnl_attr_for_each_nested(attr, tb[NLE_ATTR_TUNE_VARS]) {
+		if (mnl_attr_get_type(attr) == NLE_ATTR_VAR) {
+		mnl_attr_for_each_nested(attr_var, attr) {
+			if (mnl_attr_get_type(attr_var) == NEA_VAR_NAME) {
+				const char *tmp = mnl_attr_get_str(attr_var);
+				(*var_data)->var[k].name = strdup(tmp);
+			}
+			if (mnl_attr_get_type(attr_var) == NEA_VAR_TYPE) {
+				(*var_data)->var[k].type = mnl_attr_get_u32(attr_var);
+			}
+		}
+		}
+		else dbgprintf("no data for NLE_ATTR_TUNE_VARS %d\n", k); 
+
+		i++;
+		k++;
+	}
+	(*var_data)->max_index[TUNE_TABLE] = i;
+	
+	i = 0;
+	mnl_attr_for_each_nested(attr, tb[NLE_ATTR_EXTRAS_VARS]) {
+		if (mnl_attr_get_type(attr) == NLE_ATTR_VAR) {
+		mnl_attr_for_each_nested(attr_var, attr) {
+			if (mnl_attr_get_type(attr_var) == NEA_VAR_NAME) {
+				const char *tmp = mnl_attr_get_str(attr_var);
+				(*var_data)->var[k].name = strdup(tmp);
+			}
+			if (mnl_attr_get_type(attr_var) == NEA_VAR_TYPE) {
+				(*var_data)->var[k].type = mnl_attr_get_u32(attr_var);
+			}
+		}
+		}
+		else dbgprintf("no data for NLE_ATTR_EXTRAS_VARS %d\n", k); 
+
+		i++;
+		k++;
+	}
+	(*var_data)->max_index[EXTRAS_TABLE] = i;
+	
+	return MNL_CB_OK;
 }
 
 static int data_cb(const struct nlmsghdr *nlh, void *data)
@@ -398,18 +628,64 @@ static int data_cb(const struct nlmsghdr *nlh, void *data)
 	}
         if (tb[NLE_ATTR_TIME])
                 parse_time(tb[NLE_ATTR_TIME], NULL);
-        if (tb[NLE_ATTR_PERF])
-                parse_table(tb[NLE_ATTR_PERF], PERF_TABLE);
-        if (tb[NLE_ATTR_PATH])
-                parse_table(tb[NLE_ATTR_PATH], PATH_TABLE);
-        if (tb[NLE_ATTR_STACK])
-                parse_table(tb[NLE_ATTR_STACK], STACK_TABLE);
-        if (tb[NLE_ATTR_APP])
-                parse_table(tb[NLE_ATTR_APP], APP_TABLE);
-        if (tb[NLE_ATTR_TUNE])
-                parse_table(tb[NLE_ATTR_TUNE], TUNE_TABLE);
+        if (tb[NLE_ATTR_PERF_VALS])
+                parse_table(tb[NLE_ATTR_PERF_VALS], PERF_TABLE);
+        if (tb[NLE_ATTR_PATH_VALS])
+                parse_table(tb[NLE_ATTR_PATH_VALS], PATH_TABLE);
+        if (tb[NLE_ATTR_STACK_VALS])
+                parse_table(tb[NLE_ATTR_STACK_VALS], STACK_TABLE);
+        if (tb[NLE_ATTR_APP_VALS])
+                parse_table(tb[NLE_ATTR_APP_VALS], APP_TABLE);
+        if (tb[NLE_ATTR_TUNE_VALS])
+                parse_table(tb[NLE_ATTR_TUNE_VALS], TUNE_TABLE);
  
         return MNL_CB_OK;
+}
+
+struct estats_error*
+estats_get_mib(estats_var_data** var_data, const estats_nl_client* cl)
+{
+	estats_error* err = NULL;
+	struct mnl_socket* nl;
+	int fam_id; 
+	int ret;
+
+	char buf[MNL_SOCKET_BUFFER_SIZE];
+	struct nlmsghdr *nlh;
+	struct genlmsghdr *genl;
+	unsigned int seq, portid;
+
+	ErrIf(var_data == NULL || cl == NULL, ESTATS_ERR_INVAL);
+
+	nl = cl->mnl_sock;
+	fam_id = cl->fam_id;
+	portid = mnl_socket_get_portid(nl);
+
+	nlh = mnl_nlmsg_put_header(buf);
+	nlh->nlmsg_type = fam_id;
+	nlh->nlmsg_flags = NLM_F_REQUEST | NLM_F_ACK;
+	nlh->nlmsg_seq = seq = time(NULL);
+	genl = mnl_nlmsg_put_extra_header(nlh, sizeof(struct genlmsghdr));
+
+ 	genl->cmd = TCPE_CMD_INIT;
+
+	ret = mnl_socket_sendto(nl, nlh, nlh->nlmsg_len);
+
+	Err2If(ret == -1, ESTATS_ERR_GENL, "mnl_socket_send");
+
+	ret = mnl_socket_recvfrom(nl, buf, sizeof(buf));
+	while (ret > 0) {
+		ret = mnl_cb_run(buf, ret, seq, portid, data_cb_get_mib,
+				 (void *)var_data);
+		if (ret <= 0)
+			break;
+		ret = mnl_socket_recvfrom(nl, buf, sizeof(buf));
+	}
+
+	Err2If(ret == -1, ESTATS_ERR_GENL, "error");
+
+ Cleanup:
+ 	return err;
 }
 
 struct estats_error*
