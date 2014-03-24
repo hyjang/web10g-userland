@@ -51,6 +51,8 @@ estats_nl_client_init(struct estats_nl_client** cl)
 		(*cl)->mask.if_mask[i] = 0;
 	}
 
+	Chk(estats_get_mib(&(*cl)->var_data, *cl));
+
  Cleanup:
         return err;
 }
@@ -88,6 +90,19 @@ estats_nl_client_get_sock(struct mnl_socket** nl, const estats_nl_client* cl)
 	ErrIf(nl == NULL || cl == NULL, ESTATS_ERR_INVAL);
 
 	*nl = cl->mnl_sock;
+
+ Cleanup:
+ 	return err;
+}
+
+struct estats_error*
+estats_nl_client_get_var_data(struct estats_var_data** var_data, const estats_nl_client* cl)
+{
+	estats_error* err = NULL;
+
+	ErrIf(var_data == NULL || cl == NULL, ESTATS_ERR_INVAL);
+
+	*var_data = cl->var_data;
 
  Cleanup:
  	return err;

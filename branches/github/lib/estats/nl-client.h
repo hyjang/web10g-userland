@@ -19,6 +19,7 @@
 struct estats_error* estats_nl_client_init(struct estats_nl_client**);
 void                 estats_nl_client_destroy(struct estats_nl_client**);
 struct estats_error* estats_nl_client_get_sock(struct mnl_socket**, const estats_nl_client*);
+struct estats_error* estats_nl_client_get_var_data(struct estats_var_data**, const estats_nl_client*);
 struct estats_error* estats_nl_client_get_fam_id(int*, const estats_nl_client*);
 struct estats_error* estats_nl_client_set_mask(struct estats_nl_client*, struct estats_mask*);
 

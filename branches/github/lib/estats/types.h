@@ -194,6 +194,7 @@ enum MIB_TABLE {
         STACK_TABLE,
         APP_TABLE,
         TUNE_TABLE,
+	EXTRAS_TABLE,
         __MAX_TABLE
 };
 #define MAX_TABLE __MAX_TABLE
@@ -208,6 +209,7 @@ extern struct estats_var estats_var_array[];
 typedef struct estats_connection	estats_connection;
 typedef struct estats_connection_info	estats_connection_info;
 typedef struct estats_connection_list	estats_connection_list;
+typedef struct estats_var_data		estats_var_data;
 typedef struct estats_val_data		estats_val_data;
 typedef struct estats_error		estats_error;
 typedef struct estats_nl_client		estats_nl_client;
